@@ -26,6 +26,7 @@
             :key="member.ID"
             v-ripple
             clickable
+            :to="{ name: 'Member', params: { memberId: member.ID }}"
           >
             <q-item-section>{{ member.NAME }}</q-item-section>
           </q-item>
