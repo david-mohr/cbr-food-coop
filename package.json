@@ -7,7 +7,8 @@
   "private": true,
   "scripts": {
     "lint": "eslint --ext .js,.vue ./",
-    "test": "echo \"No test specified\" && exit 0"
+    "test": "echo \"No test specified\" && exit 0",
+    "serve": "quasar serve -p 8080 --proxy serve.js dist/spa"
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",
