@@ -13,6 +13,11 @@ function parseJwt (token) {
 export function updateMemberHistory (state, member) {
   state.memberHistory[member.id] = member.history
 }
+export function updateMemberStatus (state, member) {
+  member.status.MEMBERSHIPEXPIRES = new Date(member.status.MEMBERSHIPEXPIRES)
+  member.status.DISCVALIDUNTIL = new Date(member.status.DISCVALIDUNTIL)
+  state.memberStatus[member.id] = member.status
+}
 export function updateMembers (state, members) {
   if (members) members.sort(alphasort('NAME'))
   state.members = members

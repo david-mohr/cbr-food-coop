@@ -76,7 +76,6 @@ export default defineComponent({
   computed: {
     name () {
       if (!this.$store.state.members.user) return null
-      console.log(this.$store.state.members.user)
       return this.$store.state.members.user.username
     }
   },

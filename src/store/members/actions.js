@@ -47,6 +47,30 @@ export async function getHistory (context, memberId) {
   }
 }
 
+export async function getStatus (context, memberId) {
+  try {
+    const res = await api.get(`/api/members/${memberId}/status`, {
+      headers: {
+        authorization: 'Bearer ' + context.state.token
+      }
+    })
+    context.commit('updateMemberStatus', {
+      id: memberId,
+      status: res.data
+    })
+  } catch (err) {
+    if (err.response.status === 401) {
+      Router.replace({ name: 'Login' })
+    }
+    Notify.create({
+      color: 'red-4',
+      textColor: 'white',
+      icon: 'error',
+      message: 'Failed to load member status'
+    })
+  }
+}
+
 export async function login (context, creds) {
   const res = await api.post('/api/login', creds)
   SessionStorage.set('token', res.data.token)

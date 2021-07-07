@@ -3,6 +3,7 @@ export default function () {
     members: [],
     token: null,
     user: null,
-    memberHistory: {}
+    memberHistory: {},
+    memberStatus: {}
   }
 }
