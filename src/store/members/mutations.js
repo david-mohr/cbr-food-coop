@@ -10,6 +10,9 @@ function parseJwt (token) {
 
   return JSON.parse(jsonPayload)
 }
+export function updateMemberHistory (state, member) {
+  state.memberHistory[member.id] = member.history
+}
 export function updateMembers (state, members) {
   if (members) members.sort(alphasort('NAME'))
   state.members = members

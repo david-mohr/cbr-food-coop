@@ -20,7 +20,30 @@ export async function getMembers (context) {
       icon: 'error',
       message: 'Failed to load members'
     })
-    // throw err
+  }
+}
+
+export async function getHistory (context, memberId) {
+  try {
+    const res = await api.get(`/api/members/${memberId}/history`, {
+      headers: {
+        authorization: 'Bearer ' + context.state.token
+      }
+    })
+    context.commit('updateMemberHistory', {
+      id: memberId,
+      history: res.data
+    })
+  } catch (err) {
+    if (err.response.status === 401) {
+      Router.replace({ name: 'Login' })
+    }
+    Notify.create({
+      color: 'red-4',
+      textColor: 'white',
+      icon: 'error',
+      message: 'Failed to load member history'
+    })
   }
 }
 
