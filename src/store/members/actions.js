@@ -30,6 +30,11 @@ export async function login (context, creds) {
   context.commit('saveToken', res.data.token)
 }
 
+export async function loadToken (context, creds) {
+  const token = SessionStorage.getItem('token')
+  if (token) context.commit('saveToken', token)
+}
+
 export async function logout (context) {
   SessionStorage.remove('token')
   context.commit('removeToken')
