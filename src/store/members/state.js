@@ -1,6 +1,7 @@
 export default function () {
   return {
     members: [],
-    token: null
+    token: null,
+    user: null
   }
 }

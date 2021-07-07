@@ -12,10 +12,10 @@
         />
 
         <q-toolbar-title>
-          Quasar App
+          CBR Food Co-op
         </q-toolbar-title>
 
-        <div>Quasar v{{ $q.version }}</div>
+        <div>{{ name }}</div>
       </q-toolbar>
     </q-header>
 
@@ -103,7 +103,13 @@ export default defineComponent({
   components: {
     EssentialLink
   },
-
+  computed: {
+    name () {
+      if (!this.$store.state.members.user) return null
+      console.log(this.$store.state.members.user)
+      return this.$store.state.members.user.username
+    }
+  },
   setup () {
     const leftDrawerOpen = ref(false)
 
