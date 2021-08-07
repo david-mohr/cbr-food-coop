@@ -15,7 +15,7 @@
           CBR Food Co-op
         </q-toolbar-title>
 
-        <div>{{ name }}</div>
+        <div clickable @click="logout">{{ name }}</div>
       </q-toolbar>
     </q-header>
 
@@ -85,6 +85,10 @@ export default defineComponent({
     return {
       essentialLinks: linksList,
       leftDrawerOpen,
+      logout () {
+        this.$store.dispatch('members/logout')
+        this.$router.replace({ name: 'Login' })
+      },
       toggleLeftDrawer () {
         leftDrawerOpen.value = !leftDrawerOpen.value
       }
