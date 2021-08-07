@@ -26,7 +26,7 @@
       </q-field>
     </div>
     <div class="q-py-md">
-      <q-card>
+      <q-card style="width: 100%">
         <q-tabs
           v-model="tab"
           dense
