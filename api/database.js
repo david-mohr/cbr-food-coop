@@ -15,7 +15,7 @@ process.on('exit', () => {
   connection.end();
 });
 
-connection.connect();
+// connection.connect();
 
 async function findUser(username) {
   const { results } = await query('SELECT * FROM auth WHERE username = ?', [username]);

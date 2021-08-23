@@ -1,6 +1,8 @@
 const express = require('express');
 const { query } = require('./database');
+
 const auth = require('./auth');
+const signup = require('./signup');
 
 const router = express.Router();
 
@@ -14,7 +16,7 @@ function hasRole (role) {
   };
 }
 
-router.put('/signup', auth);
+router.use(signup);
 router.use(auth);
 router.get('/members', hasRole('coordinator'), async (req, res) => {
   try {
