@@ -11,7 +11,7 @@
     "serve": "quasar serve -p 8080 --proxy serve.js dist/spa",
     "build": "quasar build",
     "start": "node server.js",
-    "heroku-postbuild": "yarn && yarn build"
+    "heroku-postbuild": "ls node_modules && ls node_modules/.bin && quasar build"
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",
