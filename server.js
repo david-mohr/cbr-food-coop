@@ -15,10 +15,11 @@ app.use(serveStatic(path.join(__dirname, 'dist/spa')))
 
 app.use('/api', function isAuthenticated (req, res, next) {
   if (req.originalUrl === '/api/login') return next()
+  if (req.originalUrl === '/api/signup') return next()
   return passport.authenticate('jwt', { session: false })(req, res, next)
 })
 
-app.use(api)
+app.use('/api', api)
 
 // Handle errors.
 app.use(function (err, req, res, next) {

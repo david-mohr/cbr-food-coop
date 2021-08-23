@@ -14,8 +14,9 @@ function hasRole (role) {
   };
 }
 
-router.use('/api', auth);
-router.get('/api/members', hasRole('coordinator'), async (req, res) => {
+router.put('/signup', auth);
+router.use(auth);
+router.get('/members', hasRole('coordinator'), async (req, res) => {
   try {
     const { results } = await query('SELECT * from customers');
     res.send(results);
@@ -25,7 +26,7 @@ router.get('/api/members', hasRole('coordinator'), async (req, res) => {
   }
 });
 
-router.get('/api/members/:id/history', hasRole('coordinator'), async (req, res) => {
+router.get('/members/:id/history', hasRole('coordinator'), async (req, res) => {
   try {
     if (!/^c[0-9]*$/.test(req.params.id)) {
       return res.send(400, '');
@@ -38,7 +39,7 @@ router.get('/api/members/:id/history', hasRole('coordinator'), async (req, res) 
   }
 });
 
-router.get('/api/members/:id/status', hasRole('coordinator'), async (req, res) => {
+router.get('/members/:id/status', hasRole('coordinator'), async (req, res) => {
   try {
     if (!/^c[0-9]*$/.test(req.params.id)) {
       return res.send(400, '');
@@ -54,7 +55,7 @@ router.get('/api/members/:id/status', hasRole('coordinator'), async (req, res) =
   }
 });
 
-router.get('/api/users', hasRole('admin'), async (req, res) => {
+router.get('/users', hasRole('admin'), async (req, res) => {
   try {
     const { results } = await query('SELECT id, username, role from auth');
     res.send(results);
