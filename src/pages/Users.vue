@@ -14,6 +14,69 @@
         </q-item-section>
       </q-item>
     </list-with-filter>
+    <q-page-sticky position="bottom-right" :offset="[18, 18]">
+      <q-btn
+        fab
+        icon="add"
+        color="accent"
+        @click="addUser = true"
+      />
+      <q-dialog v-model="addUser" persistent>
+        <q-card style="min-width: 350px">
+          <q-form
+            no-error-focus
+            @submit="onSubmit"
+            @reset="reset"
+          >
+            <q-card-section>
+              <div class="text-h6">New user</div>
+            </q-card-section>
+
+            <q-card-section>
+              <q-input
+                v-model="username"
+                autofocus
+                label="Username"
+                :rules="[required, noDuplicates]"
+              />
+            </q-card-section>
+            <q-card-section>
+              <q-select
+                v-model="role"
+                label="Role"
+                :options="roles"
+                emit-value
+                map-options
+                :rules="[required]"
+              />
+            </q-card-section>
+            <q-card-section>
+              <q-input
+                v-model="password"
+                type="password"
+                autofocus
+                label="password"
+                :rules="[required, min8]"
+              />
+            </q-card-section>
+            <q-card-section>
+              <q-input
+                v-model="password2"
+                type="password"
+                autofocus
+                label="Confirm password"
+                :rules="[required, passwordsMatch]"
+              />
+            </q-card-section>
+
+            <q-card-actions align="right" class="text-primary">
+              <q-btn flat label="Cancel" type="reset" v-close-popup />
+              <q-btn flat type="submit" label="Add user"  />
+            </q-card-actions>
+          </q-form>
+        </q-card>
+      </q-dialog>
+    </q-page-sticky>
   </q-page>
 </template>
 
@@ -22,6 +85,20 @@ import ListWithFilter from '../components/ListWithFilter.vue'
 
 export default {
   components: { ListWithFilter },
+  data () {
+    return {
+      addUser: false,
+      role: null,
+      username: null,
+      password: null,
+      password2: null,
+      roles: [
+        { value: 'user', label: 'User' },
+        { value: 'coordinator', label: 'Coordinator' },
+        { value: 'admin', label: 'Administrator' }
+      ]
+    }
+  },
   computed: {
     users () {
       return this.$store.state.members.users
@@ -30,6 +107,51 @@ export default {
   async created () {
     if (!this.users.length) {
       await this.$store.dispatch('members/getUsers')
+    }
+  },
+  methods: {
+    required (val) {
+      return (val && val.length > 0) || 'Required'
+    },
+    noDuplicates (val) {
+      return !this.users.some(u => u.username === this.username) || 'Username already taken'
+    },
+    min8 (val) {
+      return (val && val.length >= 8) || 'Minimum length is 8'
+    },
+    passwordsMatch (val) {
+      return (val && val === this.password) || 'Passwords don\'t match'
+    },
+    reset () {
+      this.role = null
+      this.username = null
+      this.password = null
+      this.password2 = null
+    },
+    async onSubmit () {
+      console.log('user', this.username, 'role', this.role)
+      try {
+        await this.$store.dispatch('members/addUser', {
+          username: this.username,
+          password: this.password,
+          role: this.role
+        })
+        this.$q.notify({
+          color: 'green-4',
+          textColor: 'white',
+          icon: 'cloud_done',
+          message: 'New user created'
+        })
+      } catch (err) {
+        this.$q.notify({
+          color: 'red-4',
+          textColor: 'white',
+          icon: 'error',
+          message: 'Failed to create new user'
+        })
+      }
+      this.addUser = false
+      this.reset()
     }
   }
 }

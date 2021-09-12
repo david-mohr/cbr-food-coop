@@ -99,3 +99,17 @@ export async function logout (context) {
   SessionStorage.remove('token')
   context.commit('removeToken')
 }
+
+export async function addUser (context, user) {
+  try {
+    await api.post('/api/users', user, {
+      headers: {
+        authorization: 'Bearer ' + context.state.token
+      }
+    })
+    await context.dispatch('getUsers')
+  } catch (err) {
+    console.error(err)
+    throw new Error('Failed to create new user')
+  }
+}
