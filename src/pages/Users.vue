@@ -39,8 +39,6 @@
                 label="Username"
                 :rules="[required, noDuplicates]"
               />
-            </q-card-section>
-            <q-card-section>
               <q-select
                 v-model="role"
                 label="Role"
@@ -49,17 +47,13 @@
                 map-options
                 :rules="[required]"
               />
-            </q-card-section>
-            <q-card-section>
               <q-input
                 v-model="password"
                 type="password"
                 autofocus
-                label="password"
+                label="Password"
                 :rules="[required, min8]"
               />
-            </q-card-section>
-            <q-card-section>
               <q-input
                 v-model="password2"
                 type="password"
