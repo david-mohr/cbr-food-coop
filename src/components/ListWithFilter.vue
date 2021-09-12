@@ -48,7 +48,7 @@ export default {
       type: Array,
       required: true
     },
-    key: {
+    filterKey: {
       type: String,
       default: 'NAME'
     }
@@ -70,7 +70,7 @@ export default {
     },
     filteredItems () {
       if (!this.items) return []
-      return this.items.filter(items => fuzzysearch(this.search.toLowerCase(), items[this.key].toLowerCase()))
+      return this.items.filter(item => fuzzysearch(this.search.toLowerCase(), item[this.filterKey].toLowerCase()))
     }
   }
 }
