@@ -115,6 +115,7 @@
                   type="email"
                   label="Email"
                   color="grey-8"
+                  :rules="[validEmail]"
                 />
                 <q-input
                   v-model="phone"
