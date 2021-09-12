@@ -28,4 +28,5 @@ export function saveToken (state, token) {
 }
 export function removeToken (state) {
   state.token = null
+  state.user = null
 }

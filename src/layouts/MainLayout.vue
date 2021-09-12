@@ -3,6 +3,7 @@
     <q-header elevated>
       <q-toolbar>
         <q-btn
+          v-if="loggedIn"
           flat
           dense
           round
@@ -20,6 +21,7 @@
     </q-header>
 
     <q-drawer
+      v-if="loggedIn"
       v-model="leftDrawerOpen"
       show-if-above
       bordered
@@ -74,6 +76,9 @@ export default defineComponent({
     EssentialLink
   },
   computed: {
+    loggedIn () {
+      return !!this.$store.state.members.user
+    },
     name () {
       if (!this.$store.state.members.user) return null
       return this.$store.state.members.user.username
