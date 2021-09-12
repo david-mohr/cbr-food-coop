@@ -16,7 +16,23 @@
           CBR Food Co-op
         </q-toolbar-title>
 
-        <div clickable @click="logout">{{ name }}</div>
+        <q-btn dense flat no-wrap>
+          <q-avatar rounded size="36px" icon="account_circle"/>
+          <q-icon name="arrow_drop_down" size="16px" />
+          <q-menu auto-close>
+            <q-list dense>
+              <q-item>
+                <q-item-section>
+                  <div>Signed in as <strong>{{ name }}</strong></div>
+                </q-item-section>
+              </q-item>
+              <q-separator />
+              <q-item clickable @click="logout">
+                <q-item-section>Sign out</q-item-section>
+              </q-item>
+            </q-list>
+          </q-menu>
+        </q-btn>
       </q-toolbar>
     </q-header>
 
@@ -67,13 +83,15 @@ const linksList = [
   }
 ]
 
-import { defineComponent, ref } from 'vue'
-
-export default defineComponent({
-  name: 'MainLayout',
-
+export default {
   components: {
     EssentialLink
+  },
+  data () {
+    return {
+      leftDrawerOpen: false,
+      essentialLinks: linksList
+    }
   },
   computed: {
     loggedIn () {
@@ -84,20 +102,14 @@ export default defineComponent({
       return this.$store.state.members.user.username
     }
   },
-  setup () {
-    const leftDrawerOpen = ref(false)
-
-    return {
-      essentialLinks: linksList,
-      leftDrawerOpen,
-      logout () {
-        this.$store.dispatch('members/logout')
-        this.$router.replace({ name: 'Login' })
-      },
-      toggleLeftDrawer () {
-        leftDrawerOpen.value = !leftDrawerOpen.value
-      }
+  methods: {
+    logout () {
+      this.$store.dispatch('members/logout')
+      this.$router.replace({ name: 'Login' })
+    },
+    toggleLeftDrawer () {
+      this.leftDrawerOpen = !this.leftDrawerOpen
     }
   }
-})
+}
 </script>
