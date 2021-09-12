@@ -1,18 +1,20 @@
 <template>
-  <list-with-filter v-slot="props" :items="users" filter-key="username">
-    <q-item
-      v-for="user in props.items"
-      :key="user.id"
-      v-ripple
-      clickable
-      :to="{ name: 'User', params: { userId: user.id }}"
-    >
-      <q-item-section>
-        <q-item-label>{{ user.username }}</q-item-label>
-        <q-item-label caption>{{ user.role }}</q-item-label>
-      </q-item-section>
-    </q-item>
-  </list-with-filter>
+  <q-page class="flex justify-center" style="margin-top: 30px">
+    <list-with-filter v-slot="props" :items="users" filter-key="username">
+      <q-item
+        v-for="user in props.items"
+        :key="user.id"
+        v-ripple
+        clickable
+        :to="{ name: 'User', params: { userId: user.id }}"
+      >
+        <q-item-section>
+          <q-item-label>{{ user.username }}</q-item-label>
+          <q-item-label caption>{{ user.role }}</q-item-label>
+        </q-item-section>
+      </q-item>
+    </list-with-filter>
+  </q-page>
 </template>
 
 <script>

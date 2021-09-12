@@ -1,15 +1,17 @@
 <template>
-  <list-with-filter v-slot="props" :items="members">
-    <q-item
-      v-for="member in props.items"
-      :key="member.ID"
-      v-ripple
-      clickable
-      :to="{ name: 'Member', params: { memberId: member.ID }}"
-    >
-      <q-item-section>{{ member.NAME }}</q-item-section>
-    </q-item>
-  </list-with-filter>
+  <q-page class="flex justify-center" style="margin-top: 30px">
+    <list-with-filter v-slot="props" :items="members">
+      <q-item
+        v-for="member in props.items"
+        :key="member.ID"
+        v-ripple
+        clickable
+        :to="{ name: 'Member', params: { memberId: member.ID }}"
+      >
+        <q-item-section>{{ member.NAME }}</q-item-section>
+      </q-item>
+    </list-with-filter>
+  </q-page>
 </template>
 
 <script>

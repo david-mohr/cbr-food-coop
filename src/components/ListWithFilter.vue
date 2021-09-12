@@ -1,42 +1,40 @@
 <template>
-  <q-page class="flex justify-center" style="margin-top: 30px">
-    <div
-      v-if="!!items"
-      class="row"
-    >
-      <div class="col">
-        <q-input
-          v-model="search"
-          filled
-          type="search"
-          hint="Search"
-          @update:modelValue="page = 1"
-        >
-          <template #append>
-            <q-icon name="search" />
-          </template>
-        </q-input>
-        <q-list
-          bordered
-          separator
-          style="min-width: 300px"
-        >
-          <slot :items="matchingItems" />
-        </q-list>
-        <div
-          v-if="totalPages > 1"
-          class="q-pa-lg flex flex-center"
-        >
-          <q-pagination
-            v-model="page"
-            :max="totalPages"
-            :max-pages="5"
-            :direction-links="true"
-          />
-        </div>
+  <div
+    v-if="!!items"
+    class="row"
+  >
+    <div class="col">
+      <q-input
+        v-model="search"
+        filled
+        type="search"
+        hint="Search"
+        @update:modelValue="page = 1"
+      >
+        <template #append>
+          <q-icon name="search" />
+        </template>
+      </q-input>
+      <q-list
+        bordered
+        separator
+        style="min-width: 300px"
+      >
+        <slot :items="matchingItems" />
+      </q-list>
+      <div
+        v-if="totalPages > 1"
+        class="q-pa-lg flex flex-center"
+      >
+        <q-pagination
+          v-model="page"
+          :max="totalPages"
+          :max-pages="5"
+          :direction-links="true"
+        />
       </div>
     </div>
-  </q-page>
+  </div>
 </template>
 
 <script>
