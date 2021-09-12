@@ -44,3 +44,14 @@ export DATABASE_URL='postgres://postgres:Pass2021!@localhost:5432/postgres'
 ```
 
 * Disable ssl when in dev mode
+
+
+# Deploy to Heroku (main)
+```
+git push heroku main
+```
+
+## Deploy to Heroku (branch)
+```
+git push heroku bravo-1:main
+```
