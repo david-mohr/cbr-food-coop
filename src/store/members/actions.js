@@ -23,6 +23,19 @@ export async function getMembers (context) {
   }
 }
 
+export async function getUsers (context) {
+  try {
+    const res = await api.get('/api/users', {
+      headers: {
+        authorization: 'Bearer ' + context.state.token
+      }
+    })
+    context.commit('updateUsers', res.data)
+  } catch (err) {
+    // Co-ordinators won't be able to see users
+  }
+}
+
 export async function getHistory (context, memberId) {
   try {
     const res = await api.get(`/api/members/${memberId}/history`, {

@@ -22,6 +22,10 @@ export function updateMembers (state, members) {
   if (members) members.sort(alphasort('NAME'))
   state.members = members
 }
+export function updateUsers (state, users) {
+  if (users) users.sort(alphasort('username'))
+  state.users = users
+}
 export function saveToken (state, token) {
   state.token = token
   state.user = parseJwt(token)
