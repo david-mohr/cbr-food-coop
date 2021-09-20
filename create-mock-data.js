@@ -26,7 +26,7 @@ const pool = new Pool({
 })
 
 const MEMBER_ID_START = 1000;
-const MEMBER_COUNT = 10;
+const MEMBER_COUNT = 100;
 
 async function main() {
   try {
