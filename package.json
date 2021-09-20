@@ -12,6 +12,7 @@
     "build": "quasar build",
     "start": "node server.js",
     "api": "DATABASE_URL='postgres://postgres:Pass2021!@localhost:5432/postgres' NODE_ENV=development node server.js",
+    "mockdata": "DATABASE_URL='postgres://postgres:Pass2021!@localhost:5432/postgres' node create-mock-data.js",
     "heroku-postbuild": "quasar build",
     "db": "docker run --rm -d --name dev-postgres -e POSTGRES_PASSWORD='Pass2021! -v ${PWD}/test_db/:/var/lib/postgresql/data -p 5432:5432 postgres"
   },
@@ -25,6 +26,7 @@
     "fuzzysearch": "^1.0.3",
     "inquirer": "^8.1.2",
     "jsonwebtoken": "^8.5.1",
+    "luxon": "^2.0.2",
     "morgan": "^1.10.0",
     "mysql": "^2.18.1",
     "passport": "^0.4.1",
