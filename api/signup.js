@@ -4,12 +4,19 @@ const { Pool } = require('pg');
 const router = express.Router();
 
 // Postgres
-const pool = new Pool({
+const config = {
   connectionString: process.env.DATABASE_URL,
   ssl: {
     rejectUnauthorized: false
   }
-});
+};
+
+// don't use SSL in development
+if (process.env.NODE_ENV === 'development') {
+  delete config.ssl;
+}
+
+const pool = new Pool(config);
 
 router.post('/signup', async (req, res) => {
   try {
