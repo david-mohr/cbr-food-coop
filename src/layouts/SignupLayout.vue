@@ -4,7 +4,7 @@
     <q-header elevated>
       <q-toolbar>
         <q-toolbar-title>
-          CBR Food Co-op
+          The Food Co-op
         </q-toolbar-title>
       </q-toolbar>
     </q-header>

@@ -13,7 +13,7 @@
         />
 
         <q-toolbar-title>
-          CBR Food Co-op
+          The Food Co-op
         </q-toolbar-title>
 
         <q-btn dense flat no-wrap>
