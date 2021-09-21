@@ -1,18 +1,15 @@
 const crypto = require('crypto');
 const dotenv = require('dotenv');
-const mysql = require('mysql');
+const { Pool } = require('pg');
 
 dotenv.config();
 
-const connection = mysql.createConnection({
-  host     : 'localhost',
-  user     : 'root',
-  password : process.env.DB_PASSWORD,
-  database : 'openbravo-pos'
+const pool = new Pool({
+  connectionString : 'postgres://postgres:Pass2021!@localhost:5432/postgres'
 });
  
 process.on('exit', () => {
-  connection.end();
+  pool.end();
 });
 
 // connection.connect();
@@ -50,14 +47,16 @@ function encryptPassword(password) {
 }
 
 function end() {
-  return connection.end();
+  return pool.end();
 }
 
-function query(statement, args) {
+async function query(statement, args) {
+  const client = await pool.connect();
   return new Promise((resolve, reject) => {
-    return connection.query(statement, args, (err, results, fields) => {
+    return client.query(statement, args, (err, results) => {
+      client.release();
       if (err) return reject(err);
-      return resolve({results, fields});
+      return resolve({results});
     });
   });
 }
