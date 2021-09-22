@@ -1,24 +1,19 @@
 const crypto = require('crypto');
 const dotenv = require('dotenv');
-const mysql = require('mysql');
+const { Pool } = require('pg');
 
 dotenv.config();
 
-const connection = mysql.createConnection({
-  host     : 'localhost',
-  user     : 'root',
-  password : process.env.DB_PASSWORD,
-  database : 'openbravo-pos'
+const pool = new Pool({
+  connectionString : 'postgres://postgres:Pass2021!@localhost:5432/postgres'
 });
  
 process.on('exit', () => {
-  connection.end();
+  pool.end();
 });
 
-// connection.connect();
-
 async function findUser(username) {
-  const { results } = await query('SELECT * FROM auth WHERE username = ?', [username]);
+  const results = await query('SELECT * FROM auth WHERE username = $1', [username]);
   return results[0];
 }
 
@@ -50,14 +45,16 @@ function encryptPassword(password) {
 }
 
 function end() {
-  return connection.end();
+  return pool.end();
 }
 
-function query(statement, args) {
+async function query(statement, args) {
+  const client = await pool.connect();
   return new Promise((resolve, reject) => {
-    return connection.query(statement, args, (err, results, fields) => {
+    return client.query(statement, args, (err, res) => {
+      client.release();
       if (err) return reject(err);
-      return resolve({results, fields});
+      return resolve(res.rows);
     });
   });
 }
