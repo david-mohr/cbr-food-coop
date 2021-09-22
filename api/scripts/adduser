@@ -38,7 +38,7 @@ async function main() {
   const {key, salt} = await db.encryptPassword(account.password);
 
   console.log(chalk.bold.cyan('INFO'), 'Adding user...');
-  const { results } = await db.query('INSERT INTO auth (username, password, salt, role) VALUES($1, $2, $3, $4)', [account.user, key, salt, account.role]);
+  const results = await db.query('INSERT INTO auth (username, password, salt, role) VALUES($1, $2, $3, $4) RETURNING *', [account.user, key, salt, account.role]);
   console.log(chalk.bold.cyan('INFO'), 'Results');
   console.log('RESULTS', results);
   console.log(chalk.bold.green('DONE'));

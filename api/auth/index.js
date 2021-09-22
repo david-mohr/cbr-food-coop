@@ -18,16 +18,19 @@ passport.use(
       passwordField: 'password'
     }, async (username, password, done) => {
       try {
+        console.log(username)
         const user = await db.findUser(username);
+        console.log(user)
         if (!user) {
           return done(null, false, { message: 'User not found' });
         }
 
         const validate = await db.checkPassword(user, password);
         if (!validate) {
+          console.log("Wrong Password")
           return done(null, false, { message: 'Wrong Password' });
         }
-
+        console.log("success")
         return done(null, user, { message: 'Logged in successfully' });
       } catch (error) {
         return done(error);
