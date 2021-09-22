@@ -12,10 +12,8 @@ process.on('exit', () => {
   pool.end();
 });
 
-// connection.connect();
-
 async function findUser(username) {
-  const { results } = await query('SELECT * FROM auth WHERE username = ?', [username]);
+  const results = await query('SELECT * FROM auth WHERE username = $1', [username]);
   return results[0];
 }
 
@@ -53,10 +51,10 @@ function end() {
 async function query(statement, args) {
   const client = await pool.connect();
   return new Promise((resolve, reject) => {
-    return client.query(statement, args, (err, results) => {
+    return client.query(statement, args, (err, res) => {
       client.release();
       if (err) return reject(err);
-      return resolve({results});
+      return resolve(res.rows);
     });
   });
 }
