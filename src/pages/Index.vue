@@ -3,12 +3,12 @@
     <list-with-filter v-slot="props" :items="members">
       <q-item
         v-for="member in props.items"
-        :key="member.ID"
+        :key="member.id"
         v-ripple
         clickable
-        :to="{ name: 'Member', params: { memberId: member.ID }}"
+        :to="{ name: 'Member', params: { memberId: member.id }}"
       >
-        <q-item-section>{{ member.NAME }}</q-item-section>
+        <q-item-section>{{ member.name }}</q-item-section>
       </q-item>
     </list-with-filter>
   </q-page>

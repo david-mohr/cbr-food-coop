@@ -6,22 +6,22 @@
     <div class="q-py-md">
       <q-field label="ID" stack-label>
         <template v-slot:control>
-          <div class="self-center full-width no-outline" tabindex="0">{{ member.ID }}</div>
+          <div class="self-center full-width no-outline" tabindex="0">{{ member.id }}</div>
         </template>
       </q-field>
       <q-field label="Name" stack-label>
         <template v-slot:control>
-          <div class="self-center full-width no-outline" tabindex="0">{{ member.NAME }}</div>
+          <div class="self-center full-width no-outline" tabindex="0">{{ member.name }}</div>
         </template>
       </q-field>
       <q-field label="Email" stack-label>
         <template v-slot:control>
-          <div class="self-center full-width no-outline" tabindex="0">{{ member.EMAIL }}</div>
+          <div class="self-center full-width no-outline" tabindex="0">{{ member.email }}</div>
         </template>
       </q-field>
       <q-field label="Phone" stack-label>
         <template v-slot:control>
-          <div class="self-center full-width no-outline" tabindex="0">{{ member.PHONE }}</div>
+          <div class="self-center full-width no-outline" tabindex="0">{{ member.phone }}</div>
         </template>
       </q-field>
     </div>
@@ -100,16 +100,16 @@ export default {
       tab: 'status',
       memberId: this.$route.params.memberId,
       columns: [
-        { name: 'Date', align: 'left', label: 'Date', field: 'DATENEW', sortable: true },
-        { name: 'event', align: 'left', label: 'Event', field: 'ACTION', sortable: true },
-        { name: 'paid', label: 'Paid', field: 'AMOUNTPAID', sortable: true },
-        { name: 'notes', align: 'left', label: 'Notes', field: 'NOTES', sortable: true }
+        { name: 'Date', align: 'left', label: 'Date', field: 'datenew', sortable: true },
+        { name: 'event', align: 'left', label: 'Event', field: 'action', sortable: true },
+        { name: 'paid', label: 'Paid', field: 'amountpaid', sortable: true },
+        { name: 'notes', align: 'left', label: 'Notes', field: 'notes', sortable: true }
       ]
     }
   },
   computed: {
     member () {
-      return this.$store.state.members.members.find(member => member.ID === this.memberId)
+      return this.$store.state.members.members.find(member => member.id === this.memberId)
     },
     history () {
       return this.$store.state.members.memberHistory[this.memberId]
@@ -118,25 +118,25 @@ export default {
       return this.$store.state.members.memberStatus[this.memberId]
     },
     expDate () {
-      return date.formatDate(this.status.MEMBERSHIPEXPIRES, 'YYYY-MM-DD')
+      return date.formatDate(this.status.membershipexpires, 'YYYY-MM-DD')
     },
     expStatus () {
       const now = new Date()
-      const monthBeforeExp = date.subtractFromDate(this.status.MEMBERSHIPEXPIRES, { days: 31 })
+      const monthBeforeExp = date.subtractFromDate(this.status.membershipexpires, { days: 31 })
       if (now < monthBeforeExp) {
         return 'bg-positive'
       }
-      if (date.isBetweenDates(now, monthBeforeExp, this.status.MEMBERSHIPEXPIRES, { onlyDate: true })) {
+      if (date.isBetweenDates(now, monthBeforeExp, this.status.membershipexpires, { onlyDate: true })) {
         return 'bg-warning'
       }
       return 'bg-negative'
     },
     discountDate () {
-      return date.formatDate(this.status.DISCVALIDUNTIL, 'YYYY-MM-DD')
+      return date.formatDate(this.status.discvaliduntil, 'YYYY-MM-DD')
     },
     discountStatus () {
       const now = new Date()
-      if (now < this.status.DISCVALIDUNTIL) {
+      if (now < this.status.discvaliduntil) {
         return 'bg-positive'
       }
       return 'bg-negative'

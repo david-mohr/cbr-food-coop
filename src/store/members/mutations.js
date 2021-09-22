@@ -14,12 +14,12 @@ export function updateMemberHistory (state, member) {
   state.memberHistory[member.id] = member.history
 }
 export function updateMemberStatus (state, member) {
-  member.status.MEMBERSHIPEXPIRES = new Date(member.status.MEMBERSHIPEXPIRES)
-  member.status.DISCVALIDUNTIL = new Date(member.status.DISCVALIDUNTIL)
+  member.status.membershipexpires = new Date(member.status.membershipexpires)
+  member.status.discvaliduntil = new Date(member.status.discvaliduntil)
   state.memberStatus[member.id] = member.status
 }
 export function updateMembers (state, members) {
-  if (members) members.sort(alphasort('NAME'))
+  if (members) members.sort(alphasort('name'))
   state.members = members
 }
 export function updateUsers (state, users) {

@@ -48,7 +48,7 @@ export default {
     },
     filterKey: {
       type: String,
-      default: 'NAME'
+      default: 'name'
     }
   },
   data () {
