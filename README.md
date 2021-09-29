@@ -6,12 +6,15 @@ To get this running, you will need:
 * NodeJS >= 12
 * Docker
 
-## Install the project dependencies
+## Setup
+A series of one-time-only steps to get everything ready for development
+
+### Install the project dependencies
 ```bash
 yarn
 ```
 
-## Start the test DB
+### Prepare the test DB
 This will launch the database in the background using `docker`
 ```bash
 yarn db
@@ -21,21 +24,41 @@ The first time after the database is loaded, there are two important steps:
 * Manually load the first admin user
 * Generate some mock data
 
-These steps are only required ONCE.
 ```bash
 ./api/scripts/adduser
 yarn mockdata
 ```
 
+You're now ready to start development!
+
+## Development
+### Launch the test DB
+If you already started the database during setup, you don't need to run it
+again. This will launch in the background
+```bash
+yarn db
+```
+
 ### Start the API
+This will stay running in your terminal and print HTTP logs
 ```bash
 yarn api
 ```
 
-### Start the app in development mode (hot-code reloading, error reporting, etc.)
+### Start the web app in development mode
+This will stay running in your terminal and continually rebuild the web app
+each time you save changes
 ```bash
 quasar dev
 ```
+
+### Code!
+Changes to the web app (`/src`) will be auto compiled and hot-reloaded into the
+browser.
+
+Changes to any API code (`/api`) will need to be manually activated by
+terminating the running `yarn api` process (CTRL+C) and starting it again.
+
 
 # Deploy to Heroku (main)
 ```bash
