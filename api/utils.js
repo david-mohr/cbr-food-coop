@@ -1,4 +1,5 @@
 const roles = ['user', 'coordinator', 'admin'];
+module.exports.roles = roles;
 
 module.exports.hasRole = function(role) {
   return (req, res, next) => {

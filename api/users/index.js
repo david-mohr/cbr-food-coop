@@ -1,6 +1,6 @@
 const express = require('express');
 const { encryptPassword, query } = require('../database');
-const { hasRole }  = require('../utils');
+const { hasRole, roles } = require('../utils');
 
 const router = express.Router();
 

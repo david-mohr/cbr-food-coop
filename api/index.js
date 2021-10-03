@@ -1,5 +1,4 @@
 const express = require('express');
-const { encryptPassword, query } = require('./database');
 
 const auth = require('./auth');
 const members = require('./members');

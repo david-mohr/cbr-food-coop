@@ -1,6 +1,6 @@
 const express = require('express');
 const { query } = require('../database');
-const { hasRole }  = require('../utils');
+const { hasRole } = require('../utils');
 
 const router = express.Router();
 
