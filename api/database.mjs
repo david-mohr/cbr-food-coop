@@ -5,9 +5,19 @@ const { Pool } = pg
 
 dotenv.config()
 
-const pool = new Pool({
-  connectionString: 'postgres://postgres:Pass2021!@localhost:5432/postgres'
-})
+const config = {
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
+}
+
+// don't use SSL in development
+if (process.env.NODE_ENV === 'development') {
+  delete config.ssl
+}
+
+const pool = new Pool(config)
 
 process.on('exit', () => {
   pool.end()
