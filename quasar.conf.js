@@ -81,7 +81,7 @@ module.exports = configure(function (ctx) {
         // proxy all requests starting with /api to jsonplaceholder
         '/api': {
           target: 'http://localhost:5000',
-          changeOrigin: true,
+          changeOrigin: true
         }
       }
     },
@@ -91,9 +91,9 @@ module.exports = configure(function (ctx) {
       config: {
         brand: {
           primary: '#8bb778',
-          //primary: '#8db678'
+          // primary: '#8db678'
           secondary: '#B88067',
-          accent: '#8C8EB8',
+          accent: '#8C8EB8'
         }
       },
 

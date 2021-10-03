@@ -5,11 +5,11 @@ import members from './members.mjs'
 import signup from './signup.mjs'
 import users from './users.mjs'
 
-const router = express.Router();
+const router = express.Router()
 
-router.use(signup);
-router.use(auth);
-router.use('/members', members);
-router.use('/users', users);
+router.use(signup)
+router.use(auth)
+router.use('/members', members)
+router.use('/users', users)
 
-export default router;
+export default router

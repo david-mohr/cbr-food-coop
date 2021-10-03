@@ -6,7 +6,7 @@
   "author": "David Mohr <david.mohr@ardexa.com>",
   "private": true,
   "scripts": {
-    "lint": "eslint --ext .js,.vue ./",
+    "lint": "eslint --ext .js,.mjs,.vue ./",
     "test": "echo \"No test specified\" && exit 0",
     "serve": "quasar serve -p 8080 --proxy serve.js dist/spa",
     "build": "quasar build",
