@@ -1,6 +1,6 @@
-const express = require('express');
-const { encryptPassword, query } = require('../database');
-const { hasRole, roles } = require('../utils');
+import express from 'express'
+import { encryptPassword, query } from './database.mjs'
+import { hasRole, roles } from './utils.mjs'
 
 const router = express.Router();
 
@@ -35,4 +35,4 @@ router.post('/', hasRole('admin'), async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

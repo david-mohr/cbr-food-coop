@@ -1,6 +1,6 @@
-const express = require('express');
-const { query } = require('../database');
-const { hasRole } = require('../utils');
+import express from 'express'
+import { query } from './database.mjs'
+import { hasRole } from './utils.mjs'
 
 const router = express.Router();
 
@@ -43,4 +43,4 @@ router.get('/:id/status', hasRole('coordinator'), async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

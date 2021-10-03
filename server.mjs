@@ -1,17 +1,17 @@
-const express = require('express')
-const morgan = require('morgan')
-const passport = require('passport')
-const path = require('path')
-const serveStatic = require('serve-static')
+import express from 'express'
+import morgan from 'morgan'
+import passport from 'passport'
+import serveStatic from 'serve-static'
+
+import api from './api/index.mjs'
 
 const app = express()
 const port = process.env.PORT || 5000
-const api = require('./api')
 
 app.disable('x-powered-by')
 app.use(express.json({ limit: '5mb' }))
 app.use(morgan('tiny'))
-app.use(serveStatic(path.join(__dirname, 'dist/spa')))
+app.use(serveStatic('./dist/spa'))
 
 app.use('/api', function isAuthenticated (req, res, next) {
   if (req.originalUrl === '/api/login') return next()

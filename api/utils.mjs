@@ -1,7 +1,6 @@
-const roles = ['user', 'coordinator', 'admin'];
-module.exports.roles = roles;
+export const roles = ['user', 'coordinator', 'admin'];
 
-module.exports.hasRole = function(role) {
+export function hasRole(role) {
   return (req, res, next) => {
     if (req.user.role === 'admin' || req.user.role === role) {
       next();

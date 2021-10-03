@@ -1,5 +1,6 @@
-const express = require('express');
-const { Pool } = require('pg');
+import express from 'express'
+import pg from 'pg'
+const { Pool } = pg
 
 const router = express.Router();
 
@@ -30,4 +31,4 @@ router.post('/signup', async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

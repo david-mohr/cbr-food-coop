@@ -1,13 +1,13 @@
-const dotenv = require('dotenv');
-const express = require('express');
-const jwt = require('jsonwebtoken');
-const { ExtractJwt, Strategy: JwtStrategy } = require('passport-jwt');
-const LocalStrategy = require('passport-local').Strategy;
-const passport = require('passport');
+import dotenv from 'dotenv'
+import express from 'express'
+import jwt from 'jsonwebtoken'
+import { ExtractJwt, Strategy as JwtStrategy } from 'passport-jwt'
+import { Strategy as LocalStrategy } from 'passport-local'
+import passport from 'passport'
+
+import { checkPassword, findUser } from './database.mjs'
 
 dotenv.config();
-
-const db = require('../database');
 
 const router = express.Router();
 
@@ -19,13 +19,13 @@ passport.use(
     }, async (username, password, done) => {
       try {
         console.log(username)
-        const user = await db.findUser(username);
+        const user = await findUser(username);
         console.log(user)
         if (!user) {
           return done(null, false, { message: 'User not found' });
         }
 
-        const validate = await db.checkPassword(user, password);
+        const validate = await checkPassword(user, password);
         if (!validate) {
           console.log("Wrong Password")
           return done(null, false, { message: 'Wrong Password' });
@@ -76,4 +76,4 @@ router.post('/login', (req, res, next) => {
   })(req, res, next);
 });
 
-module.exports = router;
+export default router;
