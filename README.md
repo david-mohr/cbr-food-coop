@@ -3,7 +3,7 @@
 The Food Co-op membership app
 
 To get this running, you will need:
-* NodeJS >= 12
+* NodeJS >= 16
 * Docker
 
 ## Setup
