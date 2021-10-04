@@ -50,6 +50,9 @@
             <div class="q-pa-md" v-if="!!status">
               <div class="row q-col-gutter-md">
                 <div class="col">
+                  <div class="q-pa-md">
+                  <q-btn label="Renew Membership" color="primary" @click="renewMembership = true"></q-btn>
+                  </div>
                   <q-card bordered :class="expStatus">
                     <q-card-section>
                       <div class="text-h6">Membership expires</div>
@@ -61,6 +64,9 @@
                   </q-card>
                 </div>
                 <div class="col">
+                  <div class="q-pa-md">
+                  <q-btn label="Add Volunteering Hours" color="primary" @click="addVolunteering = true"></q-btn>
+                  </div>
                   <q-card bordered :class="discountStatus">
                     <q-card-section>
                       <div class="text-h6">Discount valid until</div>
@@ -88,15 +94,68 @@
         </q-tab-panels>
       </q-card>
     </div>
+      <div class="q-pa-md q-gutter-sm">
+    <q-dialog v-model="addVolunteering" persistent>
+      <q-card style="min-width: 350px">
+        <q-form
+            no-error-focus
+            @submit="onSubmit"
+            @reset="reset"
+          >
+        <q-card-section>
+          <div class="text-h6">Add Volunteer Hours</div>
+        </q-card-section>
+        <q-card-section class="q-pt-none">
+          <div class="text">Date</div>
+          <q-input v-model ="date"
+                   filled type="date"
+                   autofocus @keyup.enter="addVolunteering = false"></q-input>
+          <div class="text">Hours Worked</div>
+          <q-input v-model="hours"
+                   filled type ="number"
+                   autofocus @keyup.enter="addVolunteering = false"
+                   lazy-rules
+                   :rules="[
+                      val => val != null && val != '' || 'Please include the number of hours',
+                      val => val > 0 && val <= 16 || 'Please add a reasonable number of hours']"></q-input>
+          <div class="text">Volunteering Type</div>
+          <q-input v-model ="activity"
+                   filled type="string"
+                   autofocus @keyup.enter="addVolunteering = false"></q-input>
+        </q-card-section>
+
+        <q-card-actions align="left" class="text-primary">
+          <q-btn flat
+                 label="Cancel"
+                 type="reset"
+                 v-close-popup></q-btn>
+          <q-btn flat
+                 type="submit"
+                 label="Add Volunteer Hours"
+                 v-close-popup></q-btn>
+        </q-card-actions>
+        </q-form>
+      </q-card>
+    </q-dialog>
+  </div>
   </q-page>
 </template>
 
 <script>
 import { date } from 'quasar'
+import { ref } from 'vue'
+// import { updateVolunteerHours } from '../../api/members.mjs'
 
 export default {
   data () {
     return {
+      // Things for Dialogue
+      renewMembership: ref(false),
+      addVolunteering: ref(false),
+      date: ref(new Date()),
+      hours: ref(1.0),
+      activity: ref(null),
+      // Other things.
       tab: 'status',
       memberId: this.$route.params.memberId,
       columns: [
@@ -105,6 +164,24 @@ export default {
         { name: 'paid', label: 'Paid', field: 'amountpaid', sortable: true },
         { name: 'notes', align: 'left', label: 'Notes', field: 'notes', sortable: true }
       ]
+    }
+  },
+  methods: {
+    reset () {
+      this.date = ref(new Date())
+      this.hours = ref(1.0)
+      this.activity = ref(null)
+    },
+    onSubmit (evt) {
+      // TODO: actually add this to the database.
+      console.log(this.date, this.hours, this.activity)
+      this.$q.notify({
+        color: 'green-4',
+        textColor: 'white',
+        icon: 'cloud_done',
+        message: 'Not added because I don\'t know how!'
+      })
+      this.reset()
     }
   },
   computed: {
