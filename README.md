@@ -56,9 +56,8 @@ quasar dev
 Changes to the web app (`/src`) will be auto compiled and hot-reloaded into the
 browser.
 
-Changes to any API code (`/api`) will need to be manually activated by
-terminating the running `yarn api` process (CTRL+C) and starting it again.
-
+Changes to any API code (`/api`) will automatically detected and the API will
+be restarted
 
 # Deploy to Heroku (main)
 ```bash
