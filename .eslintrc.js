@@ -11,7 +11,8 @@ module.exports = {
   },
 
   env: {
-    browser: true
+    browser: true,
+    'jest/globals': true
   },
 
   // Rules order is important, please avoid shuffling them
@@ -35,7 +36,7 @@ module.exports = {
     // https://eslint.vuejs.org/user-guide/#why-doesn-t-it-work-on-vue-file
     // required to lint *.vue files
     'vue',
-
+    'jest'
   ],
 
   globals: {
