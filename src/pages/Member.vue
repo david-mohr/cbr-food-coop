@@ -144,18 +144,16 @@
 <script>
 import { date } from 'quasar'
 import { ref } from 'vue'
-// import { updateVolunteerHours } from '../../api/members.mjs'
 
 export default {
   data () {
     return {
-      // Things for Dialogue
       renewMembership: ref(false),
       addVolunteering: ref(false),
       date: ref(new Date()),
       hours: ref(1.0),
       activity: ref(null),
-      // Other things.
+
       tab: 'status',
       memberId: this.$route.params.memberId,
       columns: [
@@ -172,15 +170,30 @@ export default {
       this.hours = ref(1.0)
       this.activity = ref(null)
     },
-    onSubmit (evt) {
+    async onSubmit (evt) {
       // TODO: actually add this to the database.
       console.log(this.date, this.hours, this.activity)
-      this.$q.notify({
-        color: 'green-4',
-        textColor: 'white',
-        icon: 'cloud_done',
-        message: 'Not added because I don\'t know how!'
-      })
+      try {
+        await this.$api.post('what/goes/here', {
+          date: this.date,
+          action: this.activity,
+          paid: this.hours,
+          notes: null
+        })
+        this.$q.notify({
+          color: 'green-4',
+          textColor: 'white',
+          icon: 'cloud_done',
+          message: 'Maybe Added!'
+        })
+      } catch (err) {
+        this.$q.notify({
+          color: 'red-4',
+          textColor: 'white',
+          icon: 'error',
+          message: 'Not Added'
+        })
+      }
       this.reset()
     }
   },
