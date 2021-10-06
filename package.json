@@ -13,6 +13,7 @@
     "start": "node server.mjs",
     "api": "DATABASE_URL='postgres://postgres:Pass2021!@localhost:5432/postgres' NODE_ENV=development nodemon server.mjs",
     "mockdata": "DATABASE_URL='postgres://postgres:Pass2021!@localhost:5432/postgres' node create-mock-data.js",
+    "adduser": "DATABASE_URL='postgres://postgres:Pass2021!@localhost:5432/postgres' NODE_ENV=development node api/scripts/adduser.mjs",
     "heroku-postbuild": "quasar build",
     "db": "docker run --rm -d --name dev-postgres -e POSTGRES_PASSWORD='Pass2021!' -v ${PWD}/test_db/:/var/lib/postgresql/data -p 5432:5432 postgres",
     "db:shell": "docker exec -it dev-postgres psql -U postgres",
