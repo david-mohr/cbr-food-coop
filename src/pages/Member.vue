@@ -98,41 +98,50 @@
     <q-dialog v-model="addVolunteering" persistent>
       <q-card style="min-width: 350px">
         <q-form
-            no-error-focus
-            @submit="onSubmit"
-            @reset="reset"
-          >
+          no-error-focus
+          @submit="onSubmit"
+          @reset="reset"
+        >
         <q-card-section>
           <div class="text-h6">Add Volunteer Hours</div>
         </q-card-section>
         <q-card-section class="q-pt-none">
           <div class="text">Date</div>
-          <q-input v-model ="date"
-                   filled type="date"
-                   autofocus @keyup.enter="addVolunteering = false"></q-input>
+          <q-input
+            v-model="date"
+            filled
+            type="date"
+          />
           <div class="text">Hours Worked</div>
-          <q-input v-model="hours"
-                   filled type ="number"
-                   autofocus @keyup.enter="addVolunteering = false"
-                   lazy-rules
-                   :rules="[
-                      val => val != null && val != '' || 'Please include the number of hours',
-                      val => val > 0 && val <= 16 || 'Please add a reasonable number of hours']"></q-input>
+          <q-input
+            v-model="hours"
+            filled
+            type="number"
+            lazy-rules
+            :rules="[
+              val => val != null && val != '' || 'Please include the number of hours',
+              val => val > 0 && val <= 16 || 'Please add a reasonable number of hours'
+            ]"
+          />
           <div class="text">Volunteering Type</div>
-          <q-input v-model ="activity"
-                   filled type="string"
-                   autofocus @keyup.enter="addVolunteering = false"></q-input>
+          <q-input
+            v-model="activity"
+            filled
+            type="string"
+          />
         </q-card-section>
 
         <q-card-actions align="left" class="text-primary">
           <q-btn flat
-                 label="Cancel"
-                 type="reset"
-                 v-close-popup></q-btn>
-          <q-btn flat
-                 type="submit"
-                 label="Add Volunteer Hours"
-                 v-close-popup></q-btn>
+            label="Cancel"
+            type="reset"
+            v-close-popup
+          />
+          <q-btn
+            flat
+            type="submit"
+            label="Add Volunteer Hours"
+          />
         </q-card-actions>
         </q-form>
       </q-card>
@@ -143,17 +152,16 @@
 
 <script>
 import { date } from 'quasar'
-import { ref } from 'vue'
+import { DateTime } from 'luxon'
 
 export default {
   data () {
     return {
-      renewMembership: ref(false),
-      addVolunteering: ref(false),
-      date: ref(new Date()),
-      hours: ref(1.0),
-      activity: ref(null),
-
+      renewMembership: false,
+      addVolunteering: false,
+      date: DateTime.now().toISODate(),
+      hours: 1.0,
+      activity: null,
       tab: 'status',
       memberId: this.$route.params.memberId,
       columns: [
@@ -166,19 +174,23 @@ export default {
   },
   methods: {
     reset () {
-      this.date = ref(new Date())
-      this.hours = ref(1.0)
-      this.activity = ref(null)
+      this.date = DateTime.now().toISODate()
+      this.hours = 1.0
+      this.activity = null
     },
     async onSubmit (evt) {
       // TODO: actually add this to the database.
       console.log(this.date, this.hours, this.activity)
       try {
-        await this.$api.post('what/goes/here', {
+        await this.$api.post(`/api/members/${this.memberId}/history`, {
           date: this.date,
-          action: this.activity,
+          action: 'Volunteered',
           paid: this.hours,
-          notes: null
+          notes: this.activity
+        }, {
+          headers: {
+            authorization: 'Bearer ' + this.$store.state.members.token
+          }
         })
         this.$q.notify({
           color: 'green-4',
