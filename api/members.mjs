@@ -6,6 +6,7 @@ import { hasRole } from './utils.mjs'
 
 const router = express.Router()
 const ACTIONS = ['Applied', 'Registered', 'Approved', 'Volunteered']
+const DAYS_DISCOUNT_PER_HOUR_WORKED = 14;
 
 router.get('/', hasRole('coordinator'), async (req, res) => {
   try {
@@ -39,7 +40,7 @@ export async function updateVolunteerHours (memberId, hoursWorked) {
     if (dbStartDate > startDate) startDate = dbStartDate
   }
   // 14 days of discount for every hour worked
-  const newDiscount = startDate.plus({ days: hoursWorked * 14 })
+  const newDiscount = startDate.plus({ days: hoursWorked * DAYS_DISCOUNT_PER_HOUR_WORKED })
   await query('UPDATE members_extra SET discvaliduntil = $1 WHERE id = $2 RETURNING *', [newDiscount.toString(), memberId])
 }
 
