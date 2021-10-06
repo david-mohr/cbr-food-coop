@@ -192,6 +192,8 @@ export default {
             authorization: 'Bearer ' + this.$store.state.members.token
           }
         })
+        await this.$store.dispatch('members/getHistory', this.memberId)
+        await this.$store.dispatch('members/getStatus', this.memberId)
         this.$q.notify({
           color: 'green-4',
           textColor: 'white',
@@ -207,6 +209,7 @@ export default {
         })
       }
       this.reset()
+      this.addVolunteering = false
     }
   },
   computed: {
