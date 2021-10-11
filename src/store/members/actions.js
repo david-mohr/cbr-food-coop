@@ -84,6 +84,15 @@ export async function getStatus (context, memberId) {
   }
 }
 
+export async function updateMemberDetails (context, member) {
+  await api.put(`/api/members/${member.id}`, member, {
+    headers: {
+      authorization: 'Bearer ' + context.state.token
+    }
+  })
+  context.commit('updateMemberDetails', member)
+}
+
 export async function login (context, creds) {
   const res = await api.post('/api/login', creds)
   SessionStorage.set('token', res.data.token)

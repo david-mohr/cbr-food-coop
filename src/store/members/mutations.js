@@ -34,3 +34,8 @@ export function removeToken (state) {
   state.token = null
   state.user = null
 }
+export function updateMemberDetails (state, member) {
+  const index = state.members.findIndex(m => m.id === member.id)
+  if (index >= 0) state.members.splice(index, 1, member)
+  else state.members.push(member)
+}

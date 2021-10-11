@@ -47,6 +47,28 @@
         label="Phone"
         :readonly="!edit"
       />
+      <div class="q-pt-lg row justify-end q-gutter-sm">
+        <template v-if="edit">
+          <q-btn
+            label="Cancel"
+            :disable="saving"
+            @click="cancel"
+          />
+          <q-btn
+            color="primary"
+            :working="saving"
+            :disable="saving"
+            label="Save"
+            @click="save"
+          />
+        </template>
+        <template v-else>
+          <q-btn
+            label="Edit member details"
+            @click="edit = true"
+          />
+        </template>
+      </div>
     </div>
   </q-form>
 </template>
@@ -61,12 +83,40 @@ export default {
   },
   data () {
     return {
-      edit: false
+      saving: false,
+      edit: false,
+      member: {}
     }
   },
-  computed: {
-    member () {
-      return this.$store.state.members.members.find(member => member.id === this.memberId)
+  mounted () {
+    this.member = { ...this.$store.state.members.members.find(member => member.id === this.memberId) }
+  },
+  methods: {
+    cancel () {
+      this.edit = false
+      this.member = { ...this.$store.state.members.members.find(member => member.id === this.memberId) }
+    },
+    async save () {
+      try {
+        this.saving = true
+        await this.$store.dispatch('members/updateMemberDetails', this.member)
+        this.member = { ...this.$store.state.members.members.find(member => member.id === this.memberId) }
+        this.edit = false
+        this.$q.notify({
+          color: 'green-4',
+          textColor: 'white',
+          icon: 'cloud_done',
+          message: 'Member details updated'
+        })
+      } catch (err) {
+        this.$q.notify({
+          color: 'red-4',
+          textColor: 'white',
+          icon: 'error',
+          message: 'Update failed'
+        })
+      }
+      this.saving = false
     }
   }
 }
