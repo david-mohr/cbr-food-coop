@@ -45,8 +45,8 @@
 <script>
 export default {
   props: {
-    member: {
-      type: Object,
+    memberId: {
+      type: String,
       required: true
     }
   },
@@ -55,8 +55,10 @@ export default {
       edit: false
     }
   },
-  mounted () {
-    console.log(this.member)
+  computed: {
+    member () {
+      return this.$store.state.members.members.find(member => member.id === this.memberId)
+    }
   }
 }
 </script>
