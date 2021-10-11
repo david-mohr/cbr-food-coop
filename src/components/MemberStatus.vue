@@ -13,13 +13,13 @@
         :class="expStatus"
       >
         <q-card-section>
-          <div class="text-h6">
+          <div class="text-h6 text-white">
             Membership expires
           </div>
         </q-card-section>
         <q-separator inset />
         <q-card-section>
-          <div class="text-h6">
+          <div class="text-h6 text-white">
             {{ expDate }}
           </div>
         </q-card-section>
@@ -104,13 +104,13 @@
         :class="discountStatus"
       >
         <q-card-section>
-          <div class="text-h6">
+          <div class="text-h6 text-white">
             Discount valid until
           </div>
         </q-card-section>
         <q-separator inset />
         <q-card-section>
-          <div class="text-h6">
+          <div class="text-h6 text-white">
             {{ discountDate }}
           </div>
         </q-card-section>
