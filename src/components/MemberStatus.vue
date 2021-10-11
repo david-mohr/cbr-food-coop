@@ -176,7 +176,7 @@ export default {
           color: 'green-4',
           textColor: 'white',
           icon: 'cloud_done',
-          message: 'Maybe Added!'
+          message: 'Hours added'
         })
       } catch (err) {
         this.$q.notify({
