@@ -24,13 +24,22 @@
             align="justify"
             narrow-indicator
           >
-            <q-tab name="status" label="Status" />
-            <q-tab name="history" label="History" />
+            <q-tab
+              name="status"
+              label="Status"
+            />
+            <q-tab
+              name="history"
+              label="History"
+            />
           </q-tabs>
 
           <q-separator />
 
-          <q-tab-panels v-model="tab" animated>
+          <q-tab-panels
+            v-model="tab"
+            animated
+          >
             <q-tab-panel name="status">
               <member-status
                 :member-id="memberId"

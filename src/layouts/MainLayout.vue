@@ -16,9 +16,20 @@
           The Food Co-op
         </q-toolbar-title>
 
-        <q-btn dense flat no-wrap>
-          <q-avatar rounded size="36px" icon="account_circle"/>
-          <q-icon name="arrow_drop_down" size="16px" />
+        <q-btn
+          dense
+          flat
+          no-wrap
+        >
+          <q-avatar
+            rounded
+            size="36px"
+            icon="account_circle"
+          />
+          <q-icon
+            name="arrow_drop_down"
+            size="16px"
+          />
           <q-menu auto-close>
             <q-list dense>
               <q-item>
@@ -27,7 +38,10 @@
                 </q-item-section>
               </q-item>
               <q-separator />
-              <q-item clickable @click="logout">
+              <q-item
+                clickable
+                @click="logout"
+              >
                 <q-item-section>Sign out</q-item-section>
               </q-item>
             </q-list>

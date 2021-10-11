@@ -1,6 +1,13 @@
 <template>
-  <q-page class="flex justify-center" style="margin-top: 30px">
-    <list-with-filter v-slot="props" :items="users" filter-key="username">
+  <q-page
+    class="flex justify-center"
+    style="margin-top: 30px"
+  >
+    <list-with-filter
+      v-slot="props"
+      :items="users"
+      filter-key="username"
+    >
       <q-item
         v-for="user in props.items"
         :key="user.id"
@@ -10,18 +17,26 @@
       >
         <q-item-section>
           <q-item-label>{{ user.username }}</q-item-label>
-          <q-item-label caption>{{ user.role }}</q-item-label>
+          <q-item-label caption>
+            {{ user.role }}
+          </q-item-label>
         </q-item-section>
       </q-item>
     </list-with-filter>
-    <q-page-sticky position="bottom-right" :offset="[18, 18]">
+    <q-page-sticky
+      position="bottom-right"
+      :offset="[18, 18]"
+    >
       <q-btn
         fab
         icon="add"
         color="accent"
         @click="addUser = true"
       />
-      <q-dialog v-model="addUser" persistent>
+      <q-dialog
+        v-model="addUser"
+        persistent
+      >
         <q-card style="min-width: 350px">
           <q-form
             no-error-focus
@@ -29,7 +44,9 @@
             @reset="reset"
           >
             <q-card-section>
-              <div class="text-h6">New user</div>
+              <div class="text-h6">
+                New user
+              </div>
             </q-card-section>
 
             <q-card-section>
@@ -63,9 +80,21 @@
               />
             </q-card-section>
 
-            <q-card-actions align="right" class="text-primary">
-              <q-btn flat label="Cancel" type="reset" v-close-popup />
-              <q-btn flat type="submit" label="Add user"  />
+            <q-card-actions
+              align="right"
+              class="text-primary"
+            >
+              <q-btn
+                flat
+                label="Cancel"
+                type="reset"
+                v-close-popup
+              />
+              <q-btn
+                flat
+                type="submit"
+                label="Add user"
+              />
             </q-card-actions>
           </q-form>
         </q-card>

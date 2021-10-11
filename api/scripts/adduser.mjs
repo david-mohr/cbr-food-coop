@@ -2,7 +2,7 @@
 
 import chalk from 'chalk'
 import inquirer from 'inquirer'
-import { encryptPassword, end, query } from '../database.mjs'
+import { encryptPassword, query } from '../database.mjs'
 
 const roles = ['user', 'coordinator', 'admin']
 

@@ -1,7 +1,11 @@
 <template>
   <q-page>
-    <div class="text-h2 text-center">Application for Membership</div>
-    <div class="text-h4 text-center">of The Food Co-operative Shop Ltd.</div>
+    <div class="text-h2 text-center">
+      Application for Membership
+    </div>
+    <div class="text-h4 text-center">
+      of The Food Co-operative Shop Ltd.
+    </div>
     <div class="q-pa-md">
       <q-stepper
         v-model="step"
@@ -47,11 +51,20 @@
           icon="shopping_cart"
           :done="step > 2"
         >
-          <q-toggle v-model="concession" label="Concession" />
-            <q-list>
-            <q-item tag="label" v-ripple>
+          <q-toggle
+            v-model="concession"
+            label="Concession"
+          />
+          <q-list>
+            <q-item
+              tag="label"
+              v-ripple
+            >
               <q-item-section avatar>
-                <q-radio v-model="membershipType" val="individual" />
+                <q-radio
+                  v-model="membershipType"
+                  val="individual"
+                />
               </q-item-section>
               <q-item-section>
                 <q-item-label>Individual</q-item-label>
@@ -62,13 +75,24 @@
                 /year
               </q-item-section>
             </q-item>
-            <q-item tag="label" v-ripple>
+            <q-item
+              tag="label"
+              v-ripple
+            >
               <q-item-section avatar>
-                <q-radio v-model="membershipType" val="couple" />
+                <q-radio
+                  v-model="membershipType"
+                  val="couple"
+                />
               </q-item-section>
               <q-item-section>
                 <q-item-label>Couple</q-item-label>
-                <q-item-label v-if="concession" caption>Where both people hold a concession</q-item-label>
+                <q-item-label
+                  v-if="concession"
+                  caption
+                >
+                  Where both people hold a concession
+                </q-item-label>
               </q-item-section>
               <q-item-section side>
                 <b v-if="concession">$25</b>
@@ -76,13 +100,24 @@
                 /year
               </q-item-section>
             </q-item>
-            <q-item tag="label" v-ripple>
+            <q-item
+              tag="label"
+              v-ripple
+            >
               <q-item-section avatar>
-                <q-radio v-model="membershipType" val="household" />
+                <q-radio
+                  v-model="membershipType"
+                  val="household"
+                />
               </q-item-section>
               <q-item-section>
                 <q-item-label>Household</q-item-label>
-                <q-item-label v-if="concession" caption>Majority concession holders</q-item-label>
+                <q-item-label
+                  v-if="concession"
+                  caption
+                >
+                  Majority concession holders
+                </q-item-label>
               </q-item-section>
               <q-item-section side>
                 <b v-if="concession">$40</b>
@@ -154,12 +189,23 @@
           <p>What is your gender?</p>
           <p>Do you have a disability or any other accessibility needs?</p>
         </q-step>
-        <template v-slot:navigation>
+        <template #navigation>
           <q-stepper-navigation>
             <div class="row">
-              <q-btn v-if="step > 1" flat color="primary" @click="$refs.stepper.previous()" label="Back" class="q-ml-sm" />
+              <q-btn
+                v-if="step > 1"
+                flat
+                color="primary"
+                @click="$refs.stepper.previous()"
+                label="Back"
+                class="q-ml-sm"
+              />
               <q-space />
-              <q-btn @click="$refs.stepper.next()" color="primary" :label="step === 4 ? 'Finish' : 'Continue'" />
+              <q-btn
+                @click="$refs.stepper.next()"
+                color="primary"
+                :label="step === 4 ? 'Finish' : 'Continue'"
+              />
             </div>
           </q-stepper-navigation>
         </template>

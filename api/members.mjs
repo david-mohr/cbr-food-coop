@@ -6,7 +6,7 @@ import { hasRole } from './utils.mjs'
 
 const router = express.Router()
 const ACTIONS = ['Applied', 'Registered', 'Approved', 'Volunteered']
-const DAYS_DISCOUNT_PER_HOUR_WORKED = 14;
+const DAYS_DISCOUNT_PER_HOUR_WORKED = 14
 
 router.get('/', hasRole('coordinator'), async (req, res) => {
   try {

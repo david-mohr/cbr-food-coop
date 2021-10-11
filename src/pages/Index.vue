@@ -1,6 +1,12 @@
 <template>
-  <q-page class="flex justify-center" style="margin-top: 30px">
-    <list-with-filter v-slot="props" :items="members">
+  <q-page
+    class="flex justify-center"
+    style="margin-top: 30px"
+  >
+    <list-with-filter
+      v-slot="props"
+      :items="members"
+    >
       <q-item
         v-for="member in props.items"
         :key="member.id"

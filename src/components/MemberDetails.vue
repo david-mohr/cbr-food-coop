@@ -1,41 +1,97 @@
 <template>
   <q-form class="row q-col-gutter-md">
     <div class="col-6">
-      <q-field label="Name" stack-label>
-        <template v-slot:control>
-          <div class="self-center full-width no-outline" tabindex="0">{{ member.name }}</div>
+      <q-field
+        label="Name"
+        stack-label
+      >
+        <template #control>
+          <div
+            class="self-center full-width no-outline"
+            tabindex="0"
+          >
+            {{ member.name }}
+          </div>
         </template>
       </q-field>
-      <q-field label="Address" stack-label>
-        <template v-slot:control>
-          <div class="self-center full-width no-outline" tabindex="0">{{ member.address }}</div>
+      <q-field
+        label="Address"
+        stack-label
+      >
+        <template #control>
+          <div
+            class="self-center full-width no-outline"
+            tabindex="0"
+          >
+            {{ member.address }}
+          </div>
         </template>
       </q-field>
-      <q-field label="Suburb" stack-label>
-        <template v-slot:control>
-          <div class="self-center full-width no-outline" tabindex="0">{{ member.city }}</div>
+      <q-field
+        label="Suburb"
+        stack-label
+      >
+        <template #control>
+          <div
+            class="self-center full-width no-outline"
+            tabindex="0"
+          >
+            {{ member.city }}
+          </div>
         </template>
       </q-field>
-      <q-field label="Suburb" stack-label>
-        <template v-slot:control>
-          <div class="self-center full-width no-outline" tabindex="0">{{ member.postal }}</div>
+      <q-field
+        label="Suburb"
+        stack-label
+      >
+        <template #control>
+          <div
+            class="self-center full-width no-outline"
+            tabindex="0"
+          >
+            {{ member.postal }}
+          </div>
         </template>
       </q-field>
     </div>
     <div class="col-6">
-      <q-field label="ID" stack-label>
-        <template v-slot:control>
-          <div class="self-center full-width no-outline" tabindex="0">{{ member.id }}</div>
+      <q-field
+        label="ID"
+        stack-label
+      >
+        <template #control>
+          <div
+            class="self-center full-width no-outline"
+            tabindex="0"
+          >
+            {{ member.id }}
+          </div>
         </template>
       </q-field>
-      <q-field label="Email" stack-label>
-        <template v-slot:control>
-          <div class="self-center full-width no-outline" tabindex="0">{{ member.email }}</div>
+      <q-field
+        label="Email"
+        stack-label
+      >
+        <template #control>
+          <div
+            class="self-center full-width no-outline"
+            tabindex="0"
+          >
+            {{ member.email }}
+          </div>
         </template>
       </q-field>
-      <q-field label="Phone" stack-label>
-        <template v-slot:control>
-          <div class="self-center full-width no-outline" tabindex="0">{{ member.phone }}</div>
+      <q-field
+        label="Phone"
+        stack-label
+      >
+        <template #control>
+          <div
+            class="self-center full-width no-outline"
+            tabindex="0"
+          >
+            {{ member.phone }}
+          </div>
         </template>
       </q-field>
     </div>
