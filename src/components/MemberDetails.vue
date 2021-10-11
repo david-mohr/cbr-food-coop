@@ -1,63 +1,32 @@
 <template>
   <q-form class="row q-col-gutter-md">
     <div class="col-6">
-      <q-field
+      <q-input
+        v-model="member.name"
         label="Name"
-        stack-label
-      >
-        <template #control>
-          <div
-            class="self-center full-width no-outline"
-            tabindex="0"
-          >
-            {{ member.name }}
-          </div>
-        </template>
-      </q-field>
-      <q-field
+        :readonly="!edit"
+      />
+      <q-input
+        v-model="member.address"
         label="Address"
-        stack-label
-      >
-        <template #control>
-          <div
-            class="self-center full-width no-outline"
-            tabindex="0"
-          >
-            {{ member.address }}
-          </div>
-        </template>
-      </q-field>
-      <q-field
+        :readonly="!edit"
+      />
+      <q-input
+        v-model="member.city"
         label="Suburb"
-        stack-label
-      >
-        <template #control>
-          <div
-            class="self-center full-width no-outline"
-            tabindex="0"
-          >
-            {{ member.city }}
-          </div>
-        </template>
-      </q-field>
-      <q-field
-        label="Suburb"
-        stack-label
-      >
-        <template #control>
-          <div
-            class="self-center full-width no-outline"
-            tabindex="0"
-          >
-            {{ member.postal }}
-          </div>
-        </template>
-      </q-field>
+        :readonly="!edit"
+      />
+      <q-input
+        v-model="member.postal"
+        label="Postcode"
+        :readonly="!edit"
+      />
     </div>
     <div class="col-6">
       <q-field
         label="ID"
         stack-label
+        readonly
       >
         <template #control>
           <div
@@ -68,32 +37,16 @@
           </div>
         </template>
       </q-field>
-      <q-field
+      <q-input
+        v-model="member.email"
         label="Email"
-        stack-label
-      >
-        <template #control>
-          <div
-            class="self-center full-width no-outline"
-            tabindex="0"
-          >
-            {{ member.email }}
-          </div>
-        </template>
-      </q-field>
-      <q-field
+        :readonly="!edit"
+      />
+      <q-input
+        v-model="member.phone"
         label="Phone"
-        stack-label
-      >
-        <template #control>
-          <div
-            class="self-center full-width no-outline"
-            tabindex="0"
-          >
-            {{ member.phone }}
-          </div>
-        </template>
-      </q-field>
+        :readonly="!edit"
+      />
     </div>
   </q-form>
 </template>
