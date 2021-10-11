@@ -1,8 +1,15 @@
 CREATE TABLE IF NOT EXISTS signup (
   id SERIAL PRIMARY KEY  NOT NULL,
-  name           TEXT    NOT NULL,
-  email          TEXT    NOT NULL,
-  phone          TEXT    NOT NULL
+  firstname varchar(255),
+  lastname varchar(255),
+  address varchar(255),
+  postal varchar(255),
+  city varchar(255),
+  email varchar(255),
+  phone varchar(255),
+  anuaffiliation varchar(255),
+  incomelevel varchar(255),
+  sendemails boolean NOT NULL DEFAULT true,
 );
 
 CREATE TABLE IF NOT EXISTS customers (
