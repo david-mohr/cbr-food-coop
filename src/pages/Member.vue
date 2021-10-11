@@ -3,30 +3,14 @@
     <p>Member not found</p>
   </q-page>
   <q-page padding v-if="!!member">
-    <div class="q-py-md">
-      <q-field label="ID" stack-label>
-        <template v-slot:control>
-          <div class="self-center full-width no-outline" tabindex="0">{{ member.id }}</div>
-        </template>
-      </q-field>
-      <q-field label="Name" stack-label>
-        <template v-slot:control>
-          <div class="self-center full-width no-outline" tabindex="0">{{ member.name }}</div>
-        </template>
-      </q-field>
-      <q-field label="Email" stack-label>
-        <template v-slot:control>
-          <div class="self-center full-width no-outline" tabindex="0">{{ member.email }}</div>
-        </template>
-      </q-field>
-      <q-field label="Phone" stack-label>
-        <template v-slot:control>
-          <div class="self-center full-width no-outline" tabindex="0">{{ member.phone }}</div>
-        </template>
-      </q-field>
+    <div class="q-py-md row">
+      <member-details
+        :member="member"
+        class="col"
+      />
     </div>
-    <div class="q-py-md">
-      <q-card style="width: 100%">
+    <div class="q-py-md row">
+      <q-card class="col">
         <q-tabs
           v-model="tab"
           dense
@@ -153,8 +137,10 @@
 <script>
 import { date } from 'quasar'
 import { DateTime } from 'luxon'
+import MemberDetails from '../components/MemberDetails.vue'
 
 export default {
+  components: { MemberDetails },
   data () {
     return {
       renewMembership: false,
