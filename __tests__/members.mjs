@@ -21,7 +21,7 @@ it('should update the hours correctly', async () => {
 
 it('should handle future startDate', async () => {
   const startDate = DateTime.now().startOf('day').plus({ days: 30 })
-  mockDatabase.query.mockResolvedValueOnce([{ discvaliduntil: startDate.toString() }])
+  mockDatabase.query.mockResolvedValueOnce([{ discvaliduntil: startDate.toJSDate() }])
   mockDatabase.query.mockResolvedValueOnce()
   await updateVolunteerHours('id', 1)
   const newDiscount = startDate.plus({ days: 14 }).toString()

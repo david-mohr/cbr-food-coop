@@ -36,7 +36,7 @@ export async function updateVolunteerHours (memberId, hoursWorked) {
   if (!results.length) throw new Error(`Failed to find members_extra for member: ${memberId}`)
   let startDate = DateTime.now().startOf('day')
   if (results[0].discvaliduntil) {
-    const dbStartDate = DateTime.fromISO(results[0].discvaliduntil)
+    const dbStartDate = DateTime.fromJSDate(results[0].discvaliduntil)
     if (dbStartDate > startDate) startDate = dbStartDate
   }
   // 14 days of discount for every hour worked
