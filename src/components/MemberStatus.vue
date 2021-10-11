@@ -59,7 +59,7 @@
                   type="date"
                 />
                 <q-input
-                  v-model="hours"
+                  v-model.number="hours"
                   filled
                   hide-bottom-space
                   label="Hours Worked"
