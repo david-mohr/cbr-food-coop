@@ -1,8 +1,6 @@
 <template>
   <div class="row q-col-gutter-md">
     <div class="col-6">
-      <div class="q-pa-md">
-      </div>
       <q-card
         bordered
         :class="expStatus"
@@ -15,7 +13,7 @@
         <q-card-actions align="right">
           <q-btn
             flat
-            text-color=white
+            text-color="white"
             label="Renew Membership"
             @click="renewMembership = true"
           />
@@ -23,7 +21,23 @@
       </q-card>
     </div>
     <div class="col-6">
-      <div class="q-py-md">
+      <q-card
+        bordered
+        :class="discountStatus"
+      >
+        <q-card-section>
+          <div class="text-h6 text-white">
+            Discount valid until {{ discountDate }}
+          </div>
+        </q-card-section>
+        <q-card-actions align="right">
+          <q-btn
+            flat
+            label="Add Volunteering Hours"
+            text-color="white"
+            @click="addVolunteering = true"
+          />
+        </q-card-actions>
         <q-dialog
           v-model="addVolunteering"
           persistent
@@ -34,39 +48,31 @@
               @submit="onSubmit"
               @reset="reset"
             >
-              <q-card-section>
-                <div class="text-h6">
-                  Add Volunteer Hours
-                </div>
+              <q-card-section class="text-h6">
+                Add Volunteer Hours
               </q-card-section>
-              <q-card-section class="q-pt-none">
-                <div class="text">
-                  Date
-                </div>
+              <q-card-section class="q-pt-none q-gutter-y-md">
                 <q-input
                   v-model="date"
                   filled
+                  label="Date"
                   type="date"
                 />
-                <div class="text">
-                  Hours Worked
-                </div>
                 <q-input
                   v-model="hours"
                   filled
+                  hide-bottom-space
+                  label="Hours Worked"
                   type="number"
-                  lazy-rules
                   :rules="[
                     val => val != null && val != '' || 'Please include the number of hours',
                     val => val > 0 && val <= 16 || 'Please add a reasonable number of hours'
                   ]"
                 />
-                <div class="text">
-                  Volunteering Type
-                </div>
                 <q-input
                   v-model="activity"
                   filled
+                  label="Volunteering Type"
                   type="string"
                 />
               </q-card-section>
@@ -90,24 +96,6 @@
             </q-form>
           </q-card>
         </q-dialog>
-      </div>
-      <q-card
-        bordered
-        :class="discountStatus"
-      >
-        <q-card-section>
-          <div class="text-h6 text-white">
-            Discount valid until {{ discountDate }}
-          </div>
-        </q-card-section>
-        <q-card-actions align="right">
-          <q-btn
-            flat
-            label="Add Volunteering Hours"
-            text-color="white"
-            @click="addVolunteering = true"
-          />
-        </q-card-actions>
       </q-card>
     </div>
   </div>
