@@ -68,7 +68,7 @@ router.post('/:id/history', hasRole('coordinator'), async (req, res) => {
     await query('INSERT into members_history (id, datenew, member, action, amountpaid, notes) values($1, $2, $3, $4, $5, $6)', [uid(), dateWorked, req.params.id, req.body.action, req.body.paid, req.body.notes])
     // Check if we need to update the discount date
     if (req.body.action === 'Volunteered') {
-      updateVolunteerHours(req.params.id, req.body.paid)
+      await updateVolunteerHours(req.params.id, req.body.paid)
     }
     res.sendStatus(204)
   } catch (err) {
