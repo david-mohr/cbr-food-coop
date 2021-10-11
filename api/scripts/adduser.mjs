@@ -41,7 +41,7 @@ async function main () {
   console.log(chalk.bold.cyan('INFO'), 'Results')
   console.log('RESULTS', results)
   console.log(chalk.bold.green('DONE'))
-  end()
+  process.exit(0)
 }
 
 main()

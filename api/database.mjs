@@ -20,6 +20,7 @@ if (process.env.NODE_ENV === 'development') {
 const pool = new Pool(config)
 
 process.on('exit', () => {
+  // TODO figure out if the pool is already ended
   pool.end()
 })
 
