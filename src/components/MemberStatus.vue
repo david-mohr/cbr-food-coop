@@ -2,11 +2,6 @@
   <div class="row q-col-gutter-md">
     <div class="col-6">
       <div class="q-pa-md">
-        <q-btn
-          label="Renew Membership"
-          color="primary"
-          @click="renewMembership = true"
-        />
       </div>
       <q-card
         bordered
@@ -14,24 +9,21 @@
       >
         <q-card-section>
           <div class="text-h6 text-white">
-            Membership expires
+            Membership expires {{ expDate }}
           </div>
         </q-card-section>
-        <q-separator inset />
-        <q-card-section>
-          <div class="text-h6 text-white">
-            {{ expDate }}
-          </div>
-        </q-card-section>
+        <q-card-actions align="right">
+          <q-btn
+            flat
+            text-color=white
+            label="Renew Membership"
+            @click="renewMembership = true"
+          />
+        </q-card-actions>
       </q-card>
     </div>
     <div class="col-6">
-      <div class="q-pa-md">
-        <q-btn
-          label="Add Volunteering Hours"
-          color="primary"
-          @click="addVolunteering = true"
-        />
+      <div class="q-py-md">
         <q-dialog
           v-model="addVolunteering"
           persistent
@@ -105,15 +97,17 @@
       >
         <q-card-section>
           <div class="text-h6 text-white">
-            Discount valid until
+            Discount valid until {{ discountDate }}
           </div>
         </q-card-section>
-        <q-separator inset />
-        <q-card-section>
-          <div class="text-h6 text-white">
-            {{ discountDate }}
-          </div>
-        </q-card-section>
+        <q-card-actions align="right">
+          <q-btn
+            flat
+            label="Add Volunteering Hours"
+            text-color="white"
+            @click="addVolunteering = true"
+          />
+        </q-card-actions>
       </q-card>
     </div>
   </div>
