@@ -13,6 +13,13 @@ A series of one-time-only steps to get everything ready for development
 ```bash
 yarn
 ```
+### Make sure Docker is running
+On MacOS this requires running the docker desktop app
+
+On Linux run the command
+```
+systemctl status docker
+```
 
 ### Prepare the test DB
 This will launch the database in the background using `docker`
@@ -21,12 +28,19 @@ yarn db
 ```
 
 The first time after the database is loaded, there are two important steps:
+* Generate some mock data 
 * Manually load the first admin user
-* Generate some mock data
+
 
 ```bash
-./api/scripts/adduser
 yarn mockdata
+yarn adduser
+```
+### Generate Secret
+We need a real token secret for production but for development purposes we can use a mock one.
+
+```
+echo TOKEN_SECRET=abcd1234abcd1234 >> .env
 ```
 
 You're now ready to start development!
@@ -36,6 +50,7 @@ You're now ready to start development!
 If you already started the database during setup, you don't need to run it
 again. This will launch in the background
 ```bash
+# make sure docker is running (see above) then...
 yarn db
 ```
 
