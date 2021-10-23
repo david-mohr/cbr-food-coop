@@ -94,6 +94,12 @@ const linksList = [
     caption: 'Coordinators and admins',
     icon: 'badge',
     link: '/users'
+  },
+  {
+    title: 'About',
+    caption: 'Info about this software',
+    icon: 'info',
+    link: '/about'
   }
 ]
 
