@@ -11,7 +11,8 @@ const routes = [
       { path: 'members', component: () => import('pages/Index.vue') },
       { path: 'members/:memberId', name: 'Member', component: () => import('pages/Member.vue') },
       { path: 'users', component: () => import('pages/Users.vue') },
-      { path: 'users/:userId', name: 'User', component: () => import('pages/User.vue') }
+      { path: 'users/:userId', name: 'User', component: () => import('pages/User.vue') },
+      { path: 'about', component: () => import('pages/About.vue') }
     ]
   },
 
