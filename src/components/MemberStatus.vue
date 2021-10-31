@@ -18,6 +18,74 @@
             @click="renewMembership = true"
           />
         </q-card-actions>
+        <q-dialog
+          v-model="renewMembership"
+          persistent
+        >
+          <q-card style="min-width: 350px">
+            <q-form
+              no-error-focus
+              @submit="onSubmit"
+              @reset="reset"
+            >
+              <q-card-section class="text-h6">
+                Renew Membership
+              </q-card-section>
+              <q-card-section class="q-pt-none q-gutter-y-md">
+                <q-select
+                  filled
+                  v-model="renewal_type"
+                  :options="renewal_types"
+                  label="Membership Type"
+                />
+                <q-toggle
+                  v-model="renewal_concession"
+                  label="Concession Holder"
+                />
+                <q-input
+                  v-if="renewal_concession"
+                  v-model="concession_type"
+                  filled
+                  hide-bottom-space
+                  label="Concession Type"
+                  type="string"
+                  :rules="[
+                    val => val != null && val != '' || 'Please provide a valid concession type.'
+                  ]"
+                />
+                <q-input
+                  v-model="renewal_price"
+                  filled
+                  label="Amount Paid"
+                  type="number"
+                />
+                <q-input
+                  v-model="renewal_receipt"
+                  filled
+                  label="Vend receipt number"
+                  type="string"
+                />
+              </q-card-section>
+
+              <q-card-actions
+                align="left"
+                class="text-primary"
+              >
+                <q-btn
+                  flat
+                  label="Cancel"
+                  type="reset"
+                  v-close-popup
+                />
+                <q-btn
+                  flat
+                  type="submit"
+                  label="Submit Renewal"
+                />
+              </q-card-actions>
+            </q-form>
+          </q-card>
+        </q-dialog>
       </q-card>
     </div>
     <div class="col-6">
@@ -114,6 +182,16 @@ export default {
   },
   data () {
     return {
+      action: 'Volunteered',
+      renewal_concession: false,
+      renewal_type: null,
+      renewal_types: [
+        'Single', 'Couple', 'Household', 'Philanthropic'
+      ], // I would like to have this as a table in the database,
+      // as I think this is likely to change in the future. The same may go for the below.
+      concession_type: null,
+      renewal_price: 0.0, // could be linked to renewal type by default.
+      renewal_receipt: null, // to be phased out with vend integration.
       addVolunteering: false,
       renewMembership: false,
       date: DateTime.now().toISODate(),
@@ -157,13 +235,23 @@ export default {
       this.activity = null
     },
     async onSubmit (evt) {
-      // TODO: actually add this to the database.
-      console.log(this.date, this.hours, this.activity)
+      console.log(this.date, this.hours, this.activity, this.renewMembership)
+
+      if (this.renewMembership) {
+        // Populate or update necessary fields for adding to member history.
+        this.action = 'Renewed'
+        this.hours = this.renewal_price
+        this.activity = this.renewal_receipt
+      }
+
+      console.log(this.date, this.action, this.hours, this.activity)
+
+      // For the time being, add membership renewal into volunteer history.
       try {
         await this.$api.post(`/api/members/${this.memberId}/history`, {
           date: this.date,
-          action: 'Volunteered',
-          paid: this.hours,
+          action: this.action,
+          paid: Number(this.hours),
           notes: this.activity
         }, {
           headers: {
@@ -183,12 +271,47 @@ export default {
           color: 'red-4',
           textColor: 'white',
           icon: 'error',
-          message: 'Not Added'
+          message: 'Hours Not Added'
         })
       }
+
+      // Update display with new membership and discount expiry.
+
       this.reset()
       this.addVolunteering = false
     }
+    // async onRenew (evt) {
+    //   console.log(this.renewal_type, this.concession_type, this.renewal_price, this.renewal_receipt)
+    //   try {
+    //     await this.$api.post(`/api/members/${this.memberId}/membership`, {
+    //       date: this.date,
+    //       action: 'Volunteered',
+    //       paid: this.hours,
+    //       notes: this.activity
+    //     }, {
+    //       headers: {
+    //         authorization: 'Bearer ' + this.$store.state.members.token
+    //       }
+    //     })
+    //     await this.$store.dispatch('members/getHistory', this.memberId)
+    //     await this.$store.dispatch('members/getStatus', this.memberId)
+    //     this.$q.notify({
+    //       color: 'green-4',
+    //       textColor: 'white',
+    //       icon: 'cloud_done',
+    //       message: 'Hours added'
+    //     })
+    //   } catch (err) {
+    //     this.$q.notify({
+    //       color: 'red-4',
+    //       textColor: 'white',
+    //       icon: 'error',
+    //       message: 'Not Added'
+    //     })
+    //   }
+    //   this.reset()
+    //   this.addVolunteering = false
+    // }
   }
 }
 </script>

@@ -5,7 +5,8 @@ import { query } from './database.mjs'
 import { hasRole } from './utils.mjs'
 
 const router = express.Router()
-const ACTIONS = ['Applied', 'Registered', 'Approved', 'Volunteered']
+const ACTIONS = ['Applied', 'Registered', 'Approved', 'Volunteered',
+  'Renewed'] // This probably ought to be moved elsewhere.
 const DAYS_DISCOUNT_PER_HOUR_WORKED = 14
 const memberProps = ['name', 'address', 'city', 'postal', 'email', 'phone']
 
@@ -75,6 +76,23 @@ router.get('/:id/history', hasRole('coordinator'), async (req, res) => {
   }
 })
 
+export async function renewMembership (memberId) {
+  const results = await query(
+    'SELECT membershipexpires FROM members_extra WHERE id = $1'
+    , [memberId])
+  if (!results.length) throw new Error(`Failed to find members_extra for member: ${memberId}`)
+  let startDate = DateTime.now().startOf('day')
+  if (results[0].discvaliduntil) {
+    const dbStartDate = DateTime.fromJSDate(results[0].discvaliduntil)
+    if (dbStartDate > startDate) startDate = dbStartDate
+  }
+  // For the time being, all memberships are exactly one year.
+  const newExpiry = startDate.plus({ years: 1 })
+  await query(
+    'UPDATE members_extra SET membershipexpires = $1 WHERE id = $2 RETURNING *'
+    , [newExpiry.toString(), memberId])
+}
+
 export async function updateVolunteerHours (memberId, hoursWorked) {
   const results = await query('SELECT discvaliduntil FROM members_extra WHERE ID = $1', [memberId])
   if (!results.length) throw new Error(`Failed to find members_extra for member: ${memberId}`)
@@ -113,6 +131,8 @@ router.post('/:id/history', hasRole('coordinator'), async (req, res) => {
     // Check if we need to update the discount date
     if (req.body.action === 'Volunteered') {
       await updateVolunteerHours(req.params.id, req.body.paid)
+    } else if (req.body.action === 'Membership Renewed') {
+      await renewMembership(req.params.id)
     }
     res.sendStatus(204)
   } catch (err) {
