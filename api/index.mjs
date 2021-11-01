@@ -19,10 +19,10 @@ router.use('/users', users)
 export default router
 
 const API_URL = `https://api.mailgun.net/v3/${process.env.MAILGUN_DOMAIN}`
-async function emailTest() {
+async function emailTest () {
   try {
-    const body = new FormData();
-    body.append('from', 'mailgun@sandboxe7b7304dfdd6484797a1974eb062fa39.mailgun.org')
+    const body = new FormData()
+    body.append('from', 'info@cbrfoodcoop.org.au')
     body.append('to', 'morloch@gmail.com')
     body.append('subject', 'This is subject')
     body.append('text', 'Text body')
