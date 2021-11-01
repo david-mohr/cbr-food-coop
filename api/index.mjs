@@ -38,4 +38,38 @@ async function emailTest () {
   }
 }
 
-//emailTest()
+const VEND_URL = 'https://thefoodcooperativeshop.vendhq.com/api/2.0'
+async function vendTest () {
+  try {
+    /*
+    const json = {
+      first_name: 'TestFirst',
+      last_name: 'TestLast',
+      email: 'test@cbrfoodcoop.org.au',
+      mobile: '0499 123 456',
+      physical_suburb: '2601',
+      physical_state: '2601',
+      physical_postcode: '2601',
+      physical_country_id: 'AU'
+    }
+    const newVendUser = await got.post(`${VEND_URL}/customers`, {
+      headers: {
+        authorization: `bearer ${process.env.VEND_API_KEY}`
+      },
+      json
+    }).json()
+    */
+    const dave = await got.get(`${VEND_URL}/customers/${process.env.DAVES_VEND_ID}`, {
+      headers: {
+        Authorization: `Bearer ${process.env.VEND_API_KEY}`
+      }
+    }).json()
+    console.log(dave)
+  } catch (err) {
+    console.log(err)
+    // console.log(err.request)
+    console.log(err.response.body)
+  }
+}
+// emailTest()
+// vendTest()
