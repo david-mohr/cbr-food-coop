@@ -7,7 +7,7 @@
       >
         <q-card-section>
           <div class="text-h6 text-white">
-            Membership expires {{ expDate }}
+            Membership valid until {{ expDate }}
           </div>
         </q-card-section>
         <q-card-actions align="right">
@@ -201,7 +201,7 @@ export default {
   },
   computed: {
     discountDate () {
-      return date.formatDate(this.status.discvaliduntil, 'YYYY-MM-DD')
+      return date.formatDate(this.status.discvaliduntil, 'DD-MM-YYYY')
     },
     discountStatus () {
       const now = new Date()
@@ -211,7 +211,7 @@ export default {
       return 'bg-negative'
     },
     expDate () {
-      return date.formatDate(this.status.membershipexpires, 'YYYY-MM-DD')
+      return date.formatDate(this.status.membershipexpires, 'DD-MM-YYYY')
     },
     expStatus () {
       const now = new Date()
