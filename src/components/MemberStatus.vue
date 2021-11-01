@@ -233,6 +233,11 @@ export default {
       this.date = DateTime.now().toISODate()
       this.hours = 1.0
       this.activity = null
+      this.renewal_receipt = null
+      this.renewal_price = null
+      this.renewal_receipt = null
+      this.renewal_concession = false
+      this.concession_type = null
     },
     async onSubmit (evt) {
       console.log(this.date, this.hours, this.activity, this.renewMembership)
@@ -275,43 +280,11 @@ export default {
         })
       }
 
-      // Update display with new membership and discount expiry.
-
       this.reset()
       this.addVolunteering = false
+      this.renewMembership = false
     }
-    // async onRenew (evt) {
-    //   console.log(this.renewal_type, this.concession_type, this.renewal_price, this.renewal_receipt)
-    //   try {
-    //     await this.$api.post(`/api/members/${this.memberId}/membership`, {
-    //       date: this.date,
-    //       action: 'Volunteered',
-    //       paid: this.hours,
-    //       notes: this.activity
-    //     }, {
-    //       headers: {
-    //         authorization: 'Bearer ' + this.$store.state.members.token
-    //       }
-    //     })
-    //     await this.$store.dispatch('members/getHistory', this.memberId)
-    //     await this.$store.dispatch('members/getStatus', this.memberId)
-    //     this.$q.notify({
-    //       color: 'green-4',
-    //       textColor: 'white',
-    //       icon: 'cloud_done',
-    //       message: 'Hours added'
-    //     })
-    //   } catch (err) {
-    //     this.$q.notify({
-    //       color: 'red-4',
-    //       textColor: 'white',
-    //       icon: 'error',
-    //       message: 'Not Added'
-    //     })
-    //   }
-    //   this.reset()
-    //   this.addVolunteering = false
-    // }
+
   }
 }
 </script>

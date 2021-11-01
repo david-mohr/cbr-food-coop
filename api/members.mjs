@@ -82,8 +82,8 @@ export async function renewMembership (memberId) {
     , [memberId])
   if (!results.length) throw new Error(`Failed to find members_extra for member: ${memberId}`)
   let startDate = DateTime.now().startOf('day')
-  if (results[0].discvaliduntil) {
-    const dbStartDate = DateTime.fromJSDate(results[0].discvaliduntil)
+  if (results[0].membershipexpires) {
+    const dbStartDate = DateTime.fromJSDate(results[0].membershipexpires)
     if (dbStartDate > startDate) startDate = dbStartDate
   }
   // For the time being, all memberships are exactly one year.
@@ -131,7 +131,7 @@ router.post('/:id/history', hasRole('coordinator'), async (req, res) => {
     // Check if we need to update the discount date
     if (req.body.action === 'Volunteered') {
       await updateVolunteerHours(req.params.id, req.body.paid)
-    } else if (req.body.action === 'Membership Renewed') {
+    } else if (req.body.action === 'Renewed') {
       await renewMembership(req.params.id)
     }
     res.sendStatus(204)
