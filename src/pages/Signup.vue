@@ -4,7 +4,7 @@
       Application for Membership
     </div>
     <div class="text-h4 text-center">
-      of The Food Co-operative Shop Ltd.
+      of The Food Co-op Shop Canberra.
     </div>
     <div class="q-pa-md">
       <q-stepper
@@ -51,81 +51,7 @@
           icon="shopping_cart"
           :done="step > 2"
         >
-          <q-toggle
-            v-model="concession"
-            label="Concession"
-          />
-          <q-list>
-            <q-item
-              tag="label"
-              v-ripple
-            >
-              <q-item-section avatar>
-                <q-radio
-                  v-model="membershipType"
-                  val="individual"
-                />
-              </q-item-section>
-              <q-item-section>
-                <q-item-label>Individual</q-item-label>
-              </q-item-section>
-              <q-item-section side>
-                <b v-if="concession">$15</b>
-                <b v-else>$25</b>
-                /year
-              </q-item-section>
-            </q-item>
-            <q-item
-              tag="label"
-              v-ripple
-            >
-              <q-item-section avatar>
-                <q-radio
-                  v-model="membershipType"
-                  val="couple"
-                />
-              </q-item-section>
-              <q-item-section>
-                <q-item-label>Couple</q-item-label>
-                <q-item-label
-                  v-if="concession"
-                  caption
-                >
-                  Where both people hold a concession
-                </q-item-label>
-              </q-item-section>
-              <q-item-section side>
-                <b v-if="concession">$25</b>
-                <b v-else>$40</b>
-                /year
-              </q-item-section>
-            </q-item>
-            <q-item
-              tag="label"
-              v-ripple
-            >
-              <q-item-section avatar>
-                <q-radio
-                  v-model="membershipType"
-                  val="household"
-                />
-              </q-item-section>
-              <q-item-section>
-                <q-item-label>Household</q-item-label>
-                <q-item-label
-                  v-if="concession"
-                  caption
-                >
-                  Majority concession holders
-                </q-item-label>
-              </q-item-section>
-              <q-item-section side>
-                <b v-if="concession">$40</b>
-                <b v-else>$50</b>
-                /year
-              </q-item-section>
-            </q-item>
-          </q-list>
+          <membership-picker v-model="membership" />
         </q-step>
         <q-step
           :name="3"
@@ -215,12 +141,13 @@
 </template>
 
 <script>
+import MembershipPicker from '../components/MembershipPicker.vue'
 export default {
+  components: { MembershipPicker },
   data () {
     return {
       step: 1,
-      concession: false,
-      membershipType: 'individual',
+      membership: {},
       name: '',
       email: '',
       phone: '',
