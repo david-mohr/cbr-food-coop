@@ -8,7 +8,7 @@
     </div>
     <div class="q-pa-md">
       Find the source code here:
-      <a href="https://github.com/david-mohr/cbr-food-coop">https://github.com/david-mohr/cbr-food-coop</a>
+      <a :href="sourceUrl">{{ sourceUrl }}</a>
     </div>
     <div class="q-pa-md">
       The tech team meets every Wednesday at 7pm.
@@ -20,11 +20,15 @@
 </template>
 
 <script>
-import { version } from '../../package.json'
+import packageJson from '../../package.json'
+const version = packageJson.version
 
 export default {
   data () {
-    return { version: version }
+    return {
+      version: version,
+      sourceUrl: 'https://github.com/david-mohr/cbr-food-coop'
+    }
   }
 }
 
