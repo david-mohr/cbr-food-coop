@@ -12,7 +12,8 @@ const routes = [
       { path: 'members/:memberId', name: 'Member', component: () => import('pages/Member.vue') },
       { path: 'users', component: () => import('pages/Users.vue') },
       { path: 'users/:userId', name: 'User', component: () => import('pages/User.vue') },
-      { path: 'about', component: () => import('pages/About.vue') }
+      { path: 'unapproved-members', name: 'Unapproved Members', component: () => import('pages/UnapprovedMembers.vue') },
+      { path: 'about', name: 'About', component: () => import('pages/About.vue') }
     ]
   },
 

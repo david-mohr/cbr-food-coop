@@ -90,6 +90,12 @@ const linksList = [
     link: '/members'
   },
   {
+    title: 'Unapproved Members',
+    caption: 'List unappoved members',
+    icon: 'list',
+    link: '/unapproved-members'
+  },
+  {
     title: 'Users',
     caption: 'Coordinators and admins',
     icon: 'badge',
