@@ -1,8 +1,16 @@
 <template>
-  <q-toggle
-    v-model="concession"
-    label="Concession"
-  />
+  <div class="row q-gutter-md">
+    <q-toggle
+      v-model="concession"
+      label="Concession"
+    />
+    <q-input
+      v-show="concession"
+      v-model="concessionId"
+      label="Concession ID"
+      :rules="[val => !!val || 'Required']"
+    />
+  </div>
   <q-list>
     <q-item
       tag="label"
@@ -77,6 +85,20 @@
 </template>
 
 <script>
+
+function makeComputed (prop) {
+  return {
+    [prop]: {
+      get () {
+        return this.modelValue?.[prop]
+      },
+      set (val) {
+        this.$emit('update:modelValue', { ...this.modelValue, [prop]: val })
+      }
+    }
+  }
+}
+
 export default {
   props: {
     modelValue: {
@@ -86,22 +108,9 @@ export default {
   },
   emits: ['update:modelValue'],
   computed: {
-    concession: {
-      get () {
-        return this.modelValue?.concession
-      },
-      set (concession) {
-        this.$emit('update:modelValue', { ...this.modelValue, concession })
-      }
-    },
-    type: {
-      get () {
-        return this.modelValue?.type
-      },
-      set (type) {
-        this.$emit('update:modelValue', { ...this.modelValue, type })
-      }
-    }
+    ...makeComputed('concession'),
+    ...makeComputed('concessionId'),
+    ...makeComputed('type')
   },
   mounted () {
     if (Object.keys(this.modelValue).length === 0) {
