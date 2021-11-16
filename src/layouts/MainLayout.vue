@@ -90,6 +90,12 @@ const linksList = [
     link: '/members'
   },
   {
+    title: 'New signups',
+    caption: 'List of people asking to join',
+    icon: 'list',
+    link: '/process-signups'
+  },
+  {
     title: 'Unapproved Members',
     caption: 'List unappoved members',
     icon: 'list',

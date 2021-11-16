@@ -26,6 +26,14 @@ export function updateUsers (state, users) {
   if (users) users.sort(alphasort('username'))
   state.users = users
 }
+export function updateSignups (state, signups) {
+  if (signups) signups.sort(alphasort('firstname'))
+  state.signups = signups.map(s => Object.defineProperty(s, 'name', {
+    get: function () {
+      return this.firstname + ' ' + this.lastname
+    }
+  }))
+}
 export function saveToken (state, token) {
   state.token = token
   state.user = parseJwt(token)

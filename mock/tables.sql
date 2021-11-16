@@ -8,7 +8,8 @@ CREATE TABLE IF NOT EXISTS signup (
   phone varchar(255),
   membership varchar(255),
   concession varchar(255),
-  sendemails boolean NOT NULL DEFAULT true
+  sendemails boolean NOT NULL DEFAULT true,
+  vendCreated boolean NOT NULL DEFAULT false
 );
 
 CREATE TABLE IF NOT EXISTS customers (

@@ -1,5 +1,6 @@
 import express from 'express'
 import { query } from './database.mjs'
+import { hasRole } from './utils.mjs'
 
 const router = express.Router()
 
@@ -12,6 +13,16 @@ router.post('/signup', async (req, res) => {
   } catch (err) {
     console.error(err)
     res.status(500).send('Error ' + err)
+  }
+})
+
+router.get('/signups', hasRole('coordinator'), async (req, res) => {
+  try {
+    const results = await query('SELECT * from signup')
+    res.send(results)
+  } catch (err) {
+    console.log(err)
+    return res.sendStatus(500)
   }
 })
 

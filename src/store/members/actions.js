@@ -36,6 +36,19 @@ export async function getUsers (context) {
   }
 }
 
+export async function getSignups (context) {
+  try {
+    const res = await api.get('/api/signups', {
+      headers: {
+        authorization: 'Bearer ' + context.state.token
+      }
+    })
+    context.commit('updateSignups', res.data)
+  } catch (err) {
+    console.log(err)
+  }
+}
+
 export async function getHistory (context, memberId) {
   try {
     const res = await api.get(`/api/members/${memberId}/history`, {
