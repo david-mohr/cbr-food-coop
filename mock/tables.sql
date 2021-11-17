@@ -9,7 +9,7 @@ CREATE TABLE IF NOT EXISTS signup (
   membership varchar(255),
   concession varchar(255),
   sendemails boolean NOT NULL DEFAULT true,
-  vendCreated boolean NOT NULL DEFAULT false
+  vendid varchar(255),
 );
 
 CREATE TABLE IF NOT EXISTS customers (

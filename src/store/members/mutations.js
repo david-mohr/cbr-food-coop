@@ -34,6 +34,13 @@ export function updateSignups (state, signups) {
     }
   }))
 }
+
+export function addVendId (state, { signupId, vendid }) {
+  const signup = state.signups.find(s => s.id === signupId)
+  if (!signup) return
+  signup.vendid = vendid
+}
+
 export function saveToken (state, token) {
   state.token = token
   state.user = parseJwt(token)
