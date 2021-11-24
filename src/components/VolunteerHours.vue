@@ -99,22 +99,17 @@ export default {
       this.activity = null
     },
     async onSubmit (evt) {
-      console.log(this.date, this.action, this.hours, this.activity)
-
       // For the time being, add membership renewal into volunteer history.
       try {
-        await this.$api.post(`/api/members/${this.memberId}/history`, {
-          date: this.date,
-          action: this.action,
-          paid: this.hours,
-          notes: this.activity
-        }, {
-          headers: {
-            authorization: 'Bearer ' + this.$store.state.members.token
+        await this.$store.dispatch('members/updateHistory', {
+          memberId: this.memberId,
+          activity: {
+            date: this.date,
+            action: this.action,
+            paid: this.hours,
+            notes: this.activity
           }
         })
-        await this.$store.dispatch('members/getHistory', this.memberId)
-        await this.$store.dispatch('members/getStatus', this.memberId)
         this.$q.notify({
           color: 'green-4',
           textColor: 'white',

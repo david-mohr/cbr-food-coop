@@ -73,6 +73,16 @@ export async function getHistory (context, memberId) {
   }
 }
 
+export async function updateHistory ({ dispatch, state }, { activity, memberId }) {
+  await api.post(`/api/members/${memberId}/history`, activity, {
+    headers: {
+      authorization: 'Bearer ' + state.token
+    }
+  })
+  await dispatch('getHistory', memberId)
+  await dispatch('getStatus', memberId)
+}
+
 export async function getStatus (context, memberId) {
   try {
     const res = await api.get(`/api/members/${memberId}/status`, {

@@ -115,18 +115,15 @@ export default {
       }
       // For the time being, add membership renewal into volunteer history.
       try {
-        await this.$api.post(`/api/members/${this.memberId}/history`, {
-          date: this.date,
-          action: 'Renewed',
-          paid: this.price,
-          notes
-        }, {
-          headers: {
-            authorization: 'Bearer ' + this.$store.state.members.token
+        await this.$store.dispatch('members/updateHistory', {
+          memberId: this.memberId,
+          activity: {
+            date: this.date,
+            action: 'Renewed',
+            paid: this.price,
+            notes
           }
         })
-        await this.$store.dispatch('members/getHistory', this.memberId)
-        await this.$store.dispatch('members/getStatus', this.memberId)
         this.$q.notify({
           color: 'green-4',
           textColor: 'white',
