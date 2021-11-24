@@ -10,7 +10,7 @@
         @reset="reset"
       >
         <q-card-section class="text-h6">
-          Renew Membership
+          {{ memberId ? 'Renew' : 'New' }} Membership
         </q-card-section>
         <q-card-section class="q-pt-none q-gutter-y-md">
           <q-select
@@ -21,6 +21,7 @@
             emit-value
             option-value="id"
             label="Membership Type"
+            :rules="[required]"
           />
           <q-toggle
             v-model="concession"
@@ -36,15 +37,14 @@
             option-value="id"
             label="Concession Type"
             :options="concessions"
-            :rules="[
-              val => !!val || 'Required'
-            ]"
+            :rules="[required]"
           />
           <q-input
             v-model.number="price"
             filled
             label="Amount Paid"
             type="number"
+            :rules="[val => Number.isFinite(val) && val > 0 || 'Too small']"
           />
         </q-card-section>
 
@@ -61,7 +61,7 @@
           <q-btn
             flat
             type="submit"
-            label="Submit Renewal"
+            :label="memberId ? 'Renew' : 'Create new member'"
           />
         </q-card-actions>
       </q-form>
@@ -80,10 +80,10 @@ export default {
     },
     memberId: {
       type: String,
-      required: true
+      default: () => null
     }
   },
-  emits: ['update:modelValue'],
+  emits: ['update:modelValue', 'payment'],
   data () {
     return {
       concession: false,
@@ -110,6 +110,9 @@ export default {
     }
   },
   methods: {
+    required (val) {
+      return !!val || 'Required'
+    },
     reset () {
       this.date = DateTime.now().toISODate()
       this.price = null
@@ -121,16 +124,18 @@ export default {
       if (this.concession) {
         notes += `: ${this.concession_type}`
       }
+      const activity = {
+        date: this.date,
+        paid: this.price,
+        notes
+      }
+      if (!this.memberId) return this.$emit('payment', activity)
+      this.activity.action = 'Renewed'
       // For the time being, add membership renewal into volunteer history.
       try {
         await this.$store.dispatch('members/updateHistory', {
           memberId: this.memberId,
-          activity: {
-            date: this.date,
-            action: 'Renewed',
-            paid: this.price,
-            notes
-          }
+          activity
         })
         this.$q.notify({
           color: 'green-4',

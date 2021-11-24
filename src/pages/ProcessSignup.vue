@@ -44,16 +44,36 @@
     <div class="row q-col-gutter-md q-pt-lg">
       <div class="col row justify-end">
         <q-btn
+          v-if="!signup.vendid"
           label="Create Vend account"
           @click="createVend"
         />
+        <q-btn
+          v-else
+          cojor="primary"
+          label="Membership payment"
+          @click="membershipPayment = true"
+        />
       </div>
     </div>
+    <membership-payment
+      v-model="membershipPayment"
+      @payment="createMember"
+    />
+    <pre>{{ signup }}</pre>
   </q-page>
 </template>
 
 <script>
+import MembershipPayment from '../components/MembershipPayment.vue'
+
 export default {
+  components: { MembershipPayment },
+  data () {
+    return {
+      membershipPayment: false
+    }
+  },
   computed: {
     signupId () {
       return parseInt(this.$route.params.signupId, 10)
@@ -79,6 +99,27 @@ export default {
           signupId: this.signup.id,
           vendid: res.data.vendid
         })
+      } catch (err) {
+        console.log(err)
+      }
+    },
+    async createMember (payment) {
+      try {
+        const res = await this.$api.post(`/api/signups/${this.signup.id}/member`, payment, {
+          headers: {
+            authorization: 'Bearer ' + this.$store.state.members.token
+          }
+        })
+        this.$store.commit('members/updateMemberDetails', res.data.member)
+        this.$store.dispatch('members/getSignups')
+        this.membershipPayment = false
+        this.$q.notify({
+          color: 'green-4',
+          textColor: 'white',
+          icon: 'cloud_done',
+          message: 'New member created'
+        })
+        this.$router.push({ name: 'Member', params: { memberId: res.data.member.id } })
       } catch (err) {
         console.log(err)
       }
