@@ -9,6 +9,7 @@ const mockDatabase = {
 jest.unstable_mockModule('../api/database.mjs', () => mockDatabase)
 
 const { updateVolunteerHours } = await import('../api/members.mjs')
+const { getNextMemberId } = await import('../api/signup.mjs')
 
 it('should update the hours correctly', async () => {
   mockDatabase.query.mockResolvedValueOnce([{ discvaliduntil: null }])
@@ -35,4 +36,10 @@ it('should handle past startDate (ignore it and use today)', async () => {
   await updateVolunteerHours('id', 1)
   const newDiscount = DateTime.now().startOf('day').plus({ days: 14 }).toString()
   expect(mockDatabase.query.mock.calls[1][1]).toEqual([newDiscount, 'id'])
+})
+
+it('should calculate the next member ID', async () => {
+  mockDatabase.query.mockResolvedValueOnce([{ max: 'c1009' }])
+  const id = await getNextMemberId()
+  expect(id).toEqual('c1010')
 })
