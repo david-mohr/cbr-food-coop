@@ -134,7 +134,7 @@
           Is this correct?
           <div style="max-width: 350px">
             <static-key-val label="Name" :value="firstname + ' ' + lastname" />
-            <static-key-val label="Membership" :value="membership.type + (membership.concession ? ` (${membership.concessionId})` : '')" />
+            <static-key-val label="Membership" :value="membership.type + (membership.concession ? ` (${membership.concessionType})` : '')" />
             <static-key-val label="Email" :value="email" />
             <static-key-val label="Phone" :value="phone" />
             <static-key-val label="Address" :value="suburb + ' ' + postcode" />
@@ -161,7 +161,7 @@
               <q-btn
                 @click="doStep()"
                 color="primary"
-                :disable="loading || step === 2 && membership.concession && !membership.concessionId"
+                :disable="loading || step === 2 && membership.concession && !membership.concessionType"
                 :loading="loading"
                 :label="step === 4 ? 'Finish' : 'Continue'"
               />
@@ -205,7 +205,7 @@ export default {
           suburb: this.suburb,
           postcode: this.postcode,
           membership: this.membership.type,
-          concession: this.membership.concessionId,
+          concession: this.membership.concessionType,
           sendemails: this.sendemails
         })
         this.$q.notify({

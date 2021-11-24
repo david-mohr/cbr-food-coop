@@ -4,80 +4,43 @@
       v-model="concession"
       label="Concession"
     />
-    <q-input
+    <q-select
       v-show="concession"
-      v-model="concessionId"
-      label="Concession ID"
+      v-model="concessionType"
+      map-options
+      emit-value
+      option-value="id"
+      :options="concessions"
+      label="Concession Type"
       :rules="[val => !!val || 'Required']"
+      style="width: 150px"
     />
   </div>
   <q-list>
     <q-item
+      v-for="memberType in memberTypes"
+      :key="memberType.id"
       tag="label"
       v-ripple
     >
       <q-item-section avatar>
         <q-radio
           v-model="type"
-          val="individual"
+          :val="memberType.id"
         />
       </q-item-section>
       <q-item-section>
-        <q-item-label>Individual</q-item-label>
-      </q-item-section>
-      <q-item-section side>
-        <b v-if="concession">$15</b>
-        <b v-else>$25</b>
-        /year
-      </q-item-section>
-    </q-item>
-    <q-item
-      tag="label"
-      v-ripple
-    >
-      <q-item-section avatar>
-        <q-radio
-          v-model="type"
-          val="couple"
-        />
-      </q-item-section>
-      <q-item-section>
-        <q-item-label>Couple</q-item-label>
+        <q-item-label>{{ memberType.label }}</q-item-label>
         <q-item-label
-          v-if="concession"
+          v-if="concession && memberType.concessionCaption"
           caption
         >
-          Where both people hold a concession
+          {{ memberType.concessionCaption }}
         </q-item-label>
       </q-item-section>
       <q-item-section side>
-        <b v-if="concession">$25</b>
-        <b v-else>$40</b>
-        /year
-      </q-item-section>
-    </q-item>
-    <q-item
-      tag="label"
-      v-ripple
-    >
-      <q-item-section avatar>
-        <q-radio
-          v-model="type"
-          val="household"
-        />
-      </q-item-section>
-      <q-item-section>
-        <q-item-label>Household</q-item-label>
-        <q-item-label
-          v-if="concession"
-          caption
-        >
-          Majority concession holders
-        </q-item-label>
-      </q-item-section>
-      <q-item-section side>
-        <b v-if="concession">$40</b>
-        <b v-else>$50</b>
+        <b v-if="concession">${{ memberType.concession }}</b>
+        <b v-else>${{ memberType.cost }}</b>
         /year
       </q-item-section>
     </q-item>
@@ -109,12 +72,18 @@ export default {
   emits: ['update:modelValue'],
   computed: {
     ...makeComputed('concession'),
-    ...makeComputed('concessionId'),
-    ...makeComputed('type')
+    ...makeComputed('concessionType'),
+    ...makeComputed('type'),
+    memberTypes () {
+      return this.$store.state.members.types
+    },
+    concessions () {
+      return this.$store.state.members.concessions
+    }
   },
   mounted () {
     if (Object.keys(this.modelValue).length === 0) {
-      this.$emit('update:modelValue', { concession: false, type: 'individual' })
+      this.$emit('update:modelValue', { concession: false, type: 'single' })
     }
   }
 }

@@ -17,21 +17,27 @@
             filled
             v-model="type"
             :options="types"
+            map-options
+            emit-value
+            option-value="id"
             label="Membership Type"
           />
           <q-toggle
             v-model="concession"
             label="Concession Holder"
           />
-          <q-input
+          <q-select
             v-if="concession"
             v-model="concession_type"
             filled
             hide-bottom-space
+            map-options
+            emit-value
+            option-value="id"
             label="Concession Type"
-            type="string"
+            :options="concessions"
             :rules="[
-              val => val != null && val != '' || 'Please provide a valid concession type.'
+              val => !!val || 'Required'
             ]"
           />
           <q-input
@@ -82,10 +88,6 @@ export default {
     return {
       concession: false,
       type: null,
-      types: [
-        'Single', 'Couple', 'Household', 'Philanthropic'
-      ], // I would like to have this as a table in the database,
-      // as I think this is likely to change in the future. The same may go for the below.
       concession_type: null,
       price: 0.0, // could be linked to renewal type by default.
       date: DateTime.now().toISODate()
@@ -99,6 +101,12 @@ export default {
       set (val) {
         this.$emit('update:modelValue', val)
       }
+    },
+    types () {
+      return this.$store.state.members.types
+    },
+    concessions () {
+      return this.$store.state.members.concessions
     }
   },
   methods: {
