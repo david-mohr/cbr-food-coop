@@ -36,6 +36,19 @@ export async function getUsers (context) {
   }
 }
 
+export async function getSignups (context) {
+  try {
+    const res = await api.get('/api/signups', {
+      headers: {
+        authorization: 'Bearer ' + context.state.token
+      }
+    })
+    context.commit('updateSignups', res.data)
+  } catch (err) {
+    console.log(err)
+  }
+}
+
 export async function getHistory (context, memberId) {
   try {
     const res = await api.get(`/api/members/${memberId}/history`, {
@@ -58,6 +71,16 @@ export async function getHistory (context, memberId) {
       message: 'Failed to load member history'
     })
   }
+}
+
+export async function updateHistory ({ dispatch, state }, { activity, memberId }) {
+  await api.post(`/api/members/${memberId}/history`, activity, {
+    headers: {
+      authorization: 'Bearer ' + state.token
+    }
+  })
+  await dispatch('getHistory', memberId)
+  await dispatch('getStatus', memberId)
 }
 
 export async function getStatus (context, memberId) {

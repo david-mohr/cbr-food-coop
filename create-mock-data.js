@@ -29,8 +29,9 @@ const MEMBER_ID_START = 1000
 const MEMBER_COUNT = 100
 
 async function main () {
+  let client
   try {
-    const client = await pool.connect()
+    client = await pool.connect()
     await client.query(tables)
     for (let id = MEMBER_ID_START; id < MEMBER_ID_START + MEMBER_COUNT; ++id) {
       const given = random(givenNames)
@@ -71,10 +72,10 @@ async function main () {
         history = history.plus({ days: randomInt(0, 30) })
       }
     }
-    client.release()
   } catch (err) {
-    console.error(err)
+    console.error(err.message)
   }
+  if (client) client.release()
 }
 
 main()
