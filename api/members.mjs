@@ -66,7 +66,7 @@ router.put('/:id', hasRole('coordinator'), async (req, res) => {
 router.get('/:id/history', hasRole('coordinator'), async (req, res) => {
   try {
     if (!/^c[0-9]*$/.test(req.params.id)) {
-      return res.send(400, '')
+      return res.status(400).send('')
     }
     const results = await query('SELECT datenew, action, amountpaid, notes FROM members_history WHERE member = $1 ORDER BY datenew DESC', [req.params.id])
     res.send(results)
@@ -115,16 +115,16 @@ export async function updateVolunteerHours (memberId, hoursWorked) {
 router.post('/:id/history', hasRole('coordinator'), async (req, res) => {
   try {
     if (!/^c[0-9]*$/.test(req.params.id)) {
-      return res.send(400, 'Invalid member ID')
+      return res.status(400).send('Invalid member ID')
     }
     if (!Number.isFinite(req.body.paid)) {
-      return res.send(400, 'Invalid paid (Must be a number)')
+      return res.status(400).send('Invalid paid (Must be a number)')
     }
     if (!ACTIONS.includes(req.body.action)) {
-      return res.send(400, 'Invalid action')
+      return res.status(400).send('Invalid action')
     }
     if (req.body.date && !/^[0-9]{4}-[0-9]{2}-[0-9]{2}$/.test(req.body.date)) {
-      return res.send(400, 'Invalid date')
+      return res.status(400).send('Invalid date')
     }
     const dateWorked = req.body.date || DateTime.now().toString()
     await query('INSERT into members_history (id, datenew, member, action, amountpaid, notes) values($1, $2, $3, $4, $5, $6)', [uid(), dateWorked, req.params.id, req.body.action, req.body.paid, req.body.notes])
@@ -144,7 +144,7 @@ router.post('/:id/history', hasRole('coordinator'), async (req, res) => {
 router.get('/:id/status', hasRole('coordinator'), async (req, res) => {
   try {
     if (!/^c[0-9]*$/.test(req.params.id)) {
-      return res.send(400, '')
+      return res.status(400).send('')
     }
     const results = await query('SELECT membershipexpires, discvaliduntil FROM members_extra WHERE id = $1', [req.params.id])
     if (!results.length) {
