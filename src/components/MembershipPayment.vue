@@ -81,6 +81,10 @@ export default {
     memberId: {
       type: String,
       default: () => null
+    },
+    membership: {
+      type: Object,
+      default: () => null
     }
   },
   emits: ['update:modelValue', 'payment'],
@@ -107,6 +111,19 @@ export default {
     },
     concessions () {
       return this.$store.state.members.concessions
+    }
+  },
+  watch: {
+    modelValue (val) {
+      if (!val || !this.membership) return
+      // use the membership object to see the values
+      this.concession = !!this.membership.concession
+      this.concession_type = this.membership.concession
+      this.type = this.membership.type
+      const plan = this.types.find(type => type.id === this.membership.type)
+      if (plan) {
+        this.price = this.concession ? plan.concession : plan.cost
+      }
     }
   },
   methods: {

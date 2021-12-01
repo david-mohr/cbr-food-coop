@@ -58,6 +58,7 @@
     </div>
     <membership-payment
       v-model="membershipPayment"
+      :membership="membership"
       @payment="createMember"
     />
     <pre>{{ signup }}</pre>
@@ -80,6 +81,12 @@ export default {
     },
     signup () {
       return this.$store.state.members.signups.find(s => s.id === this.signupId)
+    },
+    membership () {
+      return {
+        concession: this.signup.concession,
+        type: this.signup.membership
+      }
     }
   },
   async created () {
