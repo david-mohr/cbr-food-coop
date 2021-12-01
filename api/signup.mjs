@@ -4,8 +4,13 @@ import { DateTime } from 'luxon'
 import { uid } from 'quasar'
 import { query } from './database.mjs'
 import { hasRole } from './utils.mjs'
+import mailchimp from '@mailchimp/mailchimp_marketing'
 
 const router = express.Router()
+mailchimp.setConfig({
+  apiKey: process.env.MAILCHIMP_API_KEY,
+  server: process.env.MAILCHIMP_SERVER_PREFIX
+})
 
 const signupProps = ['firstname', 'lastname', 'suburb', 'postcode', 'email', 'phone', 'membership', 'concession', 'sendemails']
 
@@ -28,6 +33,16 @@ router.get('/signups', hasRole('coordinator'), async (req, res) => {
     return res.sendStatus(500)
   }
 })
+
+async function createMailchimp (email) {
+  await mailchimp.lists.batchListMembers(process.env.MAILCHIMP_LIST_ID, {
+    members: [{
+      email_address: email,
+      email_type: 'html'
+    }],
+    update_existing: true
+  })
+}
 
 const VEND_URL = 'https://thefoodcooperativeshop.vendhq.com/api/2.0'
 router.post('/signups/:id/vend', hasRole('coordinator'), async (req, res) => {
@@ -75,7 +90,7 @@ router.post('/signups/:id/member', hasRole('coordinator'), async (req, res) => {
     const results = await query('SELECT * from signup WHERE id = $1', [req.params.id])
     if (!Array.isArray(results) || !results.length) return res.sendStatus(404)
     if (!results[0].vendid) return res.status(409).send('Not in Vend')
-
+    await createMailchimp(results[0].email)
     const joindate = DateTime.now()
     const id = await getNextMemberId()
     // Create the new member record

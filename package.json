@@ -20,6 +20,7 @@
     "db:stop": "docker stop dev-postgres"
   },
   "dependencies": {
+    "@mailchimp/mailchimp_marketing": "^3.0.72",
     "@quasar/extras": "^1.0.0",
     "axios": "^0.21.1",
     "chalk": "^4.1.2",
