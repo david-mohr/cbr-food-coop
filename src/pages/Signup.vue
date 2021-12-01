@@ -153,12 +153,14 @@
                 class="q-ml-sm"
               />
               <q-space />
+              <!--
               <q-toggle
                 v-if="step === 4"
                 v-model="sendemails"
                 left-label
                 label="I consent to receive emails from the Food Co-op"
               />
+              -->
               <q-btn
                 @click="doStep()"
                 color="primary"
