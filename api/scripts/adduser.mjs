@@ -3,9 +3,9 @@
 import chalk from 'chalk'
 import inquirer from 'inquirer'
 import { sendInvite } from '../email.mjs'
+import { emailRegex } from '../utils.mjs'
 
 const roles = ['coordinator', 'admin']
-const emailRegex = /^[a-zA-Z0-9.!#$%&’*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/
 
 async function main () {
   const account = await inquirer.prompt([{

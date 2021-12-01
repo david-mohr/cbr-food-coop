@@ -13,11 +13,11 @@
           >
             <q-card-section>
               <q-input
-                v-model="username"
+                v-model="email"
                 square
                 filled
                 type="text"
-                label="username"
+                label="Email"
                 color="grey-8"
               />
               <q-input
@@ -25,7 +25,7 @@
                 square
                 filled
                 :type="isPwd ? 'password' : 'text'"
-                label="password"
+                label="Password"
                 color="grey-8"
               >
                 <template #append>
@@ -59,7 +59,7 @@
 export default {
   data () {
     return {
-      username: '',
+      email: '',
       password: '',
       loading: false,
       isPwd: true
@@ -70,7 +70,7 @@ export default {
       this.loading = true
       try {
         await this.$store.dispatch('members/login', {
-          username: this.username,
+          email: this.email,
           password: this.password
         })
         this.$q.notify({

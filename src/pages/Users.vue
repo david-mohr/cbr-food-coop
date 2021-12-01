@@ -27,9 +27,9 @@
 
             <q-card-section>
               <q-input
-                v-model="username"
+                v-model="email"
                 autofocus
-                label="Username"
+                label="Email"
                 :rules="[required, noDuplicates]"
               />
               <q-select
@@ -80,7 +80,7 @@
       <list-with-filter
         v-slot="props"
         :items="users"
-        filter-key="username"
+        filter-key="email"
       >
         <q-item
           v-for="user in props.items"
@@ -90,7 +90,7 @@
           :to="{ name: 'User', params: { userId: user.id }}"
         >
           <q-item-section>
-            <q-item-label>{{ user.username }}</q-item-label>
+            <q-item-label>{{ user.email }}</q-item-label>
             <q-item-label caption>
               {{ user.role }}
             </q-item-label>
@@ -110,7 +110,7 @@ export default {
     return {
       addUser: false,
       role: null,
-      username: null,
+      email: null,
       password: null,
       password2: null,
       roles: [
@@ -145,15 +145,15 @@ export default {
     },
     reset () {
       this.role = null
-      this.username = null
+      this.email = null
       this.password = null
       this.password2 = null
     },
     async onSubmit () {
-      console.log('user', this.username, 'role', this.role)
+      console.log('user', this.email, 'role', this.role)
       try {
         await this.$store.dispatch('members/addUser', {
-          username: this.username,
+          email: this.email,
           password: this.password,
           role: this.role
         })
