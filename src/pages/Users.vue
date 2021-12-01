@@ -1,35 +1,11 @@
 <template>
   <q-page
-    class="flex justify-center"
     style="margin-top: 30px"
   >
-    <list-with-filter
-      v-slot="props"
-      :items="users"
-      filter-key="username"
-    >
-      <q-item
-        v-for="user in props.items"
-        :key="user.id"
-        v-ripple
-        clickable
-        :to="{ name: 'User', params: { userId: user.id }}"
-      >
-        <q-item-section>
-          <q-item-label>{{ user.username }}</q-item-label>
-          <q-item-label caption>
-            {{ user.role }}
-          </q-item-label>
-        </q-item-section>
-      </q-item>
-    </list-with-filter>
-    <q-page-sticky
-      position="bottom-right"
-      :offset="[18, 18]"
-    >
+    <div class="row justify-center">
       <q-btn
-        fab
         icon="add"
+        label="Add"
         color="accent"
         @click="addUser = true"
       />
@@ -99,7 +75,29 @@
           </q-form>
         </q-card>
       </q-dialog>
-    </q-page-sticky>
+    </div>
+    <div class="row justify-center q-mt-md">
+      <list-with-filter
+        v-slot="props"
+        :items="users"
+        filter-key="username"
+      >
+        <q-item
+          v-for="user in props.items"
+          :key="user.id"
+          v-ripple
+          clickable
+          :to="{ name: 'User', params: { userId: user.id }}"
+        >
+          <q-item-section>
+            <q-item-label>{{ user.username }}</q-item-label>
+            <q-item-label caption>
+              {{ user.role }}
+            </q-item-label>
+          </q-item-section>
+        </q-item>
+      </list-with-filter>
+    </div>
   </q-page>
 </template>
 
