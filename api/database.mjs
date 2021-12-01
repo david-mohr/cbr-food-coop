@@ -39,7 +39,7 @@ export function checkPassword (user, password) {
   })
 }
 
-function makeSalt () {
+export function makeSalt () {
   return crypto.randomBytes(16).toString('hex')
 }
 
