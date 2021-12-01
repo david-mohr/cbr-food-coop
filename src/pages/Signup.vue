@@ -6,12 +6,13 @@
     <div class="text-h4 text-center">
       of The Food Co-op Shop Canberra.
     </div>
-    <div class="q-pa-md">
+    <div class="q-pa-md row justify-center">
       <q-stepper
         v-model="step"
         ref="stepper"
         color="primary"
         animated
+        style="width: 100%; max-width: 800px"
       >
         <q-step
           :name="1"
