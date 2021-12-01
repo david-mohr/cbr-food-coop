@@ -24,8 +24,8 @@ process.on('exit', () => {
   pool.end()
 })
 
-export async function findUser (username) {
-  const results = await query('SELECT * FROM auth WHERE username = $1', [username])
+export async function findUser (email) {
+  const results = await query('SELECT * FROM auth WHERE email = $1', [email])
   return results[0]
 }
 
@@ -39,7 +39,7 @@ export function checkPassword (user, password) {
   })
 }
 
-function makeSalt () {
+export function makeSalt () {
   return crypto.randomBytes(16).toString('hex')
 }
 

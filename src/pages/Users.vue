@@ -1,35 +1,11 @@
 <template>
   <q-page
-    class="flex justify-center"
     style="margin-top: 30px"
   >
-    <list-with-filter
-      v-slot="props"
-      :items="users"
-      filter-key="username"
-    >
-      <q-item
-        v-for="user in props.items"
-        :key="user.id"
-        v-ripple
-        clickable
-        :to="{ name: 'User', params: { userId: user.id }}"
-      >
-        <q-item-section>
-          <q-item-label>{{ user.username }}</q-item-label>
-          <q-item-label caption>
-            {{ user.role }}
-          </q-item-label>
-        </q-item-section>
-      </q-item>
-    </list-with-filter>
-    <q-page-sticky
-      position="bottom-right"
-      :offset="[18, 18]"
-    >
+    <div class="row justify-center">
       <q-btn
-        fab
         icon="add"
+        label="Add"
         color="accent"
         @click="addUser = true"
       />
@@ -51,9 +27,9 @@
 
             <q-card-section>
               <q-input
-                v-model="username"
+                v-model="email"
                 autofocus
-                label="Username"
+                label="Email"
                 :rules="[required, noDuplicates]"
               />
               <q-select
@@ -63,20 +39,6 @@
                 emit-value
                 map-options
                 :rules="[required]"
-              />
-              <q-input
-                v-model="password"
-                type="password"
-                autofocus
-                label="Password"
-                :rules="[required, min8]"
-              />
-              <q-input
-                v-model="password2"
-                type="password"
-                autofocus
-                label="Confirm password"
-                :rules="[required, passwordsMatch]"
               />
             </q-card-section>
 
@@ -99,7 +61,29 @@
           </q-form>
         </q-card>
       </q-dialog>
-    </q-page-sticky>
+    </div>
+    <div class="row justify-center q-mt-md">
+      <list-with-filter
+        v-slot="props"
+        :items="users"
+        filter-key="email"
+      >
+        <q-item
+          v-for="user in props.items"
+          :key="user.id"
+          v-ripple
+          clickable
+          :to="{ name: 'User', params: { userId: user.id }}"
+        >
+          <q-item-section>
+            <q-item-label>{{ user.email }}</q-item-label>
+            <q-item-label caption>
+              {{ user.role }}
+            </q-item-label>
+          </q-item-section>
+        </q-item>
+      </list-with-filter>
+    </div>
   </q-page>
 </template>
 
@@ -112,11 +96,8 @@ export default {
     return {
       addUser: false,
       role: null,
-      username: null,
-      password: null,
-      password2: null,
+      email: null,
       roles: [
-        { value: 'user', label: 'User' },
         { value: 'coordinator', label: 'Coordinator' },
         { value: 'admin', label: 'Administrator' }
       ]
@@ -137,25 +118,17 @@ export default {
       return (val && val.length > 0) || 'Required'
     },
     noDuplicates (val) {
-      return !this.users.some(u => u.username === this.username) || 'Username already taken'
-    },
-    min8 (val) {
-      return (val && val.length >= 8) || 'Minimum length is 8'
-    },
-    passwordsMatch (val) {
-      return (val && val === this.password) || 'Passwords don\'t match'
+      return !this.users.some(u => u.email === this.email) || 'Email already in use'
     },
     reset () {
       this.role = null
-      this.username = null
-      this.password = null
-      this.password2 = null
+      this.email = null
     },
     async onSubmit () {
-      console.log('user', this.username, 'role', this.role)
+      console.log('user', this.email, 'role', this.role)
       try {
         await this.$store.dispatch('members/addUser', {
-          username: this.username,
+          email: this.email,
           password: this.password,
           role: this.role
         })
@@ -163,14 +136,14 @@ export default {
           color: 'green-4',
           textColor: 'white',
           icon: 'cloud_done',
-          message: 'New user created'
+          message: 'Invite sent'
         })
       } catch (err) {
         this.$q.notify({
           color: 'red-4',
           textColor: 'white',
           icon: 'error',
-          message: 'Failed to create new user'
+          message: 'Failed to create new user invitation'
         })
       }
       this.addUser = false

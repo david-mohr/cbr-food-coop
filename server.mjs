@@ -16,6 +16,7 @@ app.use(serveStatic('./dist/spa'))
 app.use('/api', function isAuthenticated (req, res, next) {
   if (req.originalUrl === '/api/login') return next()
   if (req.originalUrl === '/api/signup') return next()
+  if (/\/api\/invites\/[a-z0-9]+\/accept/i.test(req.originalUrl)) return next()
   return passport.authenticate('jwt', { session: false })(req, res, next)
 })
 
