@@ -96,10 +96,10 @@ const linksList = [
     link: '/view-signups'
   },
   {
-    title: 'Unapproved Members',
-    caption: 'List unappoved members',
+    title: 'Members to be approved',
+    caption: 'List members needing approval',
     icon: 'list',
-    link: '/unapproved-members'
+    link: '/members/to-be-approved'
   },
   {
     title: 'Users',
