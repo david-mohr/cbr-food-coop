@@ -60,8 +60,24 @@ echo MAILGUN_API_KEY=api-key-from-your-mailgun-account >> .env
 echo MAILGUN_DOMAIN=sandbox-domain-from-your-mailgun-account >> .env
 ```
 
-Or... we could add a script to adduser.mjs that verifies the superuser?
+### Generate an admin account
+Run ```yarn adduser``` which will send an invite to the email address you create.
+Make sure you choose 'admin' for the first user.
 
+Have a look at the ```invites``` table by running 
+```bash
+yarn db:shell
+select * from invites;
+\q
+```
+
+Copy the token from the email address you entered and browse to
+
+http://localhost:8080/#/accept-invite/78a6618bcbd0b523fa7a64386f31a49c
+
+Where 78a66... is the token you copied from the ```invites``` table.
+
+Fill out the name and password in the form and the invite should be accepted.
 
 You're now ready to start development!
 
