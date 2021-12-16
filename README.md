@@ -39,9 +39,45 @@ yarn adduser
 ### Generate Secret
 We need a real token secret for production but for development purposes we can use a mock one.
 
-```
+```bash
 echo TOKEN_SECRET=abcd1234abcd1234 >> .env
 ```
+
+### Sign up for a mailgun account
+
+Go to https://www.mailgun.com/ and sign up for a free account
+
+Verify your email address (you'll also need to give a mobile phone number so they can authenticate you) and see if you can send a test email using a curl command - this will use the provided sandbox domain, you don't need to set up a domain at this stage.
+
+Set up a template (Sending->Templates) called 'invite' (you can use the 'action' pre-fab template)
+
+Test this with a curl command also if you want
+
+Look at the test curl code and find the key and domain then add these two your .env file
+
+```bash
+echo MAILGUN_API_KEY=api-key-from-your-mailgun-account >> .env
+echo MAILGUN_DOMAIN=sandbox-domain-from-your-mailgun-account >> .env
+```
+
+### Generate an admin account
+Run ```yarn adduser``` which will send an invite to the email address you create.
+Make sure you choose 'admin' for the first user.
+
+Have a look at the ```invites``` table by running 
+```bash
+yarn db:shell
+select * from invites;
+\q
+```
+
+Copy the token from the email address you entered and browse to
+
+http://localhost:8080/#/accept-invite/78a6618bcbd0b523fa7a64386f31a49c
+
+Where 78a66... is the token you copied from the ```invites``` table.
+
+Fill out the name and password in the form and the invite should be accepted.
 
 You're now ready to start development!
 
