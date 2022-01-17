@@ -56,7 +56,7 @@
         </q-step>
         <q-step
           :name="3"
-          title="Your details"
+          title="Member details"
           icon="badge"
           :done="step > 3"
         >
@@ -65,67 +65,88 @@
             autofocus
             @submit="$refs.stepper.next()"
           >
-            <div class="q-pa-md">
-              <div class="row q-col-gutter-md">
-                <div class="col-md-6 col-12">
-                  <q-input
-                    v-model="firstname"
-                    hide-bottom-space
-                    type="text"
-                    label="First name"
-                    color="grey-8"
-                    :rules="[required]"
-                  />
-                </div>
-                <div class="col-md-6 col-12">
-                  <q-input
-                    v-model="lastname"
-                    hide-bottom-space
-                    type="text"
-                    label="Last name"
-                    color="grey-8"
-                    :rules="[required]"
-                  />
-                </div>
-                <div class="col-md-6 col-12">
-                  <q-input
-                    v-model="email"
-                    hide-bottom-space
-                    type="email"
-                    label="Email"
-                    color="grey-8"
-                    :rules="[validEmail]"
-                  />
-                </div>
-                <div class="col-md-6 col-12">
-                  <q-input
-                    v-model="phone"
-                    type="text"
-                    label="Phone"
-                    color="grey-8"
-                  />
-                </div>
-                <div class="col-md-6 col-12">
-                  <q-input
-                    v-model="suburb"
-                    type="text"
-                    label="Suburb"
-                    color="grey-8"
-                  />
-                </div>
-                <div class="col-md-6 col-12">
-                  <q-input
-                    v-model="postcode"
-                    hide-bottom-space
-                    type="text"
-                    label="Postcode"
-                    color="grey-8"
-                    :rules="[validPostcode]"
-                  />
-                </div>
-              </div>
-            </div>
+            <q-list bordered>
+              <template
+                v-for="member in members"
+                :key="member.id"
+              >
+                <q-separator />
+                <q-expansion-item
+                  group="members"
+                  :label="member.firstname + ' ' + member.lastname"
+                  icon="face"
+                >
+                  <div class="q-pa-md">
+                    <div class="row q-col-gutter-md">
+                      <div class="col-md-6 col-12">
+                        <q-input
+                          v-model="member.firstname"
+                          hide-bottom-space
+                          type="text"
+                          label="First name"
+                          color="grey-8"
+                          :rules="[required]"
+                        />
+                      </div>
+                      <div class="col-md-6 col-12">
+                        <q-input
+                          v-model="member.lastname"
+                          hide-bottom-space
+                          type="text"
+                          label="Last name"
+                          color="grey-8"
+                          :rules="[required]"
+                        />
+                      </div>
+                      <div class="col-md-6 col-12">
+                        <q-input
+                          v-model="member.email"
+                          hide-bottom-space
+                          type="email"
+                          label="Email"
+                          color="grey-8"
+                          :rules="[validEmail]"
+                        />
+                      </div>
+                      <div class="col-md-6 col-12">
+                        <q-input
+                          v-model="member.phone"
+                          type="text"
+                          label="Phone"
+                          color="grey-8"
+                        />
+                      </div>
+                      <div class="col-md-6 col-12">
+                        <q-input
+                          v-model="member.suburb"
+                          type="text"
+                          label="Suburb"
+                          color="grey-8"
+                        />
+                      </div>
+                      <div class="col-md-6 col-12">
+                        <q-input
+                          v-model="member.postcode"
+                          hide-bottom-space
+                          type="text"
+                          label="Postcode"
+                          color="grey-8"
+                          :rules="[validPostcode]"
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </q-expansion-item>
+              </template>
+            </q-list>
           </q-form>
+          <q-btn
+            v-if="members.length < membershipType?.max_members"
+            icon="add"
+            label="Add person"
+            color="accent"
+            @click="addMember"
+          />
         </q-step>
         <q-step
           :name="4"
@@ -186,20 +207,31 @@ export default {
     return {
       step: 1,
       membership: {},
-      firstname: '',
-      lastname: '',
-      email: '',
-      phone: '',
-      suburb: '',
-      postcode: '',
-      sendemails: true,
+      members: [this.newPerson()],
       loading: false
+    }
+  },
+  computed: {
+    membershipType () {
+      return this.$store.state.members.types.find(t => t.membership_type_id === this.membership.type)
     }
   },
   mounted () {
     this.$store.dispatch('members/getMembershipTypes')
   },
   methods: {
+    newPerson () {
+      return {
+        id: Symbol('member id'),
+        firstname: '',
+        lastname: '',
+        email: '',
+        phone: '',
+        suburb: '',
+        postcode: '',
+        sendemails: true
+      }
+    },
     async completeSignup () {
       this.loading = true
       try {
@@ -246,6 +278,9 @@ export default {
       if (this.step <= 2) return this.$refs.stepper.next()
       if (this.step === 3) return this.$refs.member.submit()
       this.completeSignup()
+    },
+    addMember () {
+      this.members.push(this.newPerson())
     }
   }
 }
