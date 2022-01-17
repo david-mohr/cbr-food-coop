@@ -210,7 +210,7 @@ export default {
           phone: this.phone,
           suburb: this.suburb,
           postcode: this.postcode,
-          membership: this.membership.type,
+          membership_type_id: this.membership.type,
           concession: this.membership.concessionType,
           sendemails: this.sendemails
         })

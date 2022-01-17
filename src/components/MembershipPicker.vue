@@ -83,7 +83,7 @@ export default {
   },
   mounted () {
     if (Object.keys(this.modelValue).length === 0) {
-      this.$emit('update:modelValue', { concession: false, type: 'single' })
+      this.$emit('update:modelValue', { concession: false, type: this.memberTypes[0].membership_type_id })
     }
   }
 }

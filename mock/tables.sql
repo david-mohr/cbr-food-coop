@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS signup (
   suburb varchar(255),
   email varchar(255),
   phone varchar(255),
-  membership varchar(255),
+  membership_type_id int NOT NULL REFERENCES membership_types,
   concession varchar(255),
   sendemails boolean NOT NULL DEFAULT true,
   vendid varchar(255)

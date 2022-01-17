@@ -19,7 +19,7 @@ router.get('/membership-types', async (req, res) => {
   }
 })
 
-const signupProps = ['firstname', 'lastname', 'suburb', 'postcode', 'email', 'phone', 'membership', 'concession', 'sendemails']
+const signupProps = ['firstname', 'lastname', 'suburb', 'postcode', 'email', 'phone', 'membership_type_id', 'concession', 'sendemails']
 
 router.post('/signup', async (req, res) => {
   try {
