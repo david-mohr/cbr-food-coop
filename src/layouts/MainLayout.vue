@@ -17,6 +17,18 @@
         </q-toolbar-title>
 
         <q-btn
+          flat
+          label="Signup"
+          to="/signup"
+        />
+        <q-btn
+          v-if="!loggedIn"
+          flat
+          label="Login"
+          to="/login"
+        />
+        <q-btn
+          v-else
           dense
           flat
           no-wrap
