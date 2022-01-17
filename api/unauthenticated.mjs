@@ -11,7 +11,7 @@ const router = express.Router()
 
 router.get('/membership-types', async (req, res) => {
   try {
-    const results = await query('SELECT membership_type_id, label, price, concession, concession_caption from membership_types')
+    const results = await query('SELECT membership_type_id, label, max_members, price, concession, concession_caption from membership_types')
     res.send(results)
   } catch (err) {
     console.log(err)

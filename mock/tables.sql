@@ -1,3 +1,12 @@
+CREATE TABLE IF NOT EXISTS membership_types (
+  membership_type_id SERIAL PRIMARY KEY NOT NULL,
+  label varchar(255) NOT NULL,
+  max_members int,
+  price decimal,
+  concession decimal,
+  concession_caption varchar(255)
+);
+
 CREATE TABLE IF NOT EXISTS signup (
   id SERIAL PRIMARY KEY  NOT NULL,
   firstname varchar(255),
@@ -12,19 +21,12 @@ CREATE TABLE IF NOT EXISTS signup (
   vendid varchar(255)
 );
 
-CREATE TABLE IF NOT EXISTS membership_types (
-  membership_type_id SERIAL PRIMARY KEY NOT NULL,
-  label varchar(255) NOT NULL,
-  price decimal,
-  concession decimal,
-  concession_caption varchar(255)
-);
+INSERT INTO membership_types (membership_type_id, label, max_members, price, concession, concession_caption) VALUES
+  (1, 'Single', 1, 25, 15, NULL),
+  (2, 'Couple', 2, 40, 25, 'Where both people hold a concession'),
+  (3, 'Household', 10, 50, 40, 'Majority concession holders')
+  ON CONFLICT (membership_type_id) DO NOTHING;
 
-INSERT INTO membership_types (membership_type_id, label, price, concession, concession_caption) VALUES
-  (1, 'Single', 25, 15, NULL),
-  (2, 'Couple', 40, 25, 'Where both people hold a concession'),
-  (3, 'Household', 50, 40, 'Majority concession holders')
-  ON CONFLICT (membership_type_id) DO NOTHING;;
 
 CREATE TABLE IF NOT EXISTS customers (
     id varchar(255) PRIMARY KEY NOT NULL,
