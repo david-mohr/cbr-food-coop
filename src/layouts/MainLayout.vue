@@ -143,7 +143,7 @@ export default {
     },
     name () {
       if (!this.$store.state.members.user) return null
-      return this.$store.state.members.user.username
+      return this.$store.state.members.user.name
     }
   },
   methods: {

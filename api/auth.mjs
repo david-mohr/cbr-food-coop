@@ -13,7 +13,7 @@ const router = express.Router()
 
 export function getUserToken (user) {
   if (!user) throw new Error('Must pass a user object')
-  const body = { id: user.id, email: user.email, role: user.role }
+  const body = { id: user.id, email: user.email, role: user.role, name: user.name }
   return jwt.sign(body, process.env.TOKEN_SECRET, { expiresIn: '12h' })
 }
 
