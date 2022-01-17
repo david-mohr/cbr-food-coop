@@ -13,9 +13,10 @@ app.use(express.json({ limit: '5mb' }))
 app.use(morgan('tiny'))
 app.use(serveStatic('./dist/spa'))
 
+const publicUrls = ['/api/login', '/api/signup', '/api/membership-types']
+
 app.use('/api', function isAuthenticated (req, res, next) {
-  if (req.originalUrl === '/api/login') return next()
-  if (req.originalUrl === '/api/signup') return next()
+  if (publicUrls.includes(req.originalUrl)) return next()
   if (/\/api\/invites\/[a-z0-9]+\/accept/i.test(req.originalUrl)) return next()
   return passport.authenticate('jwt', { session: false })(req, res, next)
 })

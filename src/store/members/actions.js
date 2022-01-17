@@ -49,6 +49,16 @@ export async function getSignups (context) {
   }
 }
 
+export async function getMembershipTypes (context) {
+  try {
+    const res = await api.get('/api/membership-types', {
+    })
+    context.commit('updateMembershipTypes', res.data)
+  } catch (err) {
+    console.log(err)
+  }
+}
+
 export async function getHistory (context, memberId) {
   try {
     const res = await api.get(`/api/members/${memberId}/history`, {

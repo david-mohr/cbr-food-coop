@@ -12,6 +12,20 @@ CREATE TABLE IF NOT EXISTS signup (
   vendid varchar(255)
 );
 
+CREATE TABLE IF NOT EXISTS membership_types (
+  membership_type_id SERIAL PRIMARY KEY NOT NULL,
+  label varchar(255) NOT NULL,
+  price decimal,
+  concession decimal,
+  concession_caption varchar(255)
+);
+
+INSERT INTO membership_types (membership_type_id, label, price, concession, concession_caption) VALUES
+  (1, 'Single', 25, 15, NULL),
+  (2, 'Couple', 40, 25, 'Where both people hold a concession'),
+  (3, 'Household', 50, 40, 'Majority concession holders')
+  ON CONFLICT (membership_type_id) DO NOTHING;;
+
 CREATE TABLE IF NOT EXISTS customers (
     id varchar(255) PRIMARY KEY NOT NULL,
     name varchar(255) NOT NULL,

@@ -196,6 +196,9 @@ export default {
       loading: false
     }
   },
+  mounted () {
+    this.$store.dispatch('members/getMembershipTypes')
+  },
   methods: {
     async completeSignup () {
       this.loading = true

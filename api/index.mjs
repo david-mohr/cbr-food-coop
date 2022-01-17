@@ -1,5 +1,4 @@
 import express from 'express'
-import got from 'got'
 
 import unauthenticated from './unauthenticated.mjs'
 import auth from './auth.mjs'
@@ -10,6 +9,8 @@ import invites from './invites.mjs'
 
 const router = express.Router()
 
+// Any unauthenticated URLs needs to be listed inside server.mjs at the root of
+// this project
 router.use(unauthenticated)
 router.use(auth)
 router.use('/members', members)

@@ -2,7 +2,22 @@ import express from 'express'
 import { encryptPassword, query } from './database.mjs'
 import { getUserToken } from './auth.mjs'
 
+/*
+ * Any unauthenticated URLs needs to be listed inside server.mjs at the root of
+ * this project
+ */
+
 const router = express.Router()
+
+router.get('/membership-types', async (req, res) => {
+  try {
+    const results = await query('SELECT membership_type_id, label, price, concession, concession_caption from membership_types')
+    res.send(results)
+  } catch (err) {
+    console.log(err)
+    return res.sendStatus(500)
+  }
+})
 
 const signupProps = ['firstname', 'lastname', 'suburb', 'postcode', 'email', 'phone', 'membership', 'concession', 'sendemails']
 

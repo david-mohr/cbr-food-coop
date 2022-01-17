@@ -18,6 +18,9 @@ export function updateMemberStatus (state, member) {
   member.status.discvaliduntil = new Date(member.status.discvaliduntil)
   state.memberStatus[member.id] = member.status
 }
+export function updateMembershipTypes (state, types) {
+  state.types = types.sort((a, b) => a.membership_type_id - b.membership_type_id)
+}
 export function updateMembers (state, members) {
   if (members) members.sort(alphasort('name'))
   state.members = members
