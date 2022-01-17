@@ -42,7 +42,13 @@
       </div>
     </div>
     <div class="row q-col-gutter-md q-pt-lg">
-      <div class="col row justify-end">
+      <div class="col row">
+        <q-btn
+          color="negative"
+          label="Delete request"
+          @click="deleteRequest"
+        />
+        <q-space />
         <q-btn
           v-if="!signup.vendid"
           label="Create Vend account"
@@ -130,6 +136,23 @@ export default {
       } catch (err) {
         console.log(err)
       }
+    },
+    deleteRequest () {
+      this.$q.dialog({
+        title: 'Confirm',
+        message: 'Are you sure?',
+        cancel: true,
+        ok: { color: 'negative', label: 'Delete' }
+      })
+        .onOk(async () => {
+          await this.$api.delete(`/api/signups/${this.signup.id}`, {
+            headers: {
+              authorization: 'Bearer ' + this.$store.state.members.token
+            }
+          })
+          this.$store.dispatch('members/getSignups')
+          this.$router.push({ name: 'View signups' })
+        })
     }
   }
 }
