@@ -75,7 +75,7 @@ async function main () {
   } catch (err) {
     console.error(err.message)
   }
-  if (client) client.release()
+  if (client) client.end()
 }
 
 main()
