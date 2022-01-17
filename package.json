@@ -9,6 +9,7 @@
     "lint": "eslint --ext .js,.mjs,.vue ./",
     "test": "node --experimental-vm-modules node_modules/.bin/jest",
     "serve": "quasar serve -p 8080 --proxy serve.js dist/spa",
+    "dev": "quasar dev",
     "build": "quasar build",
     "start": "node server.mjs",
     "api": "DATABASE_URL='postgres://postgres:Pass2021!@localhost:5432/postgres' NODE_ENV=development nodemon server.mjs",
