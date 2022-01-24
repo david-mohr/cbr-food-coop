@@ -91,6 +91,7 @@ router.post('/:id/member', hasRole('coordinator'), async (req, res) => {
     await query('INSERT into members_extra (id, membershipexpires, sendemails) values($1, $2, $3) RETURNING *', [id, joindate.plus({ years: 1 }), results[0].sendemails])
 
     // update the history
+    await query('INSERT INTO vend_accounts (id_vend, id_pos) VALUES($1, $2) RETURNING *', [results[0].vendid, id])
     await query('INSERT into members_history (id, datenew, member, action, amountpaid, notes) values($1, $2, $3, $4, $5, $6) RETURNING *', [uid(), joindate.toString(), id, 'Applied', req.body.paid, '12 months'])
     await query('INSERT into members_history (id, datenew, member, action, amountpaid, notes) values($1, $2, $3, $4, $5, $6) RETURNING *', [uid(), joindate.toString(), id, 'Registered', null, 'Entered into database'])
 
