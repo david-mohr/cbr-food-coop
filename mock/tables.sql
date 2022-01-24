@@ -1,8 +1,15 @@
 CREATE TABLE IF NOT EXISTS signup (
   id SERIAL PRIMARY KEY  NOT NULL,
-  name           TEXT    NOT NULL,
-  email          TEXT    NOT NULL,
-  phone          TEXT    NOT NULL
+  firstname varchar(255),
+  lastname varchar(255),
+  postcode varchar(255),
+  suburb varchar(255),
+  email varchar(255),
+  phone varchar(255),
+  membership varchar(255),
+  concession varchar(255),
+  sendemails boolean NOT NULL DEFAULT true,
+  vendid varchar(255)
 );
 
 CREATE TABLE IF NOT EXISTS customers (
@@ -53,10 +60,18 @@ CREATE TABLE IF NOT EXISTS members_history (
 );
 
 CREATE TABLE IF NOT EXISTS auth (
-    id SERIAL NOT NULL,
-    username varchar(255) NOT NULL,
+    id SERIAL PRIMARY KEY NOT NULL,
+    name varchar(255) NOT NULL,
+    email varchar(255) NOT NULL,
     password varchar(255) NOT NULL,
     salt varchar(32) NOT NULL,
+    role varchar(255) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS invites (
+    id SERIAL PRIMARY KEY NOT NULL,
+    email varchar(255) NOT NULL,
     role varchar(255) NOT NULL,
-    PRIMARY KEY (id)
+    token varchar(255) NOT NULL,
+    accepted boolean NOT NULL DEFAULT false
 );

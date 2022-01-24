@@ -4,14 +4,15 @@
       Application for Membership
     </div>
     <div class="text-h4 text-center">
-      of The Food Co-operative Shop Ltd.
+      of The Food Co-op Shop Canberra.
     </div>
-    <div class="q-pa-md">
+    <div class="q-pa-md row justify-center">
       <q-stepper
         v-model="step"
         ref="stepper"
         color="primary"
         animated
+        style="width: 100%; max-width: 800px"
       >
         <q-step
           :name="1"
@@ -51,81 +52,7 @@
           icon="shopping_cart"
           :done="step > 2"
         >
-          <q-toggle
-            v-model="concession"
-            label="Concession"
-          />
-          <q-list>
-            <q-item
-              tag="label"
-              v-ripple
-            >
-              <q-item-section avatar>
-                <q-radio
-                  v-model="membershipType"
-                  val="individual"
-                />
-              </q-item-section>
-              <q-item-section>
-                <q-item-label>Individual</q-item-label>
-              </q-item-section>
-              <q-item-section side>
-                <b v-if="concession">$15</b>
-                <b v-else>$25</b>
-                /year
-              </q-item-section>
-            </q-item>
-            <q-item
-              tag="label"
-              v-ripple
-            >
-              <q-item-section avatar>
-                <q-radio
-                  v-model="membershipType"
-                  val="couple"
-                />
-              </q-item-section>
-              <q-item-section>
-                <q-item-label>Couple</q-item-label>
-                <q-item-label
-                  v-if="concession"
-                  caption
-                >
-                  Where both people hold a concession
-                </q-item-label>
-              </q-item-section>
-              <q-item-section side>
-                <b v-if="concession">$25</b>
-                <b v-else>$40</b>
-                /year
-              </q-item-section>
-            </q-item>
-            <q-item
-              tag="label"
-              v-ripple
-            >
-              <q-item-section avatar>
-                <q-radio
-                  v-model="membershipType"
-                  val="household"
-                />
-              </q-item-section>
-              <q-item-section>
-                <q-item-label>Household</q-item-label>
-                <q-item-label
-                  v-if="concession"
-                  caption
-                >
-                  Majority concession holders
-                </q-item-label>
-              </q-item-section>
-              <q-item-section side>
-                <b v-if="concession">$40</b>
-                <b v-else>$50</b>
-                /year
-              </q-item-section>
-            </q-item>
-          </q-list>
+          <membership-picker v-model="membership" />
         </q-step>
         <q-step
           :name="3"
@@ -134,64 +61,89 @@
           :done="step > 3"
         >
           <q-form
-            class="q-gutter-md"
-            @submit="onSubmit"
+            ref="member"
+            autofocus
+            @submit="$refs.stepper.next()"
           >
-            <div class="row q-col-gutter-md">
-              <div class="col-md-6 col-12">
-                <q-input
-                  v-model="name"
-                  type="text"
-                  label="Name"
-                  color="grey-8"
-                />
-                <q-input
-                  v-model="email"
-                  type="email"
-                  label="Email"
-                  color="grey-8"
-                  :rules="[validEmail]"
-                />
-                <q-input
-                  v-model="phone"
-                  type="text"
-                  label="Phone"
-                  color="grey-8"
-                />
-              </div>
-              <div class="col-md-6 col-12">
-                <q-input
-                  v-model="suburb"
-                  type="text"
-                  label="Suburb"
-                  color="grey-8"
-                />
-                <q-input
-                  v-model="postcode"
-                  type="text"
-                  label="Postcode"
-                  color="grey-8"
-                  :rules="[validPostcode]"
-                />
+            <div class="q-pa-md">
+              <div class="row q-col-gutter-md">
+                <div class="col-md-6 col-12">
+                  <q-input
+                    v-model="firstname"
+                    hide-bottom-space
+                    type="text"
+                    label="First name"
+                    color="grey-8"
+                    :rules="[required]"
+                  />
+                </div>
+                <div class="col-md-6 col-12">
+                  <q-input
+                    v-model="lastname"
+                    hide-bottom-space
+                    type="text"
+                    label="Last name"
+                    color="grey-8"
+                    :rules="[required]"
+                  />
+                </div>
+                <div class="col-md-6 col-12">
+                  <q-input
+                    v-model="email"
+                    hide-bottom-space
+                    type="email"
+                    label="Email"
+                    color="grey-8"
+                    :rules="[validEmail]"
+                  />
+                </div>
+                <div class="col-md-6 col-12">
+                  <q-input
+                    v-model="phone"
+                    type="text"
+                    label="Phone"
+                    color="grey-8"
+                  />
+                </div>
+                <div class="col-md-6 col-12">
+                  <q-input
+                    v-model="suburb"
+                    type="text"
+                    label="Suburb"
+                    color="grey-8"
+                  />
+                </div>
+                <div class="col-md-6 col-12">
+                  <q-input
+                    v-model="postcode"
+                    hide-bottom-space
+                    type="text"
+                    label="Postcode"
+                    color="grey-8"
+                    :rules="[validPostcode]"
+                  />
+                </div>
               </div>
             </div>
           </q-form>
         </q-step>
         <q-step
           :name="4"
-          title="Additional info"
+          title="Review"
           icon="face"
         >
-          <p>What is your age? 18-25yrs; 25-35 yrs; 35-45yrs; 45-60yrs; 60-70yrs; 70+yrs</p>
-          <p>How long have you been a resident of the ACT? (yrs)</p>
-          <p>Did/does your family speak a language other than English at home?</p>
-          <p>Are you a parent of a child/children under 10yrs?</p>
-          <p>What is your gender?</p>
-          <p>Do you have a disability or any other accessibility needs?</p>
+          Is this correct?
+          <div style="max-width: 350px">
+            <static-key-val label="Name" :value="firstname + ' ' + lastname" />
+            <static-key-val label="Membership" :value="membership.type + (membership.concession ? ` (${membership.concessionType})` : '')" />
+            <static-key-val label="Email" :value="email" />
+            <static-key-val label="Phone" :value="phone" />
+            <static-key-val label="Address" :value="suburb + ' ' + postcode" />
+          </div>
         </q-step>
         <template #navigation>
           <q-stepper-navigation>
-            <div class="row">
+            <div class="row q-gutter-sm">
               <q-btn
                 v-if="step > 1"
                 flat
@@ -201,9 +153,19 @@
                 class="q-ml-sm"
               />
               <q-space />
+              <!--
+              <q-toggle
+                v-if="step === 4"
+                v-model="sendemails"
+                left-label
+                label="I consent to receive emails from the Food Co-op"
+              />
+              -->
               <q-btn
-                @click="$refs.stepper.next()"
+                @click="doStep()"
                 color="primary"
+                :disable="loading || step === 2 && membership.concession && !membership.concessionType"
+                :loading="loading"
                 :label="step === 4 ? 'Finish' : 'Continue'"
               />
             </div>
@@ -215,29 +177,39 @@
 </template>
 
 <script>
+import MembershipPicker from '../components/MembershipPicker.vue'
+import StaticKeyVal from '../components/StaticKeyVal.vue'
+
 export default {
+  components: { MembershipPicker, StaticKeyVal },
   data () {
     return {
       step: 1,
-      concession: false,
-      membershipType: 'individual',
-      name: '',
+      membership: {},
+      firstname: '',
+      lastname: '',
       email: '',
       phone: '',
       suburb: '',
       postcode: '',
-      loading: false,
-      isPwd: true
+      sendemails: true,
+      loading: false
     }
   },
   methods: {
-    async onSubmit () {
+    async completeSignup () {
       this.loading = true
       try {
         await this.$api.post('/api/signup', {
-          name: this.name,
+          firstname: this.firstname,
+          lastname: this.lastname,
           email: this.email,
-          phone: this.phone
+          phone: this.phone,
+          suburb: this.suburb,
+          postcode: this.postcode,
+          membership: this.membership.type,
+          concession: this.membership.concessionType,
+          sendemails: this.sendemails
         })
         this.$q.notify({
           color: 'green-4',
@@ -248,11 +220,12 @@ export default {
         })
         this.$router.push({ name: 'Thanks' })
       } catch (err) {
+        console.log(err)
         this.$q.notify({
           color: 'red-4',
           textColor: 'white',
           icon: 'error',
-          message: 'Login failed'
+          message: 'Signup failed'
         })
       }
       this.loading = false
@@ -262,6 +235,14 @@ export default {
     },
     validEmail (val) {
       return /^[^\s@]+@[^\s@]+(\.[^\s@]+)+$/.test(val) || 'Invalid email'
+    },
+    required (val) {
+      return !!val || 'Required'
+    },
+    doStep () {
+      if (this.step <= 2) return this.$refs.stepper.next()
+      if (this.step === 3) return this.$refs.member.submit()
+      this.completeSignup()
     }
   }
 }

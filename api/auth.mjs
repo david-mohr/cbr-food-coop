@@ -11,15 +11,21 @@ dotenv.config()
 
 const router = express.Router()
 
+export function getUserToken (user) {
+  if (!user) throw new Error('Must pass a user object')
+  const body = { id: user.id, email: user.email, role: user.role }
+  return jwt.sign(body, process.env.TOKEN_SECRET, { expiresIn: '12h' })
+}
+
 passport.use(
   'login',
   new LocalStrategy({
-    usernameField: 'username',
+    usernameField: 'email',
     passwordField: 'password'
-  }, async (username, password, done) => {
+  }, async (email, password, done) => {
     try {
-      console.log(username)
-      const user = await findUser(username)
+      console.log(email)
+      const user = await findUser(email)
       console.log(user)
       if (!user) {
         return done(null, false, { message: 'User not found' })
@@ -64,10 +70,7 @@ router.post('/login', (req, res, next) => {
 
       req.login(user, { session: false }, async (error) => {
         if (error) return next(error)
-
-        const body = { id: user.id, username: user.username, role: user.role }
-        const token = jwt.sign(body, process.env.TOKEN_SECRET, { expiresIn: '12h' })
-
+        const token = getUserToken(user)
         return res.json({ token })
       })
     } catch (error) {

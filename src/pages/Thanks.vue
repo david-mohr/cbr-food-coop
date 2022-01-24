@@ -1,7 +1,7 @@
 <template>
   <q-page padding>
     <h1>Thanks!</h1>
-    <p>Someone will be in touch</p>
+    <p>Please see the coordinator to process your payment</p>
   </q-page>
 </template>
 

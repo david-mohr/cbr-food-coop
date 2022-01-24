@@ -90,6 +90,18 @@ const linksList = [
     link: '/members'
   },
   {
+    title: 'New signups',
+    caption: 'List of people asking to join',
+    icon: 'list',
+    link: '/view-signups'
+  },
+  {
+    title: 'Members to be approved',
+    caption: 'List members needing approval',
+    icon: 'list',
+    link: '/members/to-be-approved'
+  },
+  {
     title: 'Users',
     caption: 'Coordinators and admins',
     icon: 'badge',
