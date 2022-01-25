@@ -69,7 +69,8 @@
     "last 8 ChromeAndroid versions",
     "last 8 FirefoxAndroid versions",
     "last 10 iOS versions",
-    "last 5 Opera versions"
+    "last 5 Opera versions",
+    "ios_saf > 9"
   ],
   "engines": {
     "node": ">= 16.10.0",
