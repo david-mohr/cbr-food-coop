@@ -70,7 +70,8 @@ module.exports = {
     'import/no-unresolved': 'off',
     'import/no-extraneous-dependencies': 'off',
     'prefer-promise-reject-errors': 'off',
-    'vue/max-attributes-per-line': ['error', {singleline: { max: 2, allowFirstLine: true }}],
+    'vue/max-attributes-per-line': ['error', {singleline: 2}],
+    'vue/multi-word-component-names': 'off',
 
     // allow debugger during development only
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off'
