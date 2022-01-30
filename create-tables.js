@@ -5,8 +5,16 @@ const { Pool } = require('pg')
 const tables = fs.readFileSync('mock/tables.sql', 'utf8')
 
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false
+  }
 })
+
+// don't use SSL in development
+if (process.env.NODE_ENV === 'development') {
+  delete config.ssl
+}
 
 async function main () {
   let client
