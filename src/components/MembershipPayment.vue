@@ -15,11 +15,11 @@
         <q-card-section class="q-pt-none q-gutter-y-md">
           <q-select
             filled
-            v-model="type"
+            v-model="membership_type_id"
             :options="types"
             map-options
             emit-value
-            option-value="id"
+            option-value="membership_type_id"
             label="Membership Type"
             :rules="[required]"
           />
@@ -91,7 +91,7 @@ export default {
   data () {
     return {
       concession: false,
-      type: null,
+      membership_type_id: null,
       concession_type: null,
       price: 0.0, // could be linked to renewal type by default.
       date: DateTime.now().toISODate()
@@ -119,10 +119,10 @@ export default {
       // use the membership object to see the values
       this.concession = !!this.membership.concession
       this.concession_type = this.membership.concession
-      this.type = this.membership.type
-      const plan = this.types.find(type => type.id === this.membership.type)
+      this.membership_type_id = this.membership.membership_type_id
+      const plan = this.types.find(type => type.membership_type_id === this.membership.membership_type_id)
       if (plan) {
-        this.price = this.concession ? plan.concession : plan.cost
+        this.price = this.concession ? plan.concession : plan.price
       }
     }
   },

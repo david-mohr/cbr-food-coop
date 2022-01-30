@@ -110,7 +110,7 @@ export default {
     membership () {
       return {
         concession: this.signup.concession,
-        type: this.signup.membership
+        membership_type_id: this.signup.membership_type_id
       }
     }
   },
