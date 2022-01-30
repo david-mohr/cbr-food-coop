@@ -39,10 +39,13 @@ export function updateSignups (state, signups) {
   }))
 }
 
-export function addVendId (state, { signupId, vendid }) {
+export function addVendId (state, { signupId, vendids }) {
+  console.log(vendids)
   const signup = state.signups.find(s => s.id === signupId)
   if (!signup) return
-  signup.vendid = vendid
+  for (const member of signup.members) {
+    member.vendid = vendids[member.id]
+  }
 }
 
 export function saveToken (state, token) {

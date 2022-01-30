@@ -22,7 +22,12 @@
           clickable
           :to="{ name: 'Process signup', params: { signupId: signup.id }}"
         >
-          <q-item-section>{{ signup.name }}</q-item-section>
+          <q-item-section>
+            <q-item-label>{{ signup.name }}</q-item-label>
+            <q-item-label caption>
+              {{ membershipType(signup.membership_type_id) }}
+            </q-item-label>
+          </q-item-section>
         </q-item>
       </list-with-filter>
     </div>
@@ -40,6 +45,7 @@ export default {
     }
   },
   created () {
+    this.$store.dispatch('members/getMembershipTypes')
     if (!this.signups.length) {
       this.getSignups()
     }
@@ -47,6 +53,9 @@ export default {
   methods: {
     async getSignups () {
       await this.$store.dispatch('members/getSignups')
+    },
+    membershipType (id) {
+      return this.$store.state.members.types?.find(t => t.membership_type_id === id)?.label
     }
   }
 }
