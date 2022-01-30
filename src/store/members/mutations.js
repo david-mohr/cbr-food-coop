@@ -19,7 +19,9 @@ export function updateMemberStatus (state, member) {
   state.memberStatus[member.id] = member.status
 }
 export function updateMembershipTypes (state, types) {
-  state.types = types.sort((a, b) => a.membership_type_id - b.membership_type_id)
+  state.types = types
+    .map(t => ({ ...t, price: parseFloat(t.price), concession: parseFloat(t.concession) }))
+    .sort((a, b) => a.membership_type_id - b.membership_type_id)
 }
 export function updateMembers (state, members) {
   if (members) members.sort(alphasort('name'))
