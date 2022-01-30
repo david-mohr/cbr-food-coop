@@ -30,10 +30,11 @@ export function updateUsers (state, users) {
   state.users = users
 }
 export function updateSignups (state, signups) {
-  if (signups) signups.sort(alphasort('firstname'))
   state.signups = signups.map(s => Object.defineProperty(s, 'name', {
     get: function () {
-      return this.firstname + ' ' + this.lastname
+      return Array.isArray(this.members) && this.members.length
+        ? this.members.map(m => m.firstname + ' ' + m.lastname).join(', ')
+        : '-- empty --'
     }
   }))
 }
