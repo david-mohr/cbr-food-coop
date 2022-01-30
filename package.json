@@ -16,7 +16,7 @@
     "mockdata": "DATABASE_URL='postgres://postgres:Pass2021!@localhost:5432/postgres' node create-mock-data.js",
     "create-tables": "DATABASE_URL='postgres://postgres:Pass2021!@localhost:5432/postgres' node create-tables.js",
     "adduser": "DATABASE_URL='postgres://postgres:Pass2021!@localhost:5432/postgres' NODE_ENV=development node api/scripts/adduser.mjs",
-    "heroku-postbuild": "quasar build",
+    "heroku-postbuild": "quasar build && sed -i 's/const /var /g' dist/spa/js/*.js",
     "db": "docker run --rm -d --name dev-postgres -e POSTGRES_PASSWORD='Pass2021!' -v ${PWD}/test_db/:/var/lib/postgresql/data -p 5432:5432 postgres",
     "db:shell": "docker exec -it dev-postgres psql -U postgres",
     "db:stop": "docker stop dev-postgres"
@@ -71,7 +71,7 @@
     "last 8 FirefoxAndroid versions",
     "last 10 iOS versions",
     "last 5 Opera versions",
-    "ios_saf > 9"
+    "ios_saf >= 9"
   ],
   "engines": {
     "node": "^16.10.0",
