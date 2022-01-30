@@ -9,14 +9,19 @@ CREATE TABLE IF NOT EXISTS membership_types (
 
 CREATE TABLE IF NOT EXISTS signup (
   id SERIAL PRIMARY KEY  NOT NULL,
+  membership_type_id int NOT NULL REFERENCES membership_types,
+  concession varchar(255)
+);
+
+CREATE TABLE IF NOT EXISTS signup_members (
+  id SERIAL PRIMARY KEY  NOT NULL,
+  signup_id int NOT NULL REFERENCES signup(id),
   firstname varchar(255),
   lastname varchar(255),
   postcode varchar(255),
   suburb varchar(255),
   email varchar(255),
   phone varchar(255),
-  membership_type_id int NOT NULL REFERENCES membership_types,
-  concession varchar(255),
   sendemails boolean NOT NULL DEFAULT true,
   vendid varchar(255)
 );

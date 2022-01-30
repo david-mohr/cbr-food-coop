@@ -72,6 +72,7 @@
               >
                 <q-separator />
                 <q-expansion-item
+                  default-opened
                   group="members"
                   :label="member.firstname + ' ' + member.lastname"
                   icon="face"
@@ -155,11 +156,20 @@
         >
           Is this correct?
           <div style="max-width: 350px">
-            <static-key-val label="Name" :value="firstname + ' ' + lastname" />
-            <static-key-val label="Membership" :value="membership.type + (membership.concession ? ` (${membership.concessionType})` : '')" />
-            <static-key-val label="Email" :value="email" />
-            <static-key-val label="Phone" :value="phone" />
-            <static-key-val label="Address" :value="suburb + ' ' + postcode" />
+            <static-key-val label="Membership" :value="membershipType.label + (membership.concession ? ` (concession)` : '')" />
+          </div>
+          <div
+            v-for="member in members"
+            :key="member.id"
+            style="max-width: 350px"
+            class="q-pt-md"
+          >
+            <div class="text-h5">
+              {{ member.firstname + ' ' + member.lastname }}
+            </div>
+            <static-key-val label="Email" :value="member.email" />
+            <static-key-val label="Phone" :value="member.phone" />
+            <static-key-val label="Address" :value="member.suburb + ' ' + member.postcode" />
           </div>
         </q-step>
         <template #navigation>
@@ -236,15 +246,9 @@ export default {
       this.loading = true
       try {
         await this.$api.post('/api/signup', {
-          firstname: this.firstname,
-          lastname: this.lastname,
-          email: this.email,
-          phone: this.phone,
-          suburb: this.suburb,
-          postcode: this.postcode,
           membership_type_id: this.membership.type,
           concession: this.membership.concessionType,
-          sendemails: this.sendemails
+          members: this.members
         })
         this.$q.notify({
           color: 'green-4',

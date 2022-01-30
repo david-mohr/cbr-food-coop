@@ -19,11 +19,15 @@ router.get('/membership-types', async (req, res) => {
   }
 })
 
-const signupProps = ['firstname', 'lastname', 'suburb', 'postcode', 'email', 'phone', 'membership_type_id', 'concession', 'sendemails']
+const signupProps = ['firstname', 'lastname', 'suburb', 'postcode', 'email', 'phone', 'sendemails']
 
 router.post('/signup', async (req, res) => {
   try {
-    await query(`INSERT into signup (${signupProps.join(', ')}) values($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *`, signupProps.map(prop => req.body[prop]))
+    const membership = await query('INSERT into signup (membership_type_id, concession) values($1, $2) RETURNING *', [req.body.membership_type_id, req.body.concession])
+    for (const member of req.body.members) {
+      // TODO not very performant, ideally we should use some kind of bulk-insert
+      await query(`INSERT into signup_members (signup_id, ${signupProps.join(', ')}) values($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`, [membership[0].id, ...signupProps.map(prop => member[prop])])
+    }
     res.sendStatus(200)
   } catch (err) {
     console.error(err)
