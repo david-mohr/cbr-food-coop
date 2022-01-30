@@ -14,8 +14,12 @@ mailchimp.setConfig({
 
 router.get('/', hasRole('coordinator'), async (req, res) => {
   try {
-    const results = await query('SELECT * from signup')
-    res.send(results)
+    const signups = await query('SELECT * from signup')
+    for (const signup of signups) {
+      const members = await query('SELECT * from signup_members WHERE signup_id = $1', [signup.id])
+      signup.members = members
+    }
+    res.send(signups)
   } catch (err) {
     console.log(err)
     return res.sendStatus(500)
