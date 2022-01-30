@@ -2,6 +2,7 @@ import express from 'express'
 import morgan from 'morgan'
 import passport from 'passport'
 import serveStatic from 'serve-static'
+import history from 'connect-history-api-fallback'
 
 import api from './api/index.mjs'
 
@@ -22,6 +23,10 @@ app.use('/api', function isAuthenticated (req, res, next) {
 })
 
 app.use('/api', api)
+
+// Catch-all for history mode
+app.use(history())
+app.use(serveStatic('./dist/spa'))
 
 // Handle errors.
 app.use(function (err, req, res, next) {
