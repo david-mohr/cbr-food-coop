@@ -23,6 +23,8 @@
         <q-btn
           v-if="missingVendIds"
           :label="vendLabel"
+          :loading="working.vend"
+          :disable="working.vend"
           @click="createVend"
         />
         <q-btn
@@ -85,7 +87,8 @@ export default {
   components: { MembershipPayment },
   data () {
     return {
-      membershipPayment: false
+      membershipPayment: false,
+      working: {}
     }
   },
   computed: {
@@ -122,6 +125,7 @@ export default {
   },
   methods: {
     async createVend () {
+      this.working.vend = true
       try {
         const res = await this.$api.post(`/api/signups/${this.signup.id}/vend`, {}, {
           headers: {
@@ -135,6 +139,7 @@ export default {
       } catch (err) {
         console.log(err)
       }
+      this.working.vend = false
     },
     async createMember (payment) {
       try {
