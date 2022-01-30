@@ -4,17 +4,19 @@ const { Pool } = require('pg')
 // these arrays will have blank last entry due to a trailling newline
 const tables = fs.readFileSync('mock/tables.sql', 'utf8')
 
-const pool = new Pool({
+const config = {
   connectionString: process.env.DATABASE_URL,
   ssl: {
     rejectUnauthorized: false
   }
-})
+}
 
 // don't use SSL in development
 if (process.env.NODE_ENV === 'development') {
   delete config.ssl
 }
+
+const pool = new Pool(config)
 
 async function main () {
   let client
