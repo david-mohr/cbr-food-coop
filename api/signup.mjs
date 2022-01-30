@@ -68,12 +68,20 @@ async function createVend (member) {
 const VEND_URL = 'https://thefoodcooperativeshop.vendhq.com/api/2.0'
 router.post('/:id/vend', hasRole('coordinator'), async (req, res) => {
   try {
-    const results = await query('SELECT * from signup WHERE id = $1', [req.params.id])
-    if (!Array.isArray(results) || !results.length) return res.sendStatus(404)
-    if (results[0].vendid) return res.sendStatus(409)
-    const newVendUser = await createVend(results[0])
-    await query('UPDATE signup SET vendid = $1 WHERE id = $2', [newVendUser.data.id, req.params.id])
-    res.json({ vendid: newVendUser.data.id })
+    const members = await query('SELECT * from signup_members WHERE signup_id = $1', [req.params.id])
+    if (!Array.isArray(members) || !members.length) return res.sendStatus(404)
+    console.log(members)
+    const final = {}
+    for (const member of members) {
+      if (member.vendid) {
+        final[member.id] = member.vendid
+        continue
+      }
+      const newVendUser = await createVend(member)
+      await query('UPDATE signup_members SET vendid = $1 WHERE id = $2', [newVendUser.data.id, member.id])
+      final[member.id] = newVendUser.data.id
+    }
+    res.json(final)
   } catch (err) {
     console.log(err)
     console.log(err?.response?.body)
