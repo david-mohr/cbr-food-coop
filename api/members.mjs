@@ -77,20 +77,22 @@ router.get('/:id/history', hasRole('coordinator'), async (req, res) => {
 })
 
 export async function renewMembership (memberId) {
-  const results = await query(
-    'SELECT membershipexpires FROM members_extra WHERE id = $1'
-    , [memberId])
-  if (!results.length) throw new Error(`Failed to find members_extra for member: ${memberId}`)
+  // first find the membership
+  const member = await query('SELECT membership_id FROM customers WHERE id = $1', [memberId])
+  if (!member.length) throw new Error(`Failed to find member: ${memberId}`)
+  const membershipId = member[0].membership_id
+  const membership = await query('SELECT expires FROM memberships WHERE membership_id = $1', [membershipId])
+  if (!membership.length) throw new Error(`Failed to find membership for member: ${memberId}`)
   let startDate = DateTime.now().startOf('day')
-  if (results[0].membershipexpires) {
-    const dbStartDate = DateTime.fromJSDate(results[0].membershipexpires)
+  if (membership[0].expires) {
+    const dbStartDate = DateTime.fromJSDate(membership[0].expires)
     if (dbStartDate > startDate) startDate = dbStartDate
   }
   // For the time being, all memberships are exactly one year.
   const newExpiry = startDate.plus({ years: 1 })
   await query(
-    'UPDATE members_extra SET membershipexpires = $1 WHERE id = $2 RETURNING *'
-    , [newExpiry.toString(), memberId])
+    'UPDATE memberships SET expires = $1 WHERE membership_id = $2 RETURNING *'
+    , [newExpiry.toString(), membershipId])
 }
 
 export async function updateVolunteerHours (memberId, hoursWorked) {
