@@ -28,6 +28,7 @@
       </q-card>
       <membership-payment
         v-model="renewMembership"
+        :membership="membership"
         :member-id="memberId"
       />
     </div>
@@ -109,11 +110,9 @@ export default {
       return 'bg-negative'
     },
     member () {
-      console.log(this.$store.getters['members/memberLookup'][this.memberId])
       return this.$store.getters['members/memberLookup'][this.memberId]
     },
     membership () {
-      console.log(this.$store.getters['members/membershipLookup'][this.member.membership_id])
       return this.$store.getters['members/membershipLookup'][this.member.membership_id]
     }
   }

@@ -61,7 +61,7 @@
           <q-btn
             flat
             type="submit"
-            :label="memberId ? 'Renew' : 'Create new member'"
+            :label="memberId ? 'Renew' : 'Create new membership'"
           />
         </q-card-actions>
       </q-form>
@@ -116,7 +116,7 @@ export default {
   watch: {
     modelValue (val) {
       if (!val || !this.membership) return
-      // use the membership object to see the values
+      // use the membership object to seed the values
       this.concession = !!this.membership.concession
       this.concession_type = this.membership.concession
       this.membership_type_id = this.membership.membership_type_id
@@ -147,7 +147,7 @@ export default {
         notes
       }
       if (!this.memberId) return this.$emit('payment', activity)
-      this.activity.action = 'Renewed'
+      activity.action = 'Renewed'
       // For the time being, add membership renewal into volunteer history.
       try {
         await this.$store.dispatch('members/updateHistory', {
