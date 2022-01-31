@@ -13,11 +13,15 @@ function parseJwt (token) {
 export function updateMemberHistory (state, member) {
   state.memberHistory[member.id] = member.history
 }
-export function updateMemberStatus (state, member) {
-  member.status.membershipexpires = new Date(member.status.membershipexpires)
-  member.status.discvaliduntil = new Date(member.status.discvaliduntil)
-  state.memberStatus[member.id] = member.status
+
+export function updateMemberships (state, memberships) {
+  state.memberships = memberships.map(ms => ({
+    ...ms,
+    expires: new Date(ms.expires),
+    discvaliduntil: new Date(ms.discvaliduntil)
+  }))
 }
+
 export function updateMembershipTypes (state, types) {
   state.types = types
     .map(t => ({ ...t, price: parseFloat(t.price), concession: parseFloat(t.concession) }))

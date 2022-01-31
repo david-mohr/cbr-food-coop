@@ -1,14 +1,14 @@
 export default function () {
   return {
     members: [],
+    memberships: [],
     users: [],
     signups: [],
     token: null,
     user: null,
     memberHistory: {},
-    memberStatus: {},
-    // I would like to have this as a table in the database, as I think this is
-    // likely to change in the future. The same may go for concession types.
+    // This is now a table in the database. The same may eventually happen for
+    // concession types.
     types: [],
     concessions: [
       { id: 'health', label: 'Heath Care' },
