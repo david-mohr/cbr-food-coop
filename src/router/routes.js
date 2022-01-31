@@ -6,10 +6,10 @@ const routes = [
     children: [
       { path: '', component: () => import('pages/Index.vue') },
       { path: 'login', name: 'Login', component: () => import('pages/Login.vue') },
-      { path: 'signup', component: () => import('pages/Signup.vue') },
+      { path: 'signup', component: () => import('pages/SignupPage.vue') },
       { path: 'thanks', name: 'Thanks', component: () => import('pages/Thanks.vue') },
       { path: 'members', component: () => import('pages/Index.vue') },
-      { path: 'members/:memberId', name: 'Member', component: () => import('pages/Member.vue') },
+      { path: 'members/:memberId', name: 'Member', component: () => import('pages/MemberPage.vue') },
       { path: 'members/to-be-approved', name: 'Members to be approved', component: () => import('pages/MembersToBeApproved.vue') },
       { path: 'users', component: () => import('pages/Users.vue') },
       { path: 'users/:userId', name: 'User', component: () => import('pages/User.vue') },
