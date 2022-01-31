@@ -1,5 +1,4 @@
 import { Notify, SessionStorage } from 'quasar'
-import Router from '../../router'
 import { api } from 'boot/axios'
 
 export async function getMembers (context) {
@@ -11,9 +10,6 @@ export async function getMembers (context) {
     })
     context.commit('updateMembers', res.data)
   } catch (err) {
-    if (err.response.status === 401) {
-      Router.replace({ name: 'Login' })
-    }
     Notify.create({
       color: 'red-4',
       textColor: 'white',
@@ -71,9 +67,6 @@ export async function getHistory (context, memberId) {
       history: res.data
     })
   } catch (err) {
-    if (err.response.status === 401) {
-      Router.replace({ name: 'Login' })
-    }
     Notify.create({
       color: 'red-4',
       textColor: 'white',
@@ -105,9 +98,6 @@ export async function getStatus (context, memberId) {
       status: res.data
     })
   } catch (err) {
-    if (err.response.status === 401) {
-      Router.replace({ name: 'Login' })
-    }
     Notify.create({
       color: 'red-4',
       textColor: 'white',
