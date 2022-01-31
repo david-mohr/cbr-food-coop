@@ -76,13 +76,32 @@ export async function getHistory (context, memberId) {
   }
 }
 
-export async function updateHistory ({ dispatch, state }, { activity, memberId }) {
+export async function updateHistory ({ dispatch, getters, state }, { activity, memberId }) {
   await api.post(`/api/members/${memberId}/history`, activity, {
     headers: {
       authorization: 'Bearer ' + state.token
     }
   })
   await dispatch('getHistory', memberId)
+  await dispatch('getMembership', getters.memberLookup[memberId].membership_id)
+}
+
+export async function getMembership (context, membershipId) {
+  try {
+    const res = await api.get(`/api/memberships/${membershipId}`, {
+      headers: {
+        authorization: 'Bearer ' + context.state.token
+      }
+    })
+    context.commit('updateMembership', res.data)
+  } catch (err) {
+    Notify.create({
+      color: 'red-4',
+      textColor: 'white',
+      icon: 'error',
+      message: 'Failed to load memberships'
+    })
+  }
 }
 
 export async function getMemberships (context) {

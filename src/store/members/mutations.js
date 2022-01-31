@@ -14,12 +14,24 @@ export function updateMemberHistory (state, member) {
   state.memberHistory[member.id] = member.history
 }
 
-export function updateMemberships (state, memberships) {
-  state.memberships = memberships.map(ms => ({
+function processMembership (ms) {
+  return {
     ...ms,
     expires: new Date(ms.expires),
     discvaliduntil: new Date(ms.discvaliduntil)
-  }))
+  }
+}
+
+export function updateMemberships (state, memberships) {
+  state.memberships = memberships.map(processMembership)
+}
+
+export function updateMembership (state, membership) {
+  const processed = processMembership(membership)
+  // find the membership in the array and replace it
+  const index = state.memberships.findIndex(ms => ms.membership_id === membership.id)
+  if (index < 0) state.memberships.push(processed)
+  else state.memberships.splice(index, 1, processed)
 }
 
 export function updateMembershipTypes (state, types) {
