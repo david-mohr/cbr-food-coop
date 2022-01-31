@@ -10,8 +10,19 @@ import axios from 'axios'
 // const api = axios.create({ baseURL: 'https://api.example.com' })
 const api = axios.create()
 
-export default boot(({ app, store }) => {
+export default boot(({ app, router, store }) => {
   // for use inside Vue files (Options API) through this.$axios and this.$api
+
+  // intercept authentication errors and send people back to the login page
+  api.interceptors.response.use(response => response, error => {
+    if (error.response.status === 401) {
+      if (!error.response.config.url.endsWith('/api/login')) {
+        router.replace({ name: 'Login' })
+        store.dispatch('members/logout')
+      }
+    }
+    throw error
+  })
 
   app.config.globalProperties.$axios = axios
   // ^ ^ ^ this will allow you to use this.$axios (for Vue Options API form)
