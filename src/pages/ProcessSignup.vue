@@ -93,7 +93,7 @@ export default {
   },
   computed: {
     missingVendIds () {
-      return this.signup.members.some(m => !m.vendid)
+      return this.signup.members.some(m => !m.vend_id)
     },
     membershipTypeLabel () {
       return this.membershipType?.label
@@ -134,7 +134,7 @@ export default {
         })
         this.$store.commit('members/addVendId', {
           signupId: this.signup.id,
-          vendids: res.data
+          vendIds: res.data
         })
       } catch (err) {
         console.log(err)

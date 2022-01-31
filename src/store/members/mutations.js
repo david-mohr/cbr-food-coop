@@ -41,12 +41,12 @@ export function updateSignups (state, signups) {
   }))
 }
 
-export function addVendId (state, { signupId, vendids }) {
-  console.log(vendids)
+export function addVendId (state, { signupId, vendIds }) {
+  console.log(vendIds)
   const signup = state.signups.find(s => s.id === signupId)
   if (!signup) return
   for (const member of signup.members) {
-    member.vendid = vendids[member.id]
+    member.vend_id = vendIds[member.id]
   }
 }
 
