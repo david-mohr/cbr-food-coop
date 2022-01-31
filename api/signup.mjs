@@ -26,10 +26,14 @@ router.get('/', hasRole('coordinator'), async (req, res) => {
   }
 })
 
+async function deleteSignup (signupId) {
+  await query('DELETE FROM signup_members WHERE signup_id = $1', [signupId])
+  await query('DELETE FROM signup WHERE id = $1', [signupId])
+}
+
 router.delete('/:id', hasRole('coordinator'), async (req, res) => {
   try {
-    await query('DELETE FROM signup_members WHERE signup_id = $1', [req.params.id])
-    await query('DELETE FROM signup WHERE id = $1', [req.params.id])
+    await deleteSignup(req.params.id)
     res.sendStatus(204)
   } catch (err) {
     console.log(err)
