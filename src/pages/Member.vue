@@ -70,7 +70,6 @@ export default {
   components: { MemberDetails, MemberStatus },
   data () {
     return {
-      ready: false,
       tab: 'status',
       columns: [
         { name: 'Date', align: 'left', label: 'Date', field: 'datenew', sortable: true },
@@ -81,6 +80,9 @@ export default {
     }
   },
   computed: {
+    ready () {
+      return this.$store.state.members.members.length
+    },
     memberId () {
       return this.$route.params.memberId
     },
@@ -89,18 +91,9 @@ export default {
     }
   },
   async created () {
-    const promises = []
-    if (!this.$store.state.members.members.length) {
-      promises.push(this.$store.dispatch('members/getMembers'))
-    }
     if (!this.$store.state.members.memberHistory[this.memberId]) {
-      promises.push(this.$store.dispatch('members/getHistory', this.memberId))
+      await this.$store.dispatch('members/getHistory', this.memberId)
     }
-    if (!this.$store.state.members.memberships.length) {
-      promises.push(this.$store.dispatch('members/getMemberships'))
-    }
-    await Promise.all(promises)
-    this.ready = true
   }
 }
 </script>

@@ -131,15 +131,26 @@ export async function updateMemberDetails (context, member) {
   context.commit('updateMemberDetails', member)
 }
 
-export async function login (context, creds) {
-  const res = await api.post('/api/login', creds)
-  SessionStorage.set('token', res.data.token)
-  context.commit('saveToken', res.data.token)
+export async function fetchAll ({ dispatch }) {
+  await Promise.all([
+    dispatch('getMembers'),
+    dispatch('getMemberships'),
+    dispatch('getMembershipTypes')
+  ])
 }
 
-export async function loadToken (context, creds) {
+export async function login ({ commit, dispatch }, creds) {
+  const res = await api.post('/api/login', creds)
+  SessionStorage.set('token', res.data.token)
+  commit('saveToken', res.data.token)
+  await dispatch('fetchAll')
+}
+
+export async function loadToken ({ commit, dispatch }, creds) {
   const token = SessionStorage.getItem('token')
-  if (token) context.commit('saveToken', token)
+  if (!token) return
+  commit('saveToken', token)
+  await dispatch('fetchAll')
 }
 
 export async function logout (context) {
