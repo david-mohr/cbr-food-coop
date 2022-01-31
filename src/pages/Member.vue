@@ -96,8 +96,8 @@ export default {
     if (!this.$store.state.members.memberHistory[this.memberId]) {
       promises.push(this.$store.dispatch('members/getHistory', this.memberId))
     }
-    if (!this.$store.state.members.memberStatus[this.memberId]) {
-      promises.push(this.$store.dispatch('members/getStatus', this.memberId))
+    if (!this.$store.state.members.memberships.length) {
+      promises.push(this.$store.dispatch('members/getMemberships'))
     }
     await Promise.all(promises)
     this.ready = true

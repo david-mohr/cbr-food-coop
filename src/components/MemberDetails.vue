@@ -24,6 +24,20 @@
     </div>
     <div class="col-6">
       <q-field
+        label="Membership #"
+        stack-label
+        readonly
+      >
+        <template #control>
+          <div
+            class="self-center full-width no-outline"
+            tabindex="0"
+          >
+            {{ member.membership_id }}
+          </div>
+        </template>
+      </q-field>
+      <q-field
         label="ID"
         stack-label
         readonly
