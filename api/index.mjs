@@ -3,6 +3,7 @@ import express from 'express'
 import unauthenticated from './unauthenticated.mjs'
 import auth from './auth.mjs'
 import members from './members.mjs'
+import memberships from './memberships.mjs'
 import signup from './signup.mjs'
 import users from './users.mjs'
 import invites from './invites.mjs'
@@ -14,6 +15,7 @@ const router = express.Router()
 router.use(unauthenticated)
 router.use(auth)
 router.use('/members', members)
+router.use('/memberships', memberships)
 router.use('/signups', signup)
 router.use('/users', users)
 router.use('/invites', invites)
