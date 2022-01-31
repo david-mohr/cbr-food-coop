@@ -101,7 +101,7 @@ export async function getNextMemberId () {
 
 export async function getNextMembershipId () {
   const results = await query('SELECT MAX(membership_id) from memberships')
-  const latestId = results[0].max || 'm1000'
+  const latestId = results[0].max || 'm5000'
   let id = parseInt(latestId.slice(1), 10)
   return `m${++id}`
 }
