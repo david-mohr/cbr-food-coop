@@ -26,7 +26,7 @@
           >
             <q-tab
               name="status"
-              label="Status"
+              label="Membership"
             />
             <q-tab
               name="history"
@@ -41,7 +41,7 @@
             animated
           >
             <q-tab-panel name="status">
-              <member-status
+              <membership-status
                 :member-id="memberId"
               />
             </q-tab-panel>
@@ -64,10 +64,10 @@
 
 <script>
 import MemberDetails from '../components/MemberDetails.vue'
-import MemberStatus from '../components/MemberStatus.vue'
+import MembershipStatus from '../components/MembershipStatus.vue'
 
 export default {
-  components: { MemberDetails, MemberStatus },
+  components: { MemberDetails, MembershipStatus },
   data () {
     return {
       tab: 'status',
