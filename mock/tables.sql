@@ -1,15 +1,43 @@
+CREATE TABLE IF NOT EXISTS membership_types (
+  membership_type_id SERIAL PRIMARY KEY NOT NULL,
+  label varchar(255) NOT NULL,
+  max_members int,
+  price decimal,
+  concession decimal,
+  concession_caption varchar(255)
+);
+
 CREATE TABLE IF NOT EXISTS signup (
   id SERIAL PRIMARY KEY  NOT NULL,
+  membership_type_id int NOT NULL REFERENCES membership_types,
+  concession varchar(255)
+);
+
+CREATE TABLE IF NOT EXISTS signup_members (
+  id SERIAL PRIMARY KEY  NOT NULL,
+  signup_id int NOT NULL REFERENCES signup(id),
   firstname varchar(255),
   lastname varchar(255),
   postcode varchar(255),
   suburb varchar(255),
   email varchar(255),
   phone varchar(255),
-  membership varchar(255),
-  concession varchar(255),
   sendemails boolean NOT NULL DEFAULT true,
-  vendid varchar(255)
+  vend_id varchar(255)
+);
+
+INSERT INTO membership_types (membership_type_id, label, max_members, price, concession, concession_caption) VALUES
+  (1, 'Single', 1, 25, 15, NULL),
+  (2, 'Couple', 2, 40, 25, 'Where both people hold a concession'),
+  (3, 'Household', 10, 50, 40, 'Majority concession holders')
+  ON CONFLICT (membership_type_id) DO NOTHING;
+
+CREATE TABLE IF NOT EXISTS memberships (
+  membership_id varchar(32) PRIMARY KEY NOT NULL,
+  membership_type_id int NOT NULL REFERENCES membership_types,
+  concession varchar(255),
+  expires timestamp with time zone,
+  discvaliduntil timestamp with time zone
 );
 
 CREATE TABLE IF NOT EXISTS customers (
@@ -30,14 +58,19 @@ CREATE TABLE IF NOT EXISTS customers (
     curdate timestamp with time zone,
     curdebt decimal,
     visible boolean NOT NULL DEFAULT false
+/* membership_id int REFERENCES memberships, */
 );
+ALTER TABLE customers ADD COLUMN IF NOT EXISTS membership_id varchar(32) REFERENCES memberships;
+ALTER TABLE customers ADD COLUMN IF NOT EXISTS vend_id varchar(255);
 
 CREATE TABLE IF NOT EXISTS members_extra (
     id varchar(255) NOT NULL,
+    /* will be ignored, should be removed/migrated to the membership */
     discvaliduntil timestamp with time zone,
     anuaffiliation varchar(255),
     incomelevel varchar(255),
     sendemails boolean NOT NULL DEFAULT true,
+    /* will be ignored, should be removed/migrated to the membership */
     membershipexpires timestamp with time zone,
     hadfirstshop boolean NOT NULL DEFAULT false,
     hadfreelunch boolean NOT NULL DEFAULT false,
@@ -55,8 +88,7 @@ CREATE TABLE IF NOT EXISTS members_history (
     action varchar(255),
     amountpaid decimal,
     notes varchar(255),
-    PRIMARY KEY (id),
-    CONSTRAINT member_history_customer FOREIGN KEY (member) REFERENCES customers (id)
+    PRIMARY KEY (id)
 );
 
 CREATE TABLE IF NOT EXISTS auth (

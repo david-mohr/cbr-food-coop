@@ -2,6 +2,7 @@ import express from 'express'
 import morgan from 'morgan'
 import passport from 'passport'
 import serveStatic from 'serve-static'
+import history from 'connect-history-api-fallback'
 
 import api from './api/index.mjs'
 
@@ -13,14 +14,19 @@ app.use(express.json({ limit: '5mb' }))
 app.use(morgan('tiny'))
 app.use(serveStatic('./dist/spa'))
 
+const publicUrls = ['/api/login', '/api/signup', '/api/membership-types']
+
 app.use('/api', function isAuthenticated (req, res, next) {
-  if (req.originalUrl === '/api/login') return next()
-  if (req.originalUrl === '/api/signup') return next()
+  if (publicUrls.includes(req.originalUrl)) return next()
   if (/\/api\/invites\/[a-z0-9]+\/accept/i.test(req.originalUrl)) return next()
   return passport.authenticate('jwt', { session: false })(req, res, next)
 })
 
 app.use('/api', api)
+
+// Catch-all for history mode
+app.use(history())
+app.use(serveStatic('./dist/spa'))
 
 // Handle errors.
 app.use(function (err, req, res, next) {

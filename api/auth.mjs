@@ -13,7 +13,7 @@ const router = express.Router()
 
 export function getUserToken (user) {
   if (!user) throw new Error('Must pass a user object')
-  const body = { id: user.id, email: user.email, role: user.role }
+  const body = { id: user.id, email: user.email, role: user.role, name: user.name }
   return jwt.sign(body, process.env.TOKEN_SECRET, { expiresIn: '12h' })
 }
 
@@ -65,7 +65,9 @@ router.post('/login', (req, res, next) => {
         return res.sendStatus(401)
       }
       if (!user) {
-        return res.sendStatus(404)
+        // this doesn't differentiate "missing user" and "bad password".
+        // It simply means "no match for that email/password combo"
+        return res.sendStatus(401)
       }
 
       req.login(user, { session: false }, async (error) => {

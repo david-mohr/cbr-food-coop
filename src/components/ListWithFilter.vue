@@ -9,7 +9,7 @@
         filled
         type="search"
         hint="Search"
-        @update:modelValue="page = 1"
+        @update:model-value="page = 1"
       >
         <template #append>
           <q-icon name="search" />

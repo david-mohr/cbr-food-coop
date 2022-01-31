@@ -2,13 +2,32 @@ import express from 'express'
 import { encryptPassword, query } from './database.mjs'
 import { getUserToken } from './auth.mjs'
 
+/*
+ * Any unauthenticated URLs needs to be listed inside server.mjs at the root of
+ * this project
+ */
+
 const router = express.Router()
 
-const signupProps = ['firstname', 'lastname', 'suburb', 'postcode', 'email', 'phone', 'membership', 'concession', 'sendemails']
+router.get('/membership-types', async (req, res) => {
+  try {
+    const results = await query('SELECT membership_type_id, label, max_members, price, concession, concession_caption from membership_types')
+    res.send(results)
+  } catch (err) {
+    console.log(err)
+    return res.sendStatus(500)
+  }
+})
+
+const signupProps = ['firstname', 'lastname', 'suburb', 'postcode', 'email', 'phone', 'sendemails']
 
 router.post('/signup', async (req, res) => {
   try {
-    await query(`INSERT into signup (${signupProps.join(', ')}) values($1, $2, $3, $4, $5, $6, $7, $8, $9) RETURNING *`, signupProps.map(prop => req.body[prop]))
+    const membership = await query('INSERT into signup (membership_type_id, concession) values($1, $2) RETURNING *', [req.body.membership_type_id, req.body.concession])
+    for (const member of req.body.members) {
+      // TODO not very performant, ideally we should use some kind of bulk-insert
+      await query(`INSERT into signup_members (signup_id, ${signupProps.join(', ')}) values($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *`, [membership[0].id, ...signupProps.map(prop => member[prop])])
+    }
     res.sendStatus(200)
   } catch (err) {
     console.error(err)

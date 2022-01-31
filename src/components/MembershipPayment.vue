@@ -15,11 +15,11 @@
         <q-card-section class="q-pt-none q-gutter-y-md">
           <q-select
             filled
-            v-model="type"
+            v-model="membership_type_id"
             :options="types"
             map-options
             emit-value
-            option-value="id"
+            option-value="membership_type_id"
             label="Membership Type"
             :rules="[required]"
           />
@@ -61,7 +61,7 @@
           <q-btn
             flat
             type="submit"
-            :label="memberId ? 'Renew' : 'Create new member'"
+            :label="memberId ? 'Renew' : 'Create new membership'"
           />
         </q-card-actions>
       </q-form>
@@ -91,7 +91,7 @@ export default {
   data () {
     return {
       concession: false,
-      type: null,
+      membership_type_id: null,
       concession_type: null,
       price: 0.0, // could be linked to renewal type by default.
       date: DateTime.now().toISODate()
@@ -116,13 +116,13 @@ export default {
   watch: {
     modelValue (val) {
       if (!val || !this.membership) return
-      // use the membership object to see the values
+      // use the membership object to seed the values
       this.concession = !!this.membership.concession
       this.concession_type = this.membership.concession
-      this.type = this.membership.type
-      const plan = this.types.find(type => type.id === this.membership.type)
+      this.membership_type_id = this.membership.membership_type_id
+      const plan = this.types.find(type => type.membership_type_id === this.membership.membership_type_id)
       if (plan) {
-        this.price = this.concession ? plan.concession : plan.cost
+        this.price = this.concession ? plan.concession : plan.price
       }
     }
   },
@@ -147,7 +147,7 @@ export default {
         notes
       }
       if (!this.memberId) return this.$emit('payment', activity)
-      this.activity.action = 'Renewed'
+      activity.action = 'Renewed'
       // For the time being, add membership renewal into volunteer history.
       try {
         await this.$store.dispatch('members/updateHistory', {

@@ -19,28 +19,28 @@
   <q-list>
     <q-item
       v-for="memberType in memberTypes"
-      :key="memberType.id"
+      :key="memberType.membership_type_id"
       tag="label"
       v-ripple
     >
       <q-item-section avatar>
         <q-radio
           v-model="type"
-          :val="memberType.id"
+          :val="memberType.membership_type_id"
         />
       </q-item-section>
       <q-item-section>
         <q-item-label>{{ memberType.label }}</q-item-label>
         <q-item-label
-          v-if="concession && memberType.concessionCaption"
+          v-if="concession && memberType.concession_caption"
           caption
         >
-          {{ memberType.concessionCaption }}
+          {{ memberType.concession_caption }}
         </q-item-label>
       </q-item-section>
       <q-item-section side>
         <b v-if="concession">${{ memberType.concession }}</b>
-        <b v-else>${{ memberType.cost }}</b>
+        <b v-else>${{ memberType.price }}</b>
         /year
       </q-item-section>
     </q-item>
@@ -83,7 +83,7 @@ export default {
   },
   mounted () {
     if (Object.keys(this.modelValue).length === 0) {
-      this.$emit('update:modelValue', { concession: false, type: 'single' })
+      this.$emit('update:modelValue', { concession: false, type: this.memberTypes[0].membership_type_id })
     }
   }
 }

@@ -1,5 +1,4 @@
 import { Notify, SessionStorage } from 'quasar'
-import Router from '../../router'
 import { api } from 'boot/axios'
 
 export async function getMembers (context) {
@@ -11,9 +10,6 @@ export async function getMembers (context) {
     })
     context.commit('updateMembers', res.data)
   } catch (err) {
-    if (err.response.status === 401) {
-      Router.replace({ name: 'Login' })
-    }
     Notify.create({
       color: 'red-4',
       textColor: 'white',
@@ -49,6 +45,16 @@ export async function getSignups (context) {
   }
 }
 
+export async function getMembershipTypes (context) {
+  try {
+    const res = await api.get('/api/membership-types', {
+    })
+    context.commit('updateMembershipTypes', res.data)
+  } catch (err) {
+    console.log(err)
+  }
+}
+
 export async function getHistory (context, memberId) {
   try {
     const res = await api.get(`/api/members/${memberId}/history`, {
@@ -61,9 +67,6 @@ export async function getHistory (context, memberId) {
       history: res.data
     })
   } catch (err) {
-    if (err.response.status === 401) {
-      Router.replace({ name: 'Login' })
-    }
     Notify.create({
       color: 'red-4',
       textColor: 'white',
@@ -73,36 +76,48 @@ export async function getHistory (context, memberId) {
   }
 }
 
-export async function updateHistory ({ dispatch, state }, { activity, memberId }) {
+export async function updateHistory ({ dispatch, getters, state }, { activity, memberId }) {
   await api.post(`/api/members/${memberId}/history`, activity, {
     headers: {
       authorization: 'Bearer ' + state.token
     }
   })
   await dispatch('getHistory', memberId)
-  await dispatch('getStatus', memberId)
+  await dispatch('getMembership', getters.memberLookup[memberId].membership_id)
 }
 
-export async function getStatus (context, memberId) {
+export async function getMembership (context, membershipId) {
   try {
-    const res = await api.get(`/api/members/${memberId}/status`, {
+    const res = await api.get(`/api/memberships/${membershipId}`, {
       headers: {
         authorization: 'Bearer ' + context.state.token
       }
     })
-    context.commit('updateMemberStatus', {
-      id: memberId,
-      status: res.data
-    })
+    context.commit('updateMembership', res.data)
   } catch (err) {
-    if (err.response.status === 401) {
-      Router.replace({ name: 'Login' })
-    }
     Notify.create({
       color: 'red-4',
       textColor: 'white',
       icon: 'error',
-      message: 'Failed to load member status'
+      message: 'Failed to load memberships'
+    })
+  }
+}
+
+export async function getMemberships (context) {
+  try {
+    const res = await api.get('/api/memberships', {
+      headers: {
+        authorization: 'Bearer ' + context.state.token
+      }
+    })
+    context.commit('updateMemberships', res.data)
+  } catch (err) {
+    Notify.create({
+      color: 'red-4',
+      textColor: 'white',
+      icon: 'error',
+      message: 'Failed to load memberships'
     })
   }
 }
@@ -116,15 +131,26 @@ export async function updateMemberDetails (context, member) {
   context.commit('updateMemberDetails', member)
 }
 
-export async function login (context, creds) {
-  const res = await api.post('/api/login', creds)
-  SessionStorage.set('token', res.data.token)
-  context.commit('saveToken', res.data.token)
+export async function fetchAll ({ dispatch }) {
+  await Promise.all([
+    dispatch('getMembers'),
+    dispatch('getMemberships'),
+    dispatch('getMembershipTypes')
+  ])
 }
 
-export async function loadToken (context, creds) {
+export async function login ({ commit, dispatch }, creds) {
+  const res = await api.post('/api/login', creds)
+  SessionStorage.set('token', res.data.token)
+  commit('saveToken', res.data.token)
+  await dispatch('fetchAll')
+}
+
+export async function loadToken ({ commit, dispatch }, creds) {
   const token = SessionStorage.getItem('token')
-  if (token) context.commit('saveToken', token)
+  if (!token) return
+  commit('saveToken', token)
+  await dispatch('fetchAll')
 }
 
 export async function logout (context) {

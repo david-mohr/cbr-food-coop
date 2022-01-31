@@ -13,10 +13,31 @@ function parseJwt (token) {
 export function updateMemberHistory (state, member) {
   state.memberHistory[member.id] = member.history
 }
-export function updateMemberStatus (state, member) {
-  member.status.membershipexpires = new Date(member.status.membershipexpires)
-  member.status.discvaliduntil = new Date(member.status.discvaliduntil)
-  state.memberStatus[member.id] = member.status
+
+function processMembership (ms) {
+  return {
+    ...ms,
+    expires: new Date(ms.expires),
+    discvaliduntil: new Date(ms.discvaliduntil)
+  }
+}
+
+export function updateMemberships (state, memberships) {
+  state.memberships = memberships.map(processMembership)
+}
+
+export function updateMembership (state, membership) {
+  const processed = processMembership(membership)
+  // find the membership in the array and replace it
+  const index = state.memberships.findIndex(ms => ms.membership_id === membership.id)
+  if (index < 0) state.memberships.push(processed)
+  else state.memberships.splice(index, 1, processed)
+}
+
+export function updateMembershipTypes (state, types) {
+  state.types = types
+    .map(t => ({ ...t, price: parseFloat(t.price), concession: parseFloat(t.concession) }))
+    .sort((a, b) => a.membership_type_id - b.membership_type_id)
 }
 export function updateMembers (state, members) {
   if (members) members.sort(alphasort('name'))
@@ -27,18 +48,22 @@ export function updateUsers (state, users) {
   state.users = users
 }
 export function updateSignups (state, signups) {
-  if (signups) signups.sort(alphasort('firstname'))
   state.signups = signups.map(s => Object.defineProperty(s, 'name', {
     get: function () {
-      return this.firstname + ' ' + this.lastname
+      return Array.isArray(this.members) && this.members.length
+        ? this.members.map(m => m.firstname + ' ' + m.lastname).join(', ')
+        : '-- empty --'
     }
   }))
 }
 
-export function addVendId (state, { signupId, vendid }) {
+export function addVendId (state, { signupId, vendIds }) {
+  console.log(vendIds)
   const signup = state.signups.find(s => s.id === signupId)
   if (!signup) return
-  signup.vendid = vendid
+  for (const member of signup.members) {
+    member.vend_id = vendIds[member.id]
+  }
 }
 
 export function saveToken (state, token) {

@@ -14,8 +14,27 @@ mailchimp.setConfig({
 
 router.get('/', hasRole('coordinator'), async (req, res) => {
   try {
-    const results = await query('SELECT * from signup')
-    res.send(results)
+    const signups = await query('SELECT * from signup')
+    for (const signup of signups) {
+      const members = await query('SELECT * from signup_members WHERE signup_id = $1', [signup.id])
+      signup.members = members
+    }
+    res.send(signups)
+  } catch (err) {
+    console.log(err)
+    return res.sendStatus(500)
+  }
+})
+
+async function deleteSignup (signupId) {
+  await query('DELETE FROM signup_members WHERE signup_id = $1', [signupId])
+  await query('DELETE FROM signup WHERE id = $1', [signupId])
+}
+
+router.delete('/:id', hasRole('coordinator'), async (req, res) => {
+  try {
+    await deleteSignup(req.params.id)
+    res.sendStatus(204)
   } catch (err) {
     console.log(err)
     return res.sendStatus(500)
@@ -53,12 +72,19 @@ async function createVend (member) {
 const VEND_URL = 'https://thefoodcooperativeshop.vendhq.com/api/2.0'
 router.post('/:id/vend', hasRole('coordinator'), async (req, res) => {
   try {
-    const results = await query('SELECT * from signup WHERE id = $1', [req.params.id])
-    if (!Array.isArray(results) || !results.length) return res.sendStatus(404)
-    if (results[0].vendid) return res.sendStatus(409)
-    const newVendUser = await createVend(results[0])
-    await query('UPDATE signup SET vendid = $1 WHERE id = $2', [newVendUser.data.id, req.params.id])
-    res.json({ vendid: newVendUser.data.id })
+    const members = await query('SELECT * from signup_members WHERE signup_id = $1', [req.params.id])
+    if (!Array.isArray(members) || !members.length) return res.sendStatus(404)
+    const final = {}
+    for (const member of members) {
+      if (member.vend_id) {
+        final[member.id] = member.vend_id
+        continue
+      }
+      const newVendUser = await createVend(member)
+      await query('UPDATE signup_members SET vend_id = $1 WHERE id = $2', [newVendUser.data.id, member.id])
+      final[member.id] = newVendUser.data.id
+    }
+    res.json(final)
   } catch (err) {
     console.log(err)
     console.log(err?.response?.body)
@@ -68,38 +94,64 @@ router.post('/:id/vend', hasRole('coordinator'), async (req, res) => {
 
 export async function getNextMemberId () {
   const results = await query('SELECT MAX(id) from customers')
-  const latestId = results[0].max
+  const latestId = results[0].max || 'c1000'
   let id = parseInt(latestId.slice(1), 10)
   return `c${++id}`
 }
 
+export async function getNextMembershipId () {
+  const results = await query('SELECT MAX(membership_id) from memberships')
+  const latestId = results[0].max || 'm5000'
+  let id = parseInt(latestId.slice(1), 10)
+  return `m${++id}`
+}
+
+async function createMember (joinDate, membershipId, member) {
+  await createMailchimp(member.email)
+  const memberId = await getNextMemberId()
+  // Create the new member record
+  const newMember = await query('INSERT into customers (id, postal, city, name, firstname, lastname, email, phone, curdate, visible, membership_id, vend_id) values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING *', [memberId, member.postcode, member.suburb, `${member.firstname} ${member.lastname}`, member.firstname, member.lastname, member.email, member.phone, joinDate.toString(), true, membershipId, member.vend_id])
+
+  // add the extras
+  await query('INSERT into members_extra (id, sendemails) values($1, $2) RETURNING *', [memberId, member.sendemails])
+  // update the history
+  await query('INSERT into members_history (id, datenew, member, action, amountpaid, notes) values($1, $2, $3, $4, $5, $6) RETURNING *', [uid(), joinDate.toString(), memberId, 'Registered', null, 'Entered into database'])
+
+  return newMember
+}
+
+/**
+ * This is now split into two parts:
+ *  - create the membership
+ *  - create the members (and link them to the membership)
+ */
 router.post('/:id/member', hasRole('coordinator'), async (req, res) => {
   try {
     if (!Number.isFinite(req.body.paid)) {
       return res.status(400).send('Invalid paid (Must be a number)')
     }
-    const results = await query('SELECT * from signup WHERE id = $1', [req.params.id])
-    if (!Array.isArray(results) || !results.length) return res.sendStatus(404)
-    if (!results[0].vendid) return res.status(409).send('Not in Vend')
-    await createMailchimp(results[0].email)
-    const joindate = DateTime.now()
-    const id = await getNextMemberId()
-    // Create the new member record
-    const member = await query('INSERT into customers (id, postal, city, name, firstname, lastname, email, phone, curdate, visible) values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10) RETURNING *', [id, results[0].postcode, results[0].suburb, `${results[0].firstname} ${results[0].lastname}`, results[0].firstname, results[0].lastname, results[0].email, results[0].phone, joindate.toString(), true])
+    const signup = await query('SELECT * from signup WHERE id = $1', [req.params.id])
+    if (!Array.isArray(signup) || !signup.length) return res.sendStatus(404)
 
-    // add the expiry
-    await query('INSERT into members_extra (id, membershipexpires, sendemails) values($1, $2, $3) RETURNING *', [id, joindate.plus({ years: 1 }), results[0].sendemails])
+    // Create membership
+    const joinDate = DateTime.now()
+    const membershipId = await getNextMembershipId()
+    const membership = await query('INSERT into memberships (membership_id, membership_type_id, concession, expires) VALUES ($1, $2, $3, $4) RETURNING *', [membershipId, signup[0].membership_type_id, signup[0].concession, joinDate.plus({ years: 1 })])
+    // TODO for now, we'll simply log these events into the members_history with the membershipId instead of the memberId
+    await query('INSERT into members_history (id, datenew, member, action, amountpaid, notes) values($1, $2, $3, $4, $5, $6) RETURNING *', [uid(), joinDate.toString(), membershipId, 'Applied', req.body.paid, '12 months'])
 
-    // update the history
-    await query('INSERT into members_history (id, datenew, member, action, amountpaid, notes) values($1, $2, $3, $4, $5, $6) RETURNING *', [uid(), joindate.toString(), id, 'Applied', req.body.paid, '12 months'])
-    await query('INSERT into members_history (id, datenew, member, action, amountpaid, notes) values($1, $2, $3, $4, $5, $6) RETURNING *', [uid(), joindate.toString(), id, 'Registered', null, 'Entered into database'])
+    // Create the members
+    const membersToCreate = await query('SELECT * from signup_members WHERE signup_id = $1', [req.params.id])
+    const members = await Promise.all(membersToCreate.map(member => createMember(joinDate, membershipId, member)))
 
     // delete the signup
-    await query('DELETE FROM signup WHERE id = $1', [req.params.id])
-    res.json({ member: member[0] })
+    await deleteSignup(req.params.id)
+    res.json({
+      ...membership,
+      members
+    })
   } catch (err) {
     console.log(err)
-    console.log(err?.response?.body)
     return res.sendStatus(500)
   }
 })

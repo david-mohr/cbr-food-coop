@@ -6,8 +6,15 @@
         :class="expStatus"
       >
         <q-card-section>
-          <div class="text-h6 text-white">
-            Membership valid until {{ expDate }}
+          <div
+            class="text-h6 text-white"
+          >
+            <template v-if="expDate">
+              Membership valid until {{ expDate }}
+            </template>
+            <template v-else>
+              Membership not found
+            </template>
           </div>
         </q-card-section>
         <q-card-actions align="right">
@@ -21,6 +28,7 @@
       </q-card>
       <membership-payment
         v-model="renewMembership"
+        :membership="membership"
         :member-id="memberId"
       />
     </div>
@@ -31,7 +39,12 @@
       >
         <q-card-section>
           <div class="text-h6 text-white">
-            Discount valid until {{ discountDate }}
+            <template v-if="discountDate">
+              Discount valid until {{ discountDate }}
+            </template>
+            <template v-else>
+              No discount
+            </template>
           </div>
         </q-card-section>
         <q-card-actions align="right">
@@ -72,31 +85,35 @@ export default {
   },
   computed: {
     discountDate () {
-      return date.formatDate(this.status.discvaliduntil, 'DD-MM-YYYY')
+      if (this.membership?.discvaliduntil < new Date()) return
+      return date.formatDate(this.membership?.discvaliduntil, 'DD-MM-YYYY')
     },
     discountStatus () {
       const now = new Date()
-      if (now < this.status.discvaliduntil) {
+      if (now < this.membership?.discvaliduntil) {
         return 'bg-positive'
       }
       return 'bg-negative'
     },
     expDate () {
-      return date.formatDate(this.status.membershipexpires, 'DD-MM-YYYY')
+      return date.formatDate(this.membership?.expires, 'DD-MM-YYYY')
     },
     expStatus () {
       const now = new Date()
-      const monthBeforeExp = date.subtractFromDate(this.status.membershipexpires, { days: 31 })
+      const monthBeforeExp = date.subtractFromDate(this.membership?.expires, { days: 31 })
       if (now < monthBeforeExp) {
         return 'bg-positive'
       }
-      if (date.isBetweenDates(now, monthBeforeExp, this.status.membershipexpires, { onlyDate: true })) {
+      if (date.isBetweenDates(now, monthBeforeExp, this.membership?.expires, { onlyDate: true })) {
         return 'bg-warning'
       }
       return 'bg-negative'
     },
-    status () {
-      return this.$store.state.members.memberStatus[this.memberId]
+    member () {
+      return this.$store.getters['members/memberLookup'][this.memberId]
+    },
+    membership () {
+      return this.$store.getters['members/membershipLookup'][this.member.membership_id]
     }
   }
 }
