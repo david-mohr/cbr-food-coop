@@ -94,8 +94,12 @@ export async function renewMembership (memberId) {
 }
 
 export async function updateVolunteerHours (memberId, hoursWorked) {
-  const results = await query('SELECT discvaliduntil FROM members_extra WHERE ID = $1', [memberId])
-  if (!results.length) throw new Error(`Failed to find members_extra for member: ${memberId}`)
+  // first find the membership
+  const member = await query('SELECT membership_id FROM customers WHERE id = $1', [memberId])
+  if (!member.length) throw new Error(`Failed to find member: ${memberId}`)
+  const membershipId = member[0].membership_id
+  const results = await query('SELECT discvaliduntil FROM memberships WHERE membership_id = $1', [membershipId])
+  if (!results.length) throw new Error(`Failed to find membership for member: ${memberId}`)
   let startDate = DateTime.now().startOf('day')
   if (results[0].discvaliduntil) {
     const dbStartDate = DateTime.fromJSDate(results[0].discvaliduntil)
@@ -103,7 +107,7 @@ export async function updateVolunteerHours (memberId, hoursWorked) {
   }
   // 14 days of discount for every hour worked
   const newDiscount = startDate.plus({ days: hoursWorked * DAYS_DISCOUNT_PER_HOUR_WORKED })
-  await query('UPDATE members_extra SET discvaliduntil = $1 WHERE id = $2 RETURNING *', [newDiscount.toString(), memberId])
+  await query('UPDATE memberships SET discvaliduntil = $1 WHERE membership_id = $2 RETURNING *', [newDiscount.toString(), membershipId])
 }
 
 /**
