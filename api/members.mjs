@@ -141,20 +141,4 @@ router.post('/:id/history', hasRole('coordinator'), async (req, res) => {
   }
 })
 
-router.get('/:id/status', hasRole('coordinator'), async (req, res) => {
-  try {
-    if (!/^c[0-9]*$/.test(req.params.id)) {
-      return res.status(400).send('')
-    }
-    const results = await query('SELECT membershipexpires, discvaliduntil FROM members_extra WHERE id = $1', [req.params.id])
-    if (!results.length) {
-      return res.sendStatus(404)
-    }
-    res.send(results[0])
-  } catch (err) {
-    console.log(err)
-    return res.sendStatus(500)
-  }
-})
-
 export default router
