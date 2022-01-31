@@ -9,7 +9,7 @@ const mockDatabase = {
 jest.unstable_mockModule('../api/database.mjs', () => mockDatabase)
 
 const { updateVolunteerHours } = await import('../api/members.mjs')
-const { getNextMemberId } = await import('../api/signup.mjs')
+const { getNextMemberId, getNextMembershipId } = await import('../api/signup.mjs')
 
 it('should update the hours correctly', async () => {
   mockDatabase.query.mockResolvedValueOnce([{ discvaliduntil: null }])
@@ -42,4 +42,10 @@ it('should calculate the next member ID', async () => {
   mockDatabase.query.mockResolvedValueOnce([{ max: 'c1009' }])
   const id = await getNextMemberId()
   expect(id).toEqual('c1010')
+})
+
+it('should calculate the next membership ID', async () => {
+  mockDatabase.query.mockResolvedValueOnce([{ max: 'm5099' }])
+  const id = await getNextMembershipId()
+  expect(id).toEqual('m5100')
 })
