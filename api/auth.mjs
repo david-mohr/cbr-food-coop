@@ -65,7 +65,9 @@ router.post('/login', (req, res, next) => {
         return res.sendStatus(401)
       }
       if (!user) {
-        return res.sendStatus(404)
+        // this doesn't differentiate "missing user" and "bad password".
+        // It simply means "no match for that email/password combo"
+        return res.sendStatus(401)
       }
 
       req.login(user, { session: false }, async (error) => {
