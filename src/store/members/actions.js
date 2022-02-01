@@ -28,6 +28,7 @@ export async function getUsers (context) {
     })
     context.commit('updateUsers', res.data)
   } catch (err) {
+    console.log(err)
     // Co-ordinators won't be able to see users
   }
 }

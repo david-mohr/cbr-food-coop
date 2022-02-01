@@ -3,10 +3,10 @@
     <template v-if="user">
       <div class="row">
         <div class="col-3">
-          <label>Username</label>
+          <label>Name</label>
         </div>
         <div class="col-9">
-          {{ user.username }}
+          {{ user.name }}
         </div>
       </div>
       <div class="row">
@@ -15,6 +15,14 @@
         </div>
         <div class="col-9">
           {{ user.role }}
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-3">
+          <label>Email</label>
+        </div>
+        <div class="col-9">
+          {{ user.email }}
         </div>
       </div>
     </template>

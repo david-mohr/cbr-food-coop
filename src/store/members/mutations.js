@@ -44,7 +44,7 @@ export function updateMembers (state, members) {
   state.members = members
 }
 export function updateUsers (state, users) {
-  if (users) users.sort(alphasort('username'))
+  if (users) users.sort(alphasort('name'))
   state.users = users
 }
 export function updateSignups (state, signups) {

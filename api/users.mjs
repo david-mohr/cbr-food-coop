@@ -7,7 +7,7 @@ const router = express.Router()
 
 router.get('/', hasRole('admin'), async (req, res) => {
   try {
-    const results = await query('SELECT id, email, role from auth')
+    const results = await query('SELECT id, email, role, name from auth')
     res.send(results)
   } catch (err) {
     console.log(err)
