@@ -9,6 +9,7 @@
         :rows="memberList"
         :columns="columns"
         selection="multiple"
+        v-model:selected="selected"
         :pagination="pagination"
       />
     </div>
@@ -18,6 +19,11 @@
 <script>
 
 export default {
+  data () {
+    return {
+      selected: []
+    }
+  },
   computed: {
     memberList () {
       return this.$store.getters['members/toBeApproved']
