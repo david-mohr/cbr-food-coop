@@ -76,7 +76,6 @@
         />
       </div>
     </div>
-    <pre>{{ signup }}</pre>
   </q-page>
 </template>
 
