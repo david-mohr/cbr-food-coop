@@ -118,7 +118,7 @@ async function createMember (joinDate, membershipId, member) {
   // update the history
   await query('INSERT into members_history (id, datenew, member, action, amountpaid, notes) values($1, $2, $3, $4, $5, $6) RETURNING *', [uid(), joinDate.toString(), memberId, 'Registered', null, 'Entered into database'])
 
-  return newMember
+  return newMember[0]
 }
 
 /**
@@ -148,7 +148,7 @@ router.post('/:id/member', hasRole('coordinator'), async (req, res) => {
     // delete the signup
     await deleteSignup(req.params.id)
     res.json({
-      ...membership,
+      ...membership[0],
       members
     })
   } catch (err) {
