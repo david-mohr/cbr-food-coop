@@ -48,6 +48,15 @@
           />
         </q-card-section>
 
+        <q-card-section>
+          <q-banner class="bg-warning text-black">
+            <template #avatar>
+              <q-icon name="paid" />
+            </template>
+            Please process payment on Vend
+          </q-banner>
+        </q-card-section>
+
         <q-card-actions
           align="left"
           class="text-primary"
