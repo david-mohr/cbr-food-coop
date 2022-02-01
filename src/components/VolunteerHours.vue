@@ -51,6 +51,8 @@
           <q-btn
             flat
             type="submit"
+            :loading="working"
+            :disabled="working"
             label="Add Volunteer Hours"
           />
         </q-card-actions>
@@ -76,6 +78,7 @@ export default {
   emits: ['update:modelValue'],
   data () {
     return {
+      working: false,
       action: 'Volunteered',
       date: DateTime.now().toISODate(),
       hours: 1.0,
@@ -99,6 +102,7 @@ export default {
       this.activity = null
     },
     async onSubmit (evt) {
+      this.working = true
       // For the time being, add membership renewal into volunteer history.
       try {
         await this.$store.dispatch('members/updateHistory', {
@@ -125,6 +129,7 @@ export default {
         })
       }
 
+      this.working = false
       this.reset()
       this.open = false
     }

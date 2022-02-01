@@ -70,6 +70,8 @@
           <q-btn
             flat
             type="submit"
+            :loading="working"
+            :disabled="working"
             :label="memberId ? 'Renew' : 'Create new membership'"
           />
         </q-card-actions>
@@ -99,6 +101,7 @@ export default {
   emits: ['update:modelValue', 'payment'],
   data () {
     return {
+      working: false,
       concession: false,
       membership_type_id: null,
       concession_type: null,
@@ -146,6 +149,7 @@ export default {
       this.concession_type = null
     },
     async onSubmit (evt) {
+      this.working = true
       let notes = this.type
       if (this.concession) {
         notes += `: ${this.concession_type}`
@@ -178,6 +182,7 @@ export default {
         })
       }
 
+      this.working = false
       this.reset()
       this.open = false
     }
