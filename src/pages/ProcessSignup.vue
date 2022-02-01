@@ -147,7 +147,10 @@ export default {
             authorization: 'Bearer ' + this.$store.state.members.token
           }
         })
-        this.$store.commit('members/updateMemberDetails', res.data.member)
+        for (const member of res.data.members) {
+          this.$store.commit('members/updateMemberDetails', member)
+        }
+        this.$store.commit('members/updateMembership', res.data)
         this.$store.dispatch('members/getSignups')
         this.membershipPayment = false
         this.$q.notify({
@@ -156,7 +159,7 @@ export default {
           icon: 'cloud_done',
           message: 'New member created'
         })
-        this.$router.push({ name: 'Member', params: { memberId: res.data.member.id } })
+        this.$router.push({ name: 'Members' })
       } catch (err) {
         console.log(err)
       }
