@@ -34,8 +34,8 @@ CREATE TABLE IF NOT EXISTS signup_members (
 
 INSERT INTO membership_types (membership_type_id, label, max_members, price, concession, concession_caption) VALUES
   (1, 'Single', 1, 25, 15, NULL),
-  (2, 'Couple', 2, 40, 25, 'Where both people hold a concession'),
-  (3, 'Household', 10, 50, 40, 'Majority concession holders')
+  (2, 'Couple', 2, 40, 30, 'Where both people hold a concession'),
+  (3, 'Household', 4, 50, 40, 'Majority concession holders')
   ON CONFLICT (membership_type_id) DO NOTHING;
 
 CREATE TABLE IF NOT EXISTS memberships (
