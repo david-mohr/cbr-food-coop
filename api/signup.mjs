@@ -52,6 +52,7 @@ async function createMailchimp (email) {
 }
 
 async function createVend (member) {
+  if (process.env.NODE_ENV !== 'production') return { data: { id: 'not_a_real_vend_id' }}
   const json = {
     first_name: member.firstname,
     last_name: member.lastname,
