@@ -12,6 +12,18 @@ const port = process.env.PORT || 5000
 app.disable('x-powered-by')
 app.use(express.json({ limit: '5mb' }))
 app.use(morgan('tiny'))
+
+// Force the use of HTTPS
+if (process.env.NODE_ENV === 'production') {
+  app.use((req, res, next) => {
+    if (req.header('x-forwarded-proto') !== 'https') {
+      res.redirect(`https://${req.header('host')}${req.url}`)
+    } else {
+      next()
+    }
+  })
+}
+
 app.use(serveStatic('./dist/spa'))
 
 const publicUrls = ['/api/login', '/api/signup', '/api/membership-types']
