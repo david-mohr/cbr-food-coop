@@ -25,6 +25,7 @@
             hide-bottom-space
             label="Hours Worked"
             type="number"
+            step="0.5"
             :rules="[
               val => val != null && val != '' || 'Please include the number of hours',
               val => val > 0 && val <= 16 || 'Please add a reasonable number of hours'

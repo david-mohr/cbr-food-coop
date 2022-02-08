@@ -18,11 +18,11 @@
         <q-item-section avatar>
           <q-avatar
             rounded
-            :color="discColour(member.membership_id)"
+            :color="discColour(member)"
             text-color="white"
             font-size="small"
           >
-            {{ discStatus(member.membership_id) }}%
+            {{ discStatus(member) }}%
           </q-avatar>
         </q-item-section>
       </q-item>
@@ -38,17 +38,19 @@ export default {
   computed: {
     members () {
       return this.$store.state.members.members
+    },
+    now () {
+      return new Date()
     }
   },
   methods: {
     membership: function (id) {
       return this.$store.getters['members/membershipLookup'][id]
     },
-    discStatus: function (id) {
+    discStatus: function (member) {
       const now = new Date()
-      const membership = this.membership(id)
-      const membershipExp = membership?.expires
-      const volDiscExp = membership?.discvaliduntil
+      const membershipExp = new Date(member?.expires)
+      const volDiscExp = new Date(member?.discvaliduntil)
       return ((now < membershipExp) ? ((now < volDiscExp) ? 20 : 5) : 0)
     },
     discColour: function (id) {
