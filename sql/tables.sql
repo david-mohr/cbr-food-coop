@@ -1,8 +1,8 @@
-ALTER TABLE customers SET SCHEMA public;
-ALTER TABLE members_approval_sheets SET SCHEMA public;
-ALTER TABLE members_approval_sheets_members SET SCHEMA public;
-ALTER TABLE members_extra SET SCHEMA public;
-ALTER TABLE members_history SET SCHEMA public;
+ALTER TABLE IF EXISTS customers SET SCHEMA public;
+ALTER TABLE IF EXISTS members_approval_sheets SET SCHEMA public;
+ALTER TABLE IF EXISTS members_approval_sheets_members SET SCHEMA public;
+ALTER TABLE IF EXISTS members_extra SET SCHEMA public;
+ALTER TABLE IF EXISTS members_history SET SCHEMA public;
 
 CREATE TABLE IF NOT EXISTS membership_types (
   membership_type_id SERIAL PRIMARY KEY NOT NULL,
