@@ -106,6 +106,12 @@ CREATE TABLE IF NOT EXISTS auth (
     role varchar(255) NOT NULL
 );
 
+CREATE TABLE IF NOT EXISTS password_reset (
+    id int PRIMARY KEY NOT NULL references auth,
+    token varchar(255) NOT NULL,
+    expiry timestamp with time zone NOT NULL default current_date + '1 hour'::interval
+);
+
 CREATE TABLE IF NOT EXISTS invites (
     id SERIAL PRIMARY KEY NOT NULL,
     email varchar(255) NOT NULL,
