@@ -12,7 +12,15 @@
             class="q-pa-lg shadow-1"
           >
             <template v-if="forgotComplete">
-              Request sent, please check your email for next steps
+              <q-card-section>
+                Request sent, please check your email for next&nbsp;steps
+              </q-card-section>
+              <q-card-actions class="q-px-md row justify-end">
+                <q-btn
+                  label="Done"
+                  @click="forgotComplete = false; forgot = false"
+                />
+              </q-card-actions>
             </template>
             <template v-else>
               <q-card-section>
