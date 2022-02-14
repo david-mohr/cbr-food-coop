@@ -26,7 +26,7 @@ if (process.env.NODE_ENV === 'production') {
 
 app.use(serveStatic('./dist/spa'))
 
-const publicUrls = ['/api/login', '/api/signup', '/api/membership-types']
+const publicUrls = ['/api/login', '/api/forgot', '/api/signup', '/api/membership-types']
 
 app.use('/api', function isAuthenticated (req, res, next) {
   if (publicUrls.includes(req.originalUrl)) return next()

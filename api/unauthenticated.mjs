@@ -1,6 +1,8 @@
 import express from 'express'
-import { encryptPassword, query } from './database.mjs'
+import { encryptPassword, makeSalt, query } from './database.mjs'
 import { getUserToken } from './auth.mjs'
+import { emailRegex } from './utils.mjs'
+import { sendPasswordReset } from './email.mjs'
 
 /*
  * Any unauthenticated URLs needs to be listed inside server.mjs at the root of
@@ -54,6 +56,22 @@ router.post('/invites/:id/accept', async (req, res) => {
     return res.json({ token })
   } catch (err) {
     console.log(err)
+    return res.sendStatus(500)
+  }
+})
+
+router.post('/forgot', async (req, res) => {
+  try {
+    if (!emailRegex.test(req.body.email)) {
+      return res.status(400).send({ error: 'Invalid email' })
+    }
+    await sendPasswordReset(req.body.email, req.body.role)
+    res.sendStatus(200)
+  } catch (err) {
+    console.log(err)
+    if (/User not found/.test(err.message)) {
+      return res.status(404).send({ error: err.message })
+    }
     return res.sendStatus(500)
   }
 })
