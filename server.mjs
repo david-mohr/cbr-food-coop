@@ -30,6 +30,7 @@ const publicUrls = ['/api/login', '/api/forgot', '/api/signup', '/api/membership
 
 app.use('/api', function isAuthenticated (req, res, next) {
   if (publicUrls.includes(req.originalUrl)) return next()
+  if (/\/api\/forgot\/[a-z0-9]+/i.test(req.originalUrl)) return next()
   if (/\/api\/invites\/[a-z0-9]+\/accept/i.test(req.originalUrl)) return next()
   return passport.authenticate('jwt', { session: false })(req, res, next)
 })

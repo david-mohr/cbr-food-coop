@@ -33,7 +33,7 @@ export async function sendPasswordReset (email) {
       throw new Error('User not found')
     }
     const token = makeSalt()
-    await query('INSERT INTO password_reset (id, token) VALUES($1, $2) RETURNING *', [user[0].id, token])
+    await query('INSERT INTO password_reset (auth_id, token) VALUES($1, $2) RETURNING *', [user[0].id, token])
     const mailgunData = {
       from: fromEmail,
       to: email,
