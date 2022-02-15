@@ -1,6 +1,8 @@
 import express from 'express'
-import { encryptPassword, query } from './database.mjs'
+import { encryptPassword, makeSalt, query } from './database.mjs'
 import { getUserToken } from './auth.mjs'
+import { emailRegex } from './utils.mjs'
+import { sendPasswordReset } from './email.mjs'
 
 /*
  * Any unauthenticated URLs needs to be listed inside server.mjs at the root of
@@ -54,6 +56,43 @@ router.post('/invites/:id/accept', async (req, res) => {
     return res.json({ token })
   } catch (err) {
     console.log(err)
+    return res.sendStatus(500)
+  }
+})
+
+router.post('/forgot/:token', async (req, res) => {
+  try {
+    // load the token
+    const reset = await query('SELECT auth_id FROM password_reset WHERE NOW() < expiry and token = $1', [req.params.token])
+    if (!reset.length) return res.sendStatus(404)
+    if (typeof req.body.password !== 'string' || req.body.password.length < 8) {
+      return res.status(400).send({ error: 'Invalid password' })
+    }
+    // encrypt the password
+    const { key, salt } = await encryptPassword(req.body.password)
+    // set the password
+    await query('UPDATE auth SET password = $1, salt = $2 WHERE id = $3 RETURNING *', [key, salt, reset[0].auth_id])
+    // remove all resets
+    await query('DELETE FROM password_reset WHERE auth_id = $1', [reset[0].auth_id])
+    res.sendStatus(200)
+  } catch (err) {
+    console.log(err)
+    return res.sendStatus(500)
+  }
+})
+
+router.post('/forgot', async (req, res) => {
+  try {
+    if (!emailRegex.test(req.body.email)) {
+      return res.status(400).send({ error: 'Invalid email' })
+    }
+    await sendPasswordReset(req.body.email, req.body.role)
+    res.sendStatus(200)
+  } catch (err) {
+    console.log(err)
+    if (/User not found/.test(err.message)) {
+      return res.status(404).send({ error: err.message })
+    }
     return res.sendStatus(500)
   }
 })

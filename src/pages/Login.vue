@@ -11,43 +11,65 @@
             bordered
             class="q-pa-lg shadow-1"
           >
-            <q-card-section>
-              <q-input
-                v-model="email"
-                square
-                filled
-                type="text"
-                label="Email"
-                color="grey-8"
-              />
-              <q-input
-                v-model="password"
-                square
-                filled
-                :type="isPwd ? 'password' : 'text'"
-                label="Password"
-                color="grey-8"
-              >
-                <template #append>
-                  <q-icon
-                    :name="isPwd ? 'visibility_off' : 'visibility'"
-                    class="cursor-pointer"
-                    @click="isPwd = !isPwd"
-                  />
-                </template>
-              </q-input>
-            </q-card-section>
-            <q-card-actions class="q-px-md">
-              <q-btn
-                unelevated
-                color="primary"
-                size="lg"
-                class="full-width text-ardexa-black"
-                label="Login"
-                type="submit"
-                :loading="loading"
-              />
-            </q-card-actions>
+            <template v-if="forgotComplete">
+              <q-card-section>
+                Request sent, please check your email for next&nbsp;steps
+              </q-card-section>
+              <q-card-actions class="q-px-md row justify-end">
+                <q-btn
+                  label="Done"
+                  @click="forgotComplete = false; forgot = false"
+                />
+              </q-card-actions>
+            </template>
+            <template v-else>
+              <q-card-section>
+                <q-input
+                  v-model="email"
+                  square
+                  filled
+                  type="text"
+                  label="Email"
+                  color="grey-8"
+                />
+                <q-input
+                  v-if="!forgot"
+                  v-model="password"
+                  square
+                  filled
+                  :type="isPwd ? 'password' : 'text'"
+                  label="Password"
+                  color="grey-8"
+                >
+                  <template #append>
+                    <q-icon
+                      :name="isPwd ? 'visibility_off' : 'visibility'"
+                      class="cursor-pointer"
+                      @click="isPwd = !isPwd"
+                    />
+                  </template>
+                </q-input>
+              </q-card-section>
+              <q-card-actions class="q-px-md">
+                <q-btn
+                  unelevated
+                  color="primary"
+                  size="lg"
+                  class="full-width text-ardexa-black"
+                  :label="forgot ? 'Reset password' : 'Login'"
+                  type="submit"
+                  :loading="loading"
+                />
+              </q-card-actions>
+              <q-card-actions class="q-px-md row justify-end">
+                <q-btn
+                  flat
+                  size="sm"
+                  :label="forgot ? 'Back to login' : 'Forgot password'"
+                  @click="forgot = !forgot"
+                />
+              </q-card-actions>
+            </template>
           </q-card>
         </q-form>
       </div>
@@ -59,6 +81,8 @@
 export default {
   data () {
     return {
+      forgot: false,
+      forgotComplete: false,
       email: '',
       password: '',
       loading: false,
@@ -68,6 +92,23 @@ export default {
   methods: {
     async onSubmit () {
       this.loading = true
+      if (this.forgot) {
+        try {
+          await this.$api.post('/api/forgot', { email: this.email })
+          this.forgotComplete = true
+        } catch (err) {
+          console.log(err)
+          console.log(err.response.data.error)
+          this.$q.notify({
+            color: 'red-4',
+            textColor: 'white',
+            icon: 'error',
+            message: err.response.data.error
+          })
+        }
+        this.loading = false
+        return
+      }
       try {
         await this.$store.dispatch('members/login', {
           email: this.email,
