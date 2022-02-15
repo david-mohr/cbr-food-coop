@@ -14,6 +14,7 @@ const routes = [
       { path: 'users', component: () => import('pages/Users.vue') },
       { path: 'users/:userId', name: 'User', component: () => import('pages/User.vue') },
       { path: 'accept-invite/:token', name: 'Accept invite', component: () => import('pages/AcceptInvite.vue') },
+      { path: 'reset-password/:token', name: 'Reset password', component: () => import('pages/ResetPassword.vue') },
       { path: 'view-signups', name: 'View signups', component: () => import('pages/ViewSignups.vue') },
       { path: 'process-signups/:signupId', name: 'Process signup', component: () => import('pages/ProcessSignup.vue') },
       { path: 'about', name: 'About', component: () => import('pages/About.vue') }
