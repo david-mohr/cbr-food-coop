@@ -40,7 +40,7 @@ function pluck (props, obj) {
 
 router.get('/', hasRole('coordinator'), async (req, res) => {
   try {
-    const results = await query('SELECT * from customers NATURAL JOIN memberships')
+    const results = await query('SELECT id, name, address, city, postal, membership_id, vend_id, email, phone, firstname, lastname, expires, discvaliduntil from customers NATURAL JOIN memberships')
     res.send(results)
   } catch (err) {
     console.log(err)
