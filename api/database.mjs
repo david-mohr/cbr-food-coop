@@ -25,7 +25,7 @@ process.on('exit', () => {
 })
 
 export async function findUser (email) {
-  const results = await query('SELECT * FROM auth WHERE email = $1', [email])
+  const results = await query('SELECT * FROM auth WHERE email ILIKE $1', [email])
   return results[0]
 }
 
