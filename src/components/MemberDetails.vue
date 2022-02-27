@@ -21,6 +21,30 @@
         label="Postcode"
         :readonly="!edit"
       />
+      <div class="q-pt-lg row justify-end q-gutter-sm">
+        <template v-if="member.free_lunch && !edit">
+          <q-btn
+            label="Claimed Lunch"
+          />
+        </template>
+        <template v-else-if="!edit">
+          <q-btn
+            label="Claim Lunch"
+            @click="claim_lunch"
+          />
+        </template>
+        <template v-if="member.first_shop && !edit">
+          <q-btn
+            label="Claimed First Shop"
+          />
+        </template>
+        <template v-else-if="!edit">
+          <q-btn
+            label="Claim First Shop"
+            @click="claim_shop"
+          />
+        </template>
+      </div>
     </div>
     <div class="col-6">
       <q-field
@@ -85,6 +109,7 @@
       </div>
     </div>
   </q-form>
+  {{ member }}
 </template>
 
 <script>
@@ -109,6 +134,17 @@ export default {
     cancel () {
       this.edit = false
       this.member = { ...this.$store.state.members.members.find(member => member.id === this.memberId) }
+    },
+    async claim_lunch () {
+      this.member.free_lunch = true
+      this.save()
+    },
+    async claim_shop () {
+      this.member.first_shop = true
+      this.save()
+      this.saving = true
+      await this.$store.dispatch('members/setFirstShop', this.member)
+      this.saving = false
     },
     async save () {
       try {

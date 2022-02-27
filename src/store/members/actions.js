@@ -132,6 +132,15 @@ export async function updateMemberDetails (context, member) {
   context.commit('updateMemberDetails', member)
 }
 
+export async function setFirstShop (context, member) {
+  await api.put(`/api/memberships/${member.membership_id}`, member, {
+    headers: {
+      authorization: 'Bearer ' + context.state.token
+    }
+  })
+  context.commit('updateMemberDetails', member)
+}
+
 export async function fetchAll ({ dispatch }) {
   await Promise.all([
     dispatch('getMembers'),
