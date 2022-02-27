@@ -109,7 +109,6 @@
       </div>
     </div>
   </q-form>
-  {{ member }}
 </template>
 
 <script>
