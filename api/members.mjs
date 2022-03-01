@@ -8,7 +8,7 @@ const router = express.Router()
 const ACTIONS = ['Applied', 'Registered', 'Approved', 'Volunteered',
   'Renewed'] // This probably ought to be moved elsewhere.
 const DAYS_DISCOUNT_PER_HOUR_WORKED = 14
-const memberProps = ['name', 'address', 'city', 'postal', 'email', 'phone', 'free_lunch']
+const memberProps = ['name', 'address', 'city', 'postal', 'email', 'phone']
 
 const hasOwnProperty = Object.prototype.hasOwnProperty
 function hasOwn (obj, key) {
