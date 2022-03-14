@@ -43,7 +43,8 @@ CREATE TABLE IF NOT EXISTS memberships (
   membership_type_id int NOT NULL REFERENCES membership_types,
   concession varchar(255),
   expires timestamp with time zone,
-  discvaliduntil timestamp with time zone
+  discvaliduntil timestamp with time zone,
+  first_shop boolean NOT NULL DEFAULT false
 );
 
 CREATE TABLE IF NOT EXISTS customers (
@@ -51,7 +52,6 @@ CREATE TABLE IF NOT EXISTS customers (
     name varchar(255) NOT NULL,
     maxdebt decimal NOT NULL DEFAULT '0',
     address varchar(255),
-    address2 varchar(255),
     postal varchar(255),
     city varchar(255),
     country varchar(255),
@@ -62,12 +62,12 @@ CREATE TABLE IF NOT EXISTS customers (
     phone2 varchar(255),
     notes varchar(255),
     curdate timestamp with time zone,
-    curdebt decimal,
     visible boolean NOT NULL DEFAULT false
 /* membership_id int REFERENCES memberships, */
 );
 ALTER TABLE customers ADD COLUMN IF NOT EXISTS membership_id varchar(32) REFERENCES memberships;
 ALTER TABLE customers ADD COLUMN IF NOT EXISTS vend_id varchar(255);
+ALTER TABLE customers ADD COLUMN IF NOT EXISTS approved boolean NOT NULL DEFAULT false;
 
 CREATE TABLE IF NOT EXISTS members_extra (
     id varchar(255) NOT NULL,
