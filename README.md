@@ -29,12 +29,11 @@ yarn db
 
 The first time after the database is loaded, there are two important steps:
 * Generate some mock data 
-* Manually load the first admin user
+* Manually load the first admin user (see below)
 
 
 ```bash
 yarn mockdata
-yarn adduser
 ```
 ### Generate Secret
 We need a real token secret for production but for development purposes we can use a mock one.
@@ -61,19 +60,34 @@ echo MAILGUN_DOMAIN=sandbox-domain-from-your-mailgun-account >> .env
 ```
 
 ### Generate an admin account
-Run ```yarn adduser``` which will send an invite to the email address you create.
-Make sure you choose 'admin' for the first user.
+#### 1. Use the script to create a new user
+```bash
+yarn adduser
+``` 
+Make sure you choose 'admin' for the type of user
 
-Have a look at the ```invites``` table by running 
+#### 2. Launch the api
+```bash
+yarn api
+```
+
+#### 3. Start the web app in development mode 
+```bash
+quasar dev
+```
+This will get a server up and running at http://localhost:8080
+
+#### 4. Have a look at the ```invites``` table by running 
 ```bash
 yarn db:shell
 select * from invites;
 \q
 ```
+Copy the token next to the email address you entered into the clipboard
 
-Copy the token from the email address you entered and browse to
+#### 5. Open up a browser tap and put in the following url
 
-http://localhost:8080/#/accept-invite/78a6618bcbd0b523fa7a64386f31a49c
+http://localhost:8080/#/accept-invite/:78a6618bcbd0b523fa7a64386f31a49c
 
 Where 78a66... is the token you copied from the ```invites``` table.
 

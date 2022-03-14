@@ -4,7 +4,7 @@
       About this software
     </div>
     <div class="q-pa-md">
-      Version {{ version }}
+      This is version {{ version }} which first went live February 1st 2022
     </div>
     <div class="q-pa-md">
       Find the source code here:
