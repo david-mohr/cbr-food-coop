@@ -181,3 +181,11 @@ export async function addUser (context, user) {
     throw new Error('Failed to create new user')
   }
 }
+export async function submitApprovalSheet (context, approvalSheet) {
+  await api.put('/api/approvals/', approvalSheet, {
+    headers: {
+      authorization: 'Bearer ' + context.state.token
+    }
+  })
+  // context.commit... when there is a way to display approval sheets // TODO
+}
