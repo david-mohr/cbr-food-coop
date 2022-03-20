@@ -141,7 +141,7 @@ export default {
       this.working = true
       try {
         await this.$store.dispatch('members/submitApprovalSheet', {
-          members: this.selected,
+          members: this.selected.map(member => { return { member.id }),
           approvedby: `${this.signedby1} and ${this.signedby2}`,
           notes: `Approved. ${this.notes ? `Notes: ${this.notes}` : ''}`
         })
