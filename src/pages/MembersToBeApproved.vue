@@ -72,12 +72,15 @@
           flat
           label="Cancel"
           color="primary"
+          :disabled="working"
           v-close-popup
         />
         <q-btn
           flat
           label="Approve"
           color="primary"
+          :loading="working"
+          :disabled="working"
           @click="submitApprovalSheet"
         />
       </q-card-actions>
@@ -86,7 +89,6 @@
 </template>
 
 <script>
-import { DateTime } from 'luxon'
 
 export default {
   data () {
@@ -94,7 +96,6 @@ export default {
       working: false,
       selected: [],
       approvalSheet: false,
-      date: DateTime.now().toISODate(),
       signedby1: null,
       signedby2: null,
       notes: null
@@ -141,10 +142,11 @@ export default {
       this.working = true
       try {
         await this.$store.dispatch('members/submitApprovalSheet', {
-          members: this.selected.map(member => { return { member.id }),
+          members: this.selected.map(m => { return m.id }),
           approvedby: `${this.signedby1} and ${this.signedby2}`,
           notes: `Approved. ${this.notes ? `Notes: ${this.notes}` : ''}`
         })
+        await this.$store.dispatch('members/getMembers')
         this.$q.notify({
           color: 'green-4',
           textColor: 'white',
@@ -160,6 +162,7 @@ export default {
           message: 'Error: Approval Sheet not Submitted'
         })
       }
+      this.working = false
     }
   }
 }

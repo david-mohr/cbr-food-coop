@@ -182,7 +182,7 @@ export async function addUser (context, user) {
   }
 }
 export async function submitApprovalSheet (context, approvalSheet) {
-  await api.put('/api/approvals/', approvalSheet, {
+  await api.post('/api/approvals/', approvalSheet, {
     headers: {
       authorization: 'Bearer ' + context.state.token
     }
