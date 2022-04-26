@@ -120,3 +120,19 @@ CREATE TABLE IF NOT EXISTS invites (
     token varchar(255) NOT NULL,
     accepted boolean NOT NULL DEFAULT false
 );
+
+-- I did not create these names and I would like to change them..
+CREATE TABLE IF NOT EXISTS members_approval_sheets (
+  id SERIAL PRIMARY KEY NOT NULL,
+  datecreated timestamp with time zone NOT NULL default current_timestamp,
+  nummembers int,
+  dateapproved timestamp with time zone NOT NULL default current_timestamp,
+  approvedby varchar(255) NOT NULL,
+  datesigned timestamp with time zone NOT NULL default current_timestamp,
+  signedby varchar(255) NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS members_approval_sheets_members (
+  member varchar(255) NOT NULL REFERENCES customers(id),
+  approvalsheet integer NOT NULL REFERENCES members_approval_sheets(id)
+);

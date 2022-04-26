@@ -7,6 +7,7 @@ import memberships from './memberships.mjs'
 import signup from './signup.mjs'
 import users from './users.mjs'
 import invites from './invites.mjs'
+import approvals from './approvals.mjs'
 
 const router = express.Router()
 
@@ -19,5 +20,6 @@ router.use('/memberships', memberships)
 router.use('/signups', signup)
 router.use('/users', users)
 router.use('/invites', invites)
+router.use('/approvals', approvals)
 
 export default router

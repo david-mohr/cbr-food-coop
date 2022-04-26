@@ -42,17 +42,17 @@ router.delete('/:id', hasRole('coordinator'), async (req, res) => {
 })
 
 async function createMailchimp (email) {
-  await mailchimp.lists.batchListMembers(process.env.MAILCHIMP_LIST_ID, {
-    members: [{
+  await mailchimp.lists.addListMember(process.env.MAILCHIMP_LIST_ID,
+    {
+      skip_merge_validation: true,
       email_address: email,
+      status: 'subscribed',
       email_type: 'html'
-    }],
-    update_existing: true
-  })
+    })
 }
 
 async function createVend (member) {
-  if (process.env.NODE_ENV !== 'production') return { data: { id: 'not_a_real_vend_id' }}
+  if (process.env.NODE_ENV !== 'production') return { data: { id: 'not_a_real_vend_id' } }
   const json = {
     first_name: member.firstname,
     last_name: member.lastname,
