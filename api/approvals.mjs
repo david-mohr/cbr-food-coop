@@ -9,7 +9,7 @@ const router = express.Router()
 router.post('/', hasRole('admin'), async (req, res) => {
   const date = DateTime.now().toISODate()
   const members = req.body.members
-  const sheet = await query('INSERT INTO members_approval_sheets (datecreated, nummembers, dateapproved, approvedby, datesigned, signedby) values($1, $2, $1, $3, $1, $3) RETURNING id', [date, members.length, req.body.approvedby])
+  const sheet = await query('INSERT INTO members_approval_sheets (id, datecreated, nummembers, dateapproved, approvedby, datesigned, signedby) values($4, $1, $2, $1, $3, $1, $3) RETURNING id', [date, members.length, req.body.approvedby, uid()])
 
   for (const member of members) {
     await query('INSERT INTO members_approval_sheets_members (member, approvalsheet) values($1, $2)', [member, sheet[0].id])
