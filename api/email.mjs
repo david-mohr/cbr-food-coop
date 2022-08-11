@@ -14,7 +14,7 @@ export async function sendInvite (email, role) {
     const mailgunData = {
       from: fromEmail,
       to: email,
-      subject: 'Please verify your Food Co-op Canberra account',
+      subject: `Please verify your ${process.env.COOP_NAME} account`,
       template: 'invite',
       'h:X-Mailgun-Variables': JSON.stringify({ token })
     }
@@ -37,7 +37,7 @@ export async function sendPasswordReset (email) {
     const mailgunData = {
       from: fromEmail,
       to: email,
-      subject: 'Reset your Food Co-op Canberra password',
+      subject: `Reset your ${process.env.COOP_NAME} password`,
       template: 'password-reset',
       'h:X-Mailgun-Variables': JSON.stringify({ token })
     }

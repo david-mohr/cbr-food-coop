@@ -4,7 +4,7 @@
       Application for Membership
     </div>
     <div class="text-h4 text-center">
-      of The Food Co-op Shop Canberra.
+      of {{ $coopName }}
     </div>
     <div class="q-pa-md row justify-center">
       <q-stepper
@@ -20,11 +20,12 @@
           icon="favorite"
           :done="step > 1"
         >
-          We’re pleased and excited that you are interested in joining The Food
-          Co-op in Canberra as a Member!
+          We’re pleased and excited that you are interested in joining
+          {{ $coopName }}
+          as a Member!
 
           We are a community owned-and-run bulk grocery store and cafe, events
-          venue and community hub in central Canberra who believes in the
+          venue and community hub who believes in the
           supply of food for people and the planet, not for profit
 
           According to our constitution, the primary activity of the Co-op is
