@@ -5,7 +5,7 @@ import { makeSalt, query } from './database.mjs'
 const mailgun = new Mailgun(FormData)
 const mg = mailgun.client({ username: 'api', key: process.env.MAILGUN_API_KEY })
 
-const fromEmail = 'info@cbrfoodcoop.org.au'
+const fromEmail = process.env.COOP_EMAIL
 
 export async function sendInvite (email, role) {
   try {
