@@ -69,7 +69,7 @@ async function createVend (member) {
     physical_postcode: member.postcode,
     physical_country_id: 'AU'
   }
-  return got.post(`${VEND_URL}/customers`, {
+  return got.post(`${process.env.VEND_URL}/customers`, {
     headers: {
       authorization: `Bearer ${process.env.VEND_API_KEY}`
     },
@@ -77,7 +77,6 @@ async function createVend (member) {
   }).json()
 }
 
-const VEND_URL = 'https://thefoodcooperativeshop.vendhq.com/api/2.0'
 router.post('/:id/vend', hasRole('coordinator'), async (req, res) => {
   try {
     const members = await query('SELECT * from signup_members WHERE signup_id = $1', [req.params.id])
