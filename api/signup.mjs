@@ -42,13 +42,20 @@ router.delete('/:id', hasRole('coordinator'), async (req, res) => {
 })
 
 async function createMailchimp (email) {
-  await mailchimp.lists.addListMember(process.env.MAILCHIMP_LIST_ID,
-    {
-      skip_merge_validation: true,
-      email_address: email,
-      status: 'subscribed',
-      email_type: 'html'
-    })
+  if (!process.env.MAILCHIMP_LIST_ID) return
+  try {
+    await mailchimp.lists.addListMember(process.env.MAILCHIMP_LIST_ID,
+      {
+        skip_merge_validation: true,
+        email_address: email,
+        status: 'subscribed',
+        email_type: 'html'
+      })
+  } catch (err) {
+    // supress these errors since they don't affect signup
+    // TODO probably should alert someone that it's failed though
+    console.log('MAILCHIMP error', err)
+  }
 }
 
 async function createVend (member) {
