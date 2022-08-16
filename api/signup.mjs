@@ -87,8 +87,6 @@ router.post('/:id/vend', hasRole('coordinator'), async (req, res) => {
     }
     res.json(final)
   } catch (err) {
-    console.log(err)
-    console.log(err?.response?.body)
     return res.sendStatus(500)
   }
 })
@@ -108,7 +106,13 @@ export async function getNextMembershipId () {
 }
 
 async function createMember (joinDate, membershipId, member) {
-  await createMailchimp(member.email)
+  try {
+    await createMailchimp(member.email)
+  } catch (e) {
+    // TODO: I want to be able to trace if this
+    //       hasn't worked and send the user a notice
+  }
+
   const memberId = await getNextMemberId()
   // Create the new member record
   const newMember = await query('INSERT into customers (id, postal, city, name, firstname, lastname, email, phone, curdate, visible, membership_id, vend_id) values($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12) RETURNING *', [memberId, member.postcode, member.suburb, `${member.firstname} ${member.lastname}`, member.firstname, member.lastname, member.email, member.phone, joinDate.toString(), true, membershipId, member.vend_id])
@@ -144,6 +148,7 @@ router.post('/:id/member', hasRole('coordinator'), async (req, res) => {
     // Create the members
     const membersToCreate = await query('SELECT * from signup_members WHERE signup_id = $1', [req.params.id])
     const members = await Promise.all(membersToCreate.map(member => createMember(joinDate, membershipId, member)))
+      .catch(e => { return res.sendStatus(e.status) })
 
     // delete the signup
     await deleteSignup(req.params.id)

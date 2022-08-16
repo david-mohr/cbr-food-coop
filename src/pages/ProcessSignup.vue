@@ -21,7 +21,13 @@
         />
         <q-space />
         <q-btn
-          v-if="missingVendIds"
+          v-if="duplicateEmails"
+          color="grey"
+          disable="true"
+          label="Duplicated Email"
+        />
+        <q-btn
+          v-else-if="missingVendIds"
           :label="vendLabel"
           :loading="working.vend"
           :disable="working.vend"
@@ -29,7 +35,7 @@
         />
         <q-btn
           v-else
-          cojor="primary"
+          color="primary"
           label="Membership payment"
           @click="membershipPayment = true"
         />
@@ -75,6 +81,31 @@
           :readonly="true"
         />
       </div>
+      <q-dialog
+        v-model="alert"
+      >
+        <q-card>
+          <q-card-section>
+            <div class="text-h6">
+              Duplicated Email
+            </div>
+          </q-card-section>
+
+          <q-card-section class="q-pt-none">
+            The email address given by this member already exists in our database!
+            This should be renewed, rather than adding a new membership.
+          </q-card-section>
+
+          <q-card-actions align="right">
+            <q-btn
+              flat
+              label="OK"
+              color="primary"
+              @click="confirm"
+            />
+          </q-card-actions>
+        </q-card>
+      </q-dialog>
     </div>
   </q-page>
 </template>
@@ -87,10 +118,19 @@ export default {
   data () {
     return {
       membershipPayment: false,
-      working: {}
+      working: {},
+      confirmed: false
     }
   },
   computed: {
+    alert () {
+      return this.duplicateEmails && !this.confirmed
+    },
+    duplicateEmails () {
+      console.log(this.$store.state.members[0])
+      return this.signup.members.some(m =>
+        this.$store.state.members.members.some(mm => mm.email === m.email))
+    },
     missingVendIds () {
       return this.signup.members.some(m => !m.vend_id)
     },
@@ -180,7 +220,8 @@ export default {
           this.$store.dispatch('members/getSignups')
           this.$router.push({ name: 'View signups' })
         })
-    }
+    },
+    confirm () { this.confirmed = true }
   }
 }
 </script>
