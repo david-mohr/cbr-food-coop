@@ -1,8 +1,8 @@
 {
   "name": "cbr-food-coop",
-  "version": "0.0.1",
-  "description": "CBR Food Coop membership app",
-  "productName": "CBR Food Coop",
+  "version": "0.1.0",
+  "description": "Food Co-op membership app",
+  "productName": "Food Co-op",
   "author": "David Mohr <david.mohr@ardexa.com>",
   "private": true,
   "scripts": {

@@ -1,6 +1,4 @@
-# The Food Co-op - Canberra
-
-The Food Co-op membership app
+# The Food Co-op membership app
 
 To get this running, you will need:
 * NodeJS >= 16

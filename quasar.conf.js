@@ -22,7 +22,8 @@ module.exports = configure(function (ctx) {
     // --> boot files are part of "main.js"
     // https://v2.quasar.dev/quasar-cli/boot-files
     boot: [
-      'axios'
+      'axios',
+      'env'
     ],
 
     // https://v2.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-css
@@ -46,6 +47,10 @@ module.exports = configure(function (ctx) {
 
     // Full list of options: https://v2.quasar.dev/quasar-cli/quasar-conf-js#Property%3A-build
     build: {
+      env: {
+        COOP_NAME: process.env.COOP_NAME,
+        COOP_EMAIL: process.env.COOP_EMAIL
+      },
       vueRouterMode: 'history', // available values: 'hash', 'history'
 
       // transpile: false,
@@ -158,9 +163,9 @@ module.exports = configure(function (ctx) {
       },
 
       manifest: {
-        name: 'CBR Food Coop',
-        short_name: 'CBR Food Coop',
-        description: 'CBR Food Coop membership app',
+        name: 'Food Co-op',
+        short_name: 'Food Co-op',
+        description: 'Food Co-op membership app',
         display: 'standalone',
         orientation: 'portrait',
         background_color: '#ffffff',

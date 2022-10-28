@@ -14,7 +14,7 @@
       The tech team meets every Wednesday at 7pm.
     </div>
     <div class="q-pa-md">
-      Get in touch with us if you want to be involved: info@cbrfoodcoop.org.au
+      Get in touch with us if you want to be involved: $coopEmail
     </div>
   </q-page>
 </template>

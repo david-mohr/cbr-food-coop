@@ -5,7 +5,7 @@ import { makeSalt, query } from './database.mjs'
 const mailgun = new Mailgun(FormData)
 const mg = mailgun.client({ username: 'api', key: process.env.MAILGUN_API_KEY })
 
-const fromEmail = 'info@cbrfoodcoop.org.au'
+const fromEmail = process.env.COOP_EMAIL
 
 export async function sendInvite (email, role) {
   try {
@@ -14,7 +14,7 @@ export async function sendInvite (email, role) {
     const mailgunData = {
       from: fromEmail,
       to: email,
-      subject: 'Please verify your Food Co-op Canberra account',
+      subject: `Please verify your ${process.env.COOP_NAME} account`,
       template: 'invite',
       'h:X-Mailgun-Variables': JSON.stringify({ token })
     }
@@ -37,7 +37,7 @@ export async function sendPasswordReset (email) {
     const mailgunData = {
       from: fromEmail,
       to: email,
-      subject: 'Reset your Food Co-op Canberra password',
+      subject: `Reset your ${process.env.COOP_NAME} password`,
       template: 'password-reset',
       'h:X-Mailgun-Variables': JSON.stringify({ token })
     }

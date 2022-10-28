@@ -13,7 +13,7 @@
         />
 
         <q-toolbar-title>
-          The Food Co-op
+          {{ $coopName }}
         </q-toolbar-title>
 
         <q-btn

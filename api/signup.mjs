@@ -42,13 +42,20 @@ router.delete('/:id', hasRole('coordinator'), async (req, res) => {
 })
 
 async function createMailchimp (email) {
-  await mailchimp.lists.addListMember(process.env.MAILCHIMP_LIST_ID,
-    {
-      skip_merge_validation: true,
-      email_address: email,
-      status: 'subscribed',
-      email_type: 'html'
-    })
+  if (!process.env.MAILCHIMP_LIST_ID) return
+  try {
+    await mailchimp.lists.addListMember(process.env.MAILCHIMP_LIST_ID,
+      {
+        skip_merge_validation: true,
+        email_address: email,
+        status: 'subscribed',
+        email_type: 'html'
+      })
+  } catch (err) {
+    // supress these errors since they don't affect signup
+    // TODO probably should alert someone that it's failed though
+    console.log('MAILCHIMP error', err)
+  }
 }
 
 async function createVend (member) {
@@ -62,7 +69,7 @@ async function createVend (member) {
     physical_postcode: member.postcode,
     physical_country_id: 'AU'
   }
-  return got.post(`${VEND_URL}/customers`, {
+  return got.post(`${process.env.VEND_URL}/customers`, {
     headers: {
       authorization: `Bearer ${process.env.VEND_API_KEY}`
     },
@@ -70,7 +77,6 @@ async function createVend (member) {
   }).json()
 }
 
-const VEND_URL = 'https://thefoodcooperativeshop.vendhq.com/api/2.0'
 router.post('/:id/vend', hasRole('coordinator'), async (req, res) => {
   try {
     const members = await query('SELECT * from signup_members WHERE signup_id = $1', [req.params.id])
