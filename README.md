@@ -150,3 +150,9 @@ git push heroku bravo-1:main
 
 ## Stage 4
 * Ambitious new stuff
+
+# SQL Helper scripts
+Count the number of active members
+```
+yarn cloud-sql sql/current-member-count.sql
+```

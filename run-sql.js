@@ -22,7 +22,8 @@ async function main () {
   let client
   try {
     client = await pool.connect()
-    await client.query(sql)
+    const results = await client.query(sql)
+    console.log(results.rows)
   } catch (err) {
     console.error(err.message)
   }
