@@ -123,16 +123,17 @@ CREATE TABLE IF NOT EXISTS invites (
 
 -- I did not create these names and I would like to change them..
 CREATE TABLE IF NOT EXISTS members_approval_sheets (
-  id SERIAL PRIMARY KEY NOT NULL,
-  datecreated timestamp with time zone NOT NULL default current_timestamp,
-  nummembers int,
-  dateapproved timestamp with time zone NOT NULL default current_timestamp,
-  approvedby varchar(255) NOT NULL,
-  datesigned timestamp with time zone NOT NULL default current_timestamp,
-  signedby varchar(255) NOT NULL
+  id varchar(255) PRIMARY KEY NOT NULL,
+  datecreated timestamp with time zone NOT NULL,
+  nummembers bigint NOT NULL,
+  dateapproved timestamp with time zone,
+  approvedby varchar(255),
+  datesigned timestamp with time zone,
+  signedby varchar(255),
+  notes varchar(255)
 );
 
 CREATE TABLE IF NOT EXISTS members_approval_sheets_members (
   member varchar(255) NOT NULL REFERENCES customers(id),
-  approvalsheet integer NOT NULL REFERENCES members_approval_sheets(id)
+  approvalsheet varchar(255) NOT NULL REFERENCES members_approval_sheets(id)
 );
