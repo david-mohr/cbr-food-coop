@@ -19,6 +19,7 @@
     "adduser": "yarn local-run api/scripts/adduser.mjs",
     "cloud-adduser": "DATABASE_URL=\"$(heroku config:get DATABASE_URL -a cbrfoodcoop)\" node api/scripts/adduser.mjs",
     "cloud-sql": "yarn cloud-run run-sql.js",
+    "cloud-genmailchimp": "yarn cloud-sql sql/mailchimp-current.sql csv mailchimp-current.csv; yarn cloud-sql sql/mailchimp-recentexpiry.sql csv mailchimp-recentexpiry.csv",
     "cloud-run": "DATABASE_URL=\"$(heroku config:get DATABASE_URL -a cbrfoodcoop)\" node",
     "heroku-postbuild": "quasar build",
     "db": "docker run --rm -d --name dev-postgres -e POSTGRES_PASSWORD='Pass2021!' -v pgdata:/var/lib/postgresql/data -p 5432:5432 postgres",
