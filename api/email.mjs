@@ -19,7 +19,6 @@ export async function sendInvite (email, role) {
       'h:X-Mailgun-Variables': JSON.stringify({ token })
     }
     const response = await mg.messages.create(process.env.MAILGUN_DOMAIN, mailgunData)
-    console.log(response)
   } catch (err) {
     console.log(err)
   }

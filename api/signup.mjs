@@ -1,7 +1,7 @@
 import express from 'express'
 import got from 'got'
+import { randomUUID } from 'crypto'
 import { DateTime } from 'luxon'
-import { uid } from 'quasar'
 import { query } from './database.mjs'
 import { hasRole } from './utils.mjs'
 import mailchimp from '@mailchimp/mailchimp_marketing'
@@ -120,7 +120,7 @@ async function createMember (joinDate, membershipId, member) {
   // add the extras
   await query('INSERT into members_extra (id, sendemails) values($1, $2) RETURNING *', [memberId, member.sendemails])
   // update the history
-  await query('INSERT into members_history (id, datenew, member, action, amountpaid, notes) values($1, $2, $3, $4, $5, $6) RETURNING *', [uid(), joinDate.toString(), memberId, 'Registered', null, 'Entered into database'])
+  await query('INSERT into members_history (id, datenew, member, action, amountpaid, notes) values($1, $2, $3, $4, $5, $6) RETURNING *', [randomUUID(), joinDate.toString(), memberId, 'Registered', null, 'Entered into database'])
 
   return newMember[0]
 }
@@ -143,7 +143,7 @@ router.post('/:id/member', hasRole('coordinator'), async (req, res) => {
     const membershipId = await getNextMembershipId()
     const membership = await query('INSERT into memberships (membership_id, membership_type_id, concession, expires) VALUES ($1, $2, $3, $4) RETURNING *', [membershipId, signup[0].membership_type_id, signup[0].concession, joinDate.plus({ years: 1 })])
     // TODO for now, we'll simply log these events into the members_history with the membershipId instead of the memberId
-    await query('INSERT into members_history (id, datenew, member, action, amountpaid, notes) values($1, $2, $3, $4, $5, $6) RETURNING *', [uid(), joinDate.toString(), membershipId, 'Applied', req.body.paid, '12 months'])
+    await query('INSERT into members_history (id, datenew, member, action, amountpaid, notes) values($1, $2, $3, $4, $5, $6) RETURNING *', [randomUUID(), joinDate.toString(), membershipId, 'Applied', req.body.paid, '12 months'])
 
     // Create the members
     const membersToCreate = await query('SELECT * from signup_members WHERE signup_id = $1', [req.params.id])

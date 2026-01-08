@@ -1,7 +1,7 @@
 const fs = require('fs')
+const { randomUUID } = require('crypto')
 const { DateTime } = require('luxon')
 const { Pool } = require('pg')
-const { uid } = require('quasar')
 
 // these arrays will have blank last entry due to a trailling newline
 const givenNames = fs.readFileSync('mock/given.txt', 'utf8').split('\n')
@@ -59,10 +59,10 @@ async function main () {
       await client.query('INSERT into members_extra (id, discvaliduntil, membershipexpires) values($1, $2, $3) RETURNING *', [`c${id}`, discvaliduntil, DateTime.now().plus({ days: randomInt(-500, 500) })])
 
       let history = joindate
-      await client.query('INSERT into members_history (id, datenew, member, action, amountpaid, notes) values($1, $2, $3, $4, $5, $6) RETURNING *', [uid(), history.toString(), `c${id}`, 'Applied', 10, '12 months'])
-      await client.query('INSERT into members_history (id, datenew, member, action, amountpaid, notes) values($1, $2, $3, $4, $5, $6) RETURNING *', [uid(), history.toString(), `c${id}`, 'Registered', null, 'Entered into database'])
+      await client.query('INSERT into members_history (id, datenew, member, action, amountpaid, notes) values($1, $2, $3, $4, $5, $6) RETURNING *', [randomUUID(), history.toString(), `c${id}`, 'Applied', 10, '12 months'])
+      await client.query('INSERT into members_history (id, datenew, member, action, amountpaid, notes) values($1, $2, $3, $4, $5, $6) RETURNING *', [randomUUID(), history.toString(), `c${id}`, 'Registered', null, 'Entered into database'])
       if (history < DateTime.now().minus({ days: 30 })) {
-        await client.query('INSERT into members_history (id, datenew, member, action, amountpaid, notes) values($1, $2, $3, $4, $5, $6) RETURNING *', [uid(), history.plus({ days: 7 }).toString(), `c${id}`, 'Approved', null, 'Approval sheet ###'])
+        await client.query('INSERT into members_history (id, datenew, member, action, amountpaid, notes) values($1, $2, $3, $4, $5, $6) RETURNING *', [randomUUID(), history.plus({ days: 7 }).toString(), `c${id}`, 'Approved', null, 'Approval sheet ###'])
       }
 
       if (!isVollie) continue
@@ -73,7 +73,7 @@ async function main () {
         const hours = randomInt(1, 5)
         const duty = random(duties)
         console.log('  HISTORY:', history.toString(), `c${id}`, 'Volunteered', hours, duty)
-        await client.query('INSERT into members_history (id, datenew, member, action, amountpaid, notes) values($1, $2, $3, $4, $5, $6) RETURNING *', [uid(), history.toString(), `c${id}`, 'Volunteered', hours, duty])
+        await client.query('INSERT into members_history (id, datenew, member, action, amountpaid, notes) values($1, $2, $3, $4, $5, $6) RETURNING *', [randomUUID(), history.toString(), `c${id}`, 'Volunteered', hours, duty])
         history = history.plus({ days: randomInt(0, 30) })
       }
     }

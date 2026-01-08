@@ -1,6 +1,6 @@
 import express from 'express'
+import { randomUUID } from 'crypto'
 import { DateTime } from 'luxon'
-import { uid } from 'quasar'
 import { query } from './database.mjs'
 import { hasRole } from './utils.mjs'
 
@@ -133,7 +133,7 @@ router.post('/:id/history', hasRole('coordinator'), async (req, res) => {
       return res.status(400).send('Invalid date')
     }
     const dateWorked = req.body.date || DateTime.now().toString()
-    await query('INSERT into members_history (id, datenew, member, action, amountpaid, notes) values($1, $2, $3, $4, $5, $6)', [uid(), dateWorked, req.params.id, req.body.action, req.body.paid, req.body.notes])
+    await query('INSERT into members_history (id, datenew, member, action, amountpaid, notes) values($1, $2, $3, $4, $5, $6)', [randomUUID(), dateWorked, req.params.id, req.body.action, req.body.paid, req.body.notes])
     // Check if we need to update the discount date
     if (req.body.action === 'Volunteered') {
       await updateVolunteerHours(req.params.id, req.body.paid)

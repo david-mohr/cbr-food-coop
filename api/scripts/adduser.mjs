@@ -1,9 +1,13 @@
 #!/usr/bin/env node
 
+import dotenv from 'dotenv'
 import chalk from 'chalk'
 import inquirer from 'inquirer'
 import { sendInvite } from '../email.mjs'
 import { emailRegex } from '../utils.mjs'
+
+// Load environment variables
+dotenv.config()
 
 const roles = ['coordinator', 'admin']
 
