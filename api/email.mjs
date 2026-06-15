@@ -18,9 +18,9 @@ export async function sendInvite (email, role) {
       template: 'invite',
       'h:X-Mailgun-Variables': JSON.stringify({ token })
     }
-    const response = await mg.messages.create(process.env.MAILGUN_DOMAIN, mailgunData)
+    await mg.messages.create(process.env.MAILGUN_DOMAIN, mailgunData)
   } catch (err) {
-    console.log(err)
+    console.error(err)
   }
 }
 
@@ -40,9 +40,9 @@ export async function sendPasswordReset (email) {
       template: 'password-reset',
       'h:X-Mailgun-Variables': JSON.stringify({ token })
     }
-    const response = await mg.messages.create(process.env.MAILGUN_DOMAIN, mailgunData)
-    console.log(response)
+    await mg.messages.create(process.env.MAILGUN_DOMAIN, mailgunData)
+    console.log('Password reset email sent to:', email)
   } catch (err) {
-    console.log(err)
+    console.error(err)
   }
 }

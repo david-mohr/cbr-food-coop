@@ -16,7 +16,7 @@ router.get('/membership-types', async (req, res) => {
     const results = await query('SELECT membership_type_id, label, max_members, price, concession, concession_caption from membership_types')
     res.send(results)
   } catch (err) {
-    console.log(err)
+    console.error(err)
     return res.sendStatus(500)
   }
 })
@@ -55,7 +55,7 @@ router.post('/invites/:id/accept', async (req, res) => {
     const token = getUserToken(newUser[0])
     return res.json({ token })
   } catch (err) {
-    console.log(err)
+    console.error(err)
     return res.sendStatus(500)
   }
 })
@@ -76,7 +76,7 @@ router.post('/forgot/:token', async (req, res) => {
     await query('DELETE FROM password_reset WHERE auth_id = $1', [reset[0].auth_id])
     res.sendStatus(200)
   } catch (err) {
-    console.log(err)
+    console.error(err)
     return res.sendStatus(500)
   }
 })
@@ -89,7 +89,7 @@ router.post('/forgot', async (req, res) => {
     await sendPasswordReset(req.body.email, req.body.role)
     res.sendStatus(200)
   } catch (err) {
-    console.log(err)
+    console.error(err)
     if (/User not found/.test(err.message)) {
       return res.status(404).send({ error: err.message })
     }

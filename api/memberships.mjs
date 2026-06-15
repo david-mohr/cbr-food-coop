@@ -39,7 +39,7 @@ router.get('/', hasRole('coordinator'), async (req, res) => {
     const results = await query('SELECT * from memberships')
     res.send(results)
   } catch (err) {
-    console.log(err)
+    console.error(err)
     return res.sendStatus(500)
   }
 })
@@ -50,7 +50,7 @@ router.get('/:id', hasRole('coordinator'), async (req, res) => {
     if (!membership.length) return res.sendStatus(404)
     res.send(membership[0])
   } catch (err) {
-    console.log(err)
+    console.error(err)
     return res.sendStatus(500)
   }
 })
@@ -65,7 +65,7 @@ router.put('/:id', hasRole('coordinator'), async (req, res) => {
     const results = await query(`UPDATE memberships SET ${update.set} WHERE membership_id = $${update.next} RETURNING *`, [...update.values, req.params.id])
     res.send(results)
   } catch (err) {
-    console.log(err)
+    console.error(err)
     return res.sendStatus(500)
   }
 })

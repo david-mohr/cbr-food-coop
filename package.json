@@ -21,9 +21,12 @@
     "cloud-sql": "yarn cloud-run run-sql.js",
     "cloud-run": "DATABASE_URL=\"$(heroku config:get DATABASE_URL -a cbrfoodcoop)\" node",
     "heroku-postbuild": "quasar build",
+    "sync-mailchimp": "node api/scripts/syncmailchimp.mjs",
+    "sync-mailchimp:prod": "DATABASE_URL=\"$(heroku config:get DATABASE_URL -a cbrfoodcoop)\" TOKEN_SECRET=\"$(heroku config:get TOKEN_SECRET -a cbrfoodcoop)\" LOOKBACK_DAYS=18250 MAILCHIMP_API_KEY=\"$(heroku config:get MAILCHIMP_API_KEY -a cbrfoodcoop)\" MAILCHIMP_SERVER_PREFIX=\"$(heroku config:get MAILCHIMP_SERVER_PREFIX -a cbrfoodcoop)\" MAILCHIMP_LIST_ID=\"$(heroku config:get MAILCHIMP_LIST_ID -a cbrfoodcoop)\" MAILCHIMP_MAX_LIST_SIZE=2000 node api/scripts/syncmailchimp.mjs",
     "db": "docker run --rm -d --name dev-postgres -e POSTGRES_PASSWORD='Pass2021!' -v pgdata:/var/lib/postgresql/data -p 5432:5432 postgres",
     "db:shell": "docker exec -it dev-postgres psql -U postgres",
-    "db:stop": "docker stop dev-postgres"
+    "db:stop": "docker stop dev-postgres",
+    "mailchimp-run": "MAILCHIMP_API_KEY=\"$(heroku config:get MAILCHIMP_API_KEY -a cbrfoodcoop)\" MAILCHIMP_LIST_ID=\"$(heroku config:get MAILCHIMP_LIST_ID -a cbrfoodcoop)\" DATABASE_URL='postgres://postgres:Pass2021!@localhost:5432/postgres' MAILCHIMP_SERVER_PREFIX='us4' NODE_ENV=development node server.mjs"
   },
   "dependencies": {
     "@mailchimp/mailchimp_marketing": "^3.0.80",
@@ -55,7 +58,7 @@
   },
   "devDependencies": {
     "@babel/eslint-parser": "^7.28.5",
-    "@quasar/app-webpack": "^3.12.5", 
+    "@quasar/app-webpack": "^3.12.5",
     "eslint": "^8.7.0",
     "eslint-config-standard": "^16.0.3",
     "eslint-plugin-import": "^2.32.0",
@@ -81,7 +84,6 @@
   ],
   "engines": {
     "node": "^20.19.0",
-    "npm": ">= 7.24.0",
     "yarn": ">= 1.22.15"
   }
 }

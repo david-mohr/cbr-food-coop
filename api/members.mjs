@@ -43,7 +43,7 @@ router.get('/', hasRole('coordinator'), async (req, res) => {
     const results = await query('SELECT id, name, address, city, postal, membership_id, vend_id, email, phone, firstname, lastname, expires, discvaliduntil, first_shop, approved FROM customers NATURAL JOIN memberships')
     res.send(results)
   } catch (err) {
-    console.log(err)
+    console.error(err)
     return res.sendStatus(500)
   }
 })
@@ -58,7 +58,7 @@ router.put('/:id', hasRole('coordinator'), async (req, res) => {
     const results = await query(`UPDATE customers SET ${update.set} WHERE id = $${update.next} RETURNING *`, [...update.values, req.params.id])
     res.send(results)
   } catch (err) {
-    console.log(err)
+    console.error(err)
     return res.sendStatus(500)
   }
 })
@@ -71,7 +71,7 @@ router.get('/:id/history', hasRole('coordinator'), async (req, res) => {
     const results = await query('SELECT datenew, action, amountpaid, notes FROM members_history WHERE member = $1 ORDER BY datenew DESC', [req.params.id])
     res.send(results)
   } catch (err) {
-    console.log(err)
+    console.error(err)
     return res.sendStatus(500)
   }
 })
@@ -142,7 +142,7 @@ router.post('/:id/history', hasRole('coordinator'), async (req, res) => {
     }
     res.sendStatus(204)
   } catch (err) {
-    console.log(err)
+    console.error(err)
     return res.sendStatus(500)
   }
 })

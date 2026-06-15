@@ -71,7 +71,6 @@ export default {
           message: 'Account created'
         })
         // auto-login
-        console.log(res)
         this.$q.sessionStorage.set('token', res.data.token)
         this.$store.commit('members/saveToken', res.data.token)
         this.$router.push({ path: '/' })

@@ -127,8 +127,7 @@ export default {
       return this.duplicateEmails && !this.confirmed
     },
     duplicateEmails () {
-      console.log(this.$store.state.members[0])
-      return this.signup.members.some(m =>
++      return this.signup.members.some(m =>
         this.$store.state.members.members.some(mm => mm.email === m.email))
     },
     missingVendIds () {

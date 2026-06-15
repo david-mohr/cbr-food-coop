@@ -134,19 +134,83 @@ git push heroku main
 git push heroku bravo-1:main
 ```
 
+
+# Mailchimp Integration
+
+## Overview
+
+The Mailchimp integration keeps the mailing list in sync with the membership database. It handles two scenarios:
+
+- **New member signup** — when a coordinator approves a signup, the new member is immediately added to the Mailchimp list with their membership details and relevant tags
+- **Ongoing sync** — a scheduled script reconciles the full membership database against Mailchimp, updating merge fields and tags, archiving lapsed members and members who unsubscribe, and re-subscribing returning members
+
+### Merge fields synced
+`FNAME`, `LNAME`, `PHONE`, `SUBURB`, `MTYPE` (membership type), `CONCESSION`, `EXPIRY`, `DAYSLEFT`, `DISCEXP` (discount expiry), `JOINED`, `LASTVOL` (last volunteered)
+
+### Tags applied automatically
+`Expiring Today`, `Expiring This Week`, `Expiring This Month`, `Expired`, `Recently Expired`, `Working Member`, `Coordinator`, `Provisional`, `Unclaimed First Shop`, concession type, discount status
+
+## Welcome Email via Mailchimp Event API
+
+Welcome email is sent via a MailChimp Flow, triggered by posting the member's email address to:
+
+https://us4.api.mailchimp.com/3.0/customer-journeys/journeys/2032/steps/13820/actions/trigger
+
+## Scheduled Sync (Heroku Scheduler)
+
+The sync runs daily via [Heroku Scheduler](https://devcenter.heroku.com/articles/scheduler).
+
+### First-time setup
+
+1. Add the Heroku Scheduler add-on:
+   ```bash
+   heroku addons:create scheduler:standard -a cbrfoodcoop
+   ```
+
+2. Open the scheduler dashboard:
+   ```bash
+   heroku addons:open scheduler -a cbrfoodcoop
+   ```
+
+3. Add a new job with:
+   - **Command:** `node api/scripts/syncmailchimp.mjs`
+   - **Frequency:** Every day
+   - **Time:** ~Midnight AEST
+
+### Running the sync manually
+
+Against production:
+```bash
+yarn sync-mailchimp:prod
+```
+
+Against local DB (for testing):
+```bash
+yarn sync-mailchimp
+```
+
+### Environment variables required
+
+| Variable | Description |
+|---|---|
+| `MAILCHIMP_API_KEY` | Mailchimp API key |
+| `MAILCHIMP_SERVER_PREFIX` | e.g. `us4` |
+| `MAILCHIMP_LIST_ID` | The audience/list ID |
+| `MAILCHIMP_MAX_LIST_SIZE` | Max members to sync (default: 2000, mailchimp membership tier increases at 2500) |
+| `LOOKBACK_DAYS` | How many days back to look for changes (default: 7, use `18250` for full history) |
 # Roadmap
 
 ## Stage 1
-* Replicate OpenBravo membership functions
-* Replicate silicon reporting (approval sheets, mailchimp)
+[x] Replicate OpenBravo membership functions 
+[x] Replicate silicon reporting (approval sheets, mailchimp)
 
 ## Stage 2
-* Member signup using online form
-* Expand reporting features
+[~] Member signup using online form
+[x] Expand reporting features
 
 ## Stage 3
-* Open platform to member logins
-* Integration with Vend
+[ ] Open platform to member logins
+[~] Integration with Vend
 
 ## Stage 4
 * Ambitious new stuff

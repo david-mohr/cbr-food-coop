@@ -24,19 +24,15 @@ passport.use(
     passwordField: 'password'
   }, async (email, password, done) => {
     try {
-      console.log(email)
       const user = await findUser(email)
-      console.log(user)
       if (!user) {
         return done(null, false, { message: 'User not found' })
       }
 
       const validate = await checkPassword(user, password)
       if (!validate) {
-        console.log('Wrong Password')
         return done(null, false, { message: 'Wrong Password' })
       }
-      console.log('success')
       return done(null, user, { message: 'Logged in successfully' })
     } catch (error) {
       return done(error)

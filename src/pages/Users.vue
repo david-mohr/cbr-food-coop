@@ -125,7 +125,6 @@ export default {
       this.email = null
     },
     async onSubmit () {
-      console.log('user', this.email, 'role', this.role)
       try {
         await this.$store.dispatch('members/addUser', {
           email: this.email,

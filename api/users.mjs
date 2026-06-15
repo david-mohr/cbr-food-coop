@@ -10,7 +10,7 @@ router.get('/', hasRole('admin'), async (req, res) => {
     const results = await query('SELECT id, email, role, name from auth')
     res.send(results)
   } catch (err) {
-    console.log(err)
+    console.error(err)
     return res.sendStatus(500)
   }
 })
@@ -26,7 +26,7 @@ router.post('/', hasRole('admin'), async (req, res) => {
     await sendInvite(req.body.email, req.body.role)
     res.sendStatus(200)
   } catch (err) {
-    console.log(err)
+    console.error(err)
     return res.sendStatus(500)
   }
 })
